@@ -1,0 +1,35 @@
+version: "3.5"
+services:
+    # Serviço do nginx para provar o controle do domínio
+    servidor:
+        container_name: nginx
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile-cert-acquire
+        restart: always
+        ports:
+            - target: 80
+              published: 80
+              mode: host
+              protocol: tcp
+        volumes:
+            - ./django-site/djangosite/media:/media
+            - ./django-site/djangosite/static:/static
+            # Montamos a pasta de certificados
+            - ./nginx/certificados/libencrypt/webroot:/data/letsencrypt
+            - ./nginx/certificados/libencrypt/etc:/etc/letsencrypt
+            - ./nginx/certificados/libencrypt/var/lib:/var/lib/letsencrypt
+            - ./nginx/certificados/libencrypt/var/log:/var/log/letsencrypt
+
+    # Para adquirir certificados para HTTPS
+    certbot_acquire:
+        container_name: certbot_acquire
+        image: certbot/certbot
+        command: certonly --staging --webroot --webroot-path /data/letsencrypt -d rafaelsartori96.ddns.net
+        depends_on:
+            - servidor
+        volumes:
+            - ./nginx/certificados/libencrypt/webroot:/data/letsencrypt
+            - ./nginx/certificados/libencrypt/etc:/etc/letsencrypt
+            - ./nginx/certificados/libencrypt/var/lib:/var/lib/letsencrypt
+            - ./nginx/certificados/libencrypt/var/log:/var/log/letsencrypt

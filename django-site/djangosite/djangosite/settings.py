@@ -28,7 +28,6 @@ with open('secret.key') as arquivo:
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '189.19.118.25'
 ]
 
 

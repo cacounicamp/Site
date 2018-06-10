@@ -42,7 +42,9 @@ services:
     # Serviço do nginx
     servidor:
         container_name: nginx
-        build: ./nginx
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile-https
         restart: always
         ports:
             - target: 80
@@ -59,8 +61,27 @@ services:
             # para ser servido pelo nginx (mais rápido)
             - ./django-site/djangosite/media:/media
             - ./django-site/djangosite/static:/static
+            # Montamos a pasta de certificados
+            - ./nginx/certificados/libencrypt/webroot:/data/letsencrypt
+            - ./nginx/certificados/libencrypt/etc:/etc/letsencrypt
+            - ./nginx/certificados/libencrypt/var/lib:/var/lib/letsencrypt
+            - ./nginx/certificados/libencrypt/var/log:/var/log/letsencrypt
         depends_on:
             - django-caco
         links:
             # nginx se conectará ao django
             - "django-caco:django-caco"
+
+    # Para renovar certificados para HTTPS
+    certbot_renew:
+        container_name: certbot_renew
+        # Essa imagem permite usar certbot sem fechar o nginx
+        image: deliverous/certbot
+        command: certonly --webroot --webroot-path=/data/letsencrypt --staging -d domain.com
+        depends_on:
+            - servidor
+        volumes:
+            - ./nginx/certificados/libencrypt/webroot:/data/letsencrypt
+            - ./nginx/certificados/libencrypt/etc:/etc/letsencrypt
+            - ./nginx/certificados/libencrypt/var/lib:/var/lib/letsencrypt
+            - ./nginx/certificados/libencrypt/var/log:/var/log/letsencrypt

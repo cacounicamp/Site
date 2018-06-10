@@ -1,0 +1,64 @@
+version: "3.5"
+services:
+    # Serviço do django
+    django-caco:
+        container_name: django-caco
+        # Pasta que contém o Dockerfile (instrução para configurar o container)
+        build: ./django-site
+        # Deverá sempre estar ativo
+        restart: always
+        expose:
+            # Mostraremos a porta 8080 entre containers (para o nginx)
+            - "8080"
+        # Aguardamos o banco de dados para iniciar o servidor django
+        depends_on:
+            - database
+        volumes:
+            # Montamos a pasta django-site/djangosite/ (projeto django) em
+            # /djangosite no container
+            - ./django-site/djangosite:/djangosite
+        links:
+            # O django irá se conectar com o banco de dados
+            - "database:database"
+
+    # Serviço do banco de dados
+    database:
+        container_name: database-postgresql
+        image: postgres:10.4-alpine
+        environment:
+            - DB_NAME=postgresql
+            - DB_USER=postgresql
+            - DB_PASS=postgresql
+            - DB_SERVICE=postgresql
+            - DB_PORT=5432
+        volumes:
+            # Passamos o banco de dados para a nossa pasta
+            - ./database_data:/var/lib/postgresql/data
+        restart: always
+        expose:
+            # Porta padrão do postgresql
+            - "5432"
+
+    # Serviço do nginx
+    servidor:
+        container_name: nginx
+        build:
+            context: ./nginx
+            dockerfile: Dockerfile-http
+        restart: always
+        ports:
+            - target: 80
+              published: 80
+              mode: host
+              protocol: tcp
+        volumes:
+            # Montamos as pastas django-site/djnangosite/media e
+            # django-site/djangosite/static em /media e /static do container
+            # para ser servido pelo nginx (mais rápido)
+            - ./django-site/djangosite/media:/media
+            - ./django-site/djangosite/static:/static
+        depends_on:
+            - django-caco
+        links:
+            # nginx se conectará ao django
+            - "django-caco:django-caco"
