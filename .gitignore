@@ -1,5 +1,8 @@
 database_data/
-django-site/django-site-venv/
+django-site/*env*/
 __pycache__
 *.key
 certificados/
+*.sqlite3
+*.pdf
+
