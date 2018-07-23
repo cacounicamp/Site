@@ -32,15 +32,15 @@ e `docker-compose`, usamos para construir a imagem dos _conainers_ (deve estar
 na pasta que contém algum `docker-compose.yml` que deseja utilizar):
 
 ```
-$ ls
+§ ls
 (...) docker-compose.yml (...)
-$ docker-compose -f docker-compose.yml build
+§ docker-compose -f docker-compose.yml build
 ```
 
 E, para iniciar os _containers_:
 
 ```
-$ docker-compose -f docker-compose.yml up
+§ docker-compose -f docker-compose.yml up
 ```
 
 Se o Docker for configurado corretamente (usando `systemctl enable docker` para
@@ -108,16 +108,17 @@ crescente de "dependência":
 algumas [variáveis de
 _environment_](https://wiki.archlinux.org/index.php/Environment_variables) para
 tornar o usuário e senha comuns ao Django e fazemos a pasta do banco de dados
-vir para a pasta raiz do projeto). A porta padrão `postgres` 5432 é exposta ao
-Docker (e não à máquina).
+vir para a pasta raiz do projeto). Para ligarmos o Django ao banco de dados,
+utilizando um Unix socket que é mais eficiente do que conexões TCP. Esse arquivo
+socket ficará na raiz do projeto também.
 
 ### `django-caco`:
 Possui um `Dockerfile` para configuração do ambiente (que é baseado em uma
 imagem do Python na distribuição debian), instalando Django, uWSGi e
 dependências do site.
-Possui uma dependência (irá ligar apenas depois do `database` estar ligado) e
-ligação com o _container_ `database` para poder acessar o banco de dados. A
-porta 8080 é exposta ao Docker para que nginx possa conversar com o Django.
+Possui uma dependência (irá ligar apenas depois do `database` estar ligado). A
+porta 8080 é exposta ao Docker para que nginx possa conversar com o Django. Não
+consegui ainda utilizar um Unix socket para isso.
 
 ### `servidor`:
 É baseado na imagem `nginx:alpine`, mas possui arquivo de configuração. Tem
@@ -130,6 +131,91 @@ Executa apenas um comando e termina. É para renovar os certificados HTTPS. Esse
 certificados serão utilizados pelo nginx, mantendo o site encriptado e mais
 seguro. Caso não haja um _script_ que execute este _container_ periodicamente,
 reiniciar a máquina antes dos 3 meses do certificado expirar basta.
+
+## Criação das imagens do docker
+
+O Docker utiliza imagens configuradas para a execução dos _containers_, é o que
+traz estabilidade ao serviço, pois tudo se torna previsível se a imagem é
+idêntica para qualquer máquina que a executa.
+
+```
+# Criamos as imagens
+§ docker-compose -f (arquivo de configuração yml) build
+```
+
+Como dito anteriormente, as opções de configurações são HTTP ou HTTPS. A
+configuração é adicional com HTTPS pois é necessário adquirir um certificado.
+
+## (Re-)Configuração do banco de dados
+
+O banco de dados precisa receber a estrutura do site. Isso deve ser feito antes
+da execução do servidor através dos modelos criados em Django.
+
+Para entrarmos no _environment_ de Python, é necessário estar dentro da imagem
+configurada do Docker ou dentro de um _virtual environment_ idêntico ao da
+imagem (para minimizar erros). Acredito que é mais fácil iniciar a imagem do
+banco de dados e depois utilizar a linha de comando da própria máquina para
+entrar no _virtual environment_ idêntico ao da imagem do que fazer algo
+mirabolante como iniciar as duas imagens e fazer interagirem uma com a outra.
+
+Portanto, criaremos um _virtual environment_:
+
+```
+  # Instalamos virtualenv
+§ pip3 install virtualenv
+§ cd django-site
+  # Criamos um virtual environment dando uma pasta em que será guardada todas as
+  # informações do virtual environment
+§ python3 -m venv (nome da pasta, usarei 'virtualenv-django')
+  # Ativamos o virtual environment (onde virtualenv-django é a sua pasta do seu
+  # virtual environment)
+§ source virtualenv-django/bin/activate
+```
+
+Para obtermos um _virtual environment_ idêntico ao da imagem, precisamos
+instalar todas as dependências de nosso projeto Django:
+
+```
+  # Usamos o pip para instalar todas as dependências do projeto
+(virtualenv-django) § pip install -r requirements.txt
+```
+
+Para sairmos desse _virtual environment_, utilizamos:
+
+```
+(virtualenv-django) § deactivate
+§
+```
+
+Agora que já sabe utilizar o _virtual environment_, precisamos utilizá-lo para
+configurar as estruturas no banco de dados:
+
+```
+  # Iremos iniciar o banco de dados com a opção detached (desvinculada do
+  # terminal, o tornará livre para uso)
+§ docker-compose -f (arquivo de configuração yml) run -d database
+...
+  # Entramos no virtual environment idêntico ao configurado na imagem e vamos
+  # para a raiz do projeto Django (para a pasta django-site/djangosite)
+...
+  # Fazemos Django criar as transações para o banco de dados executar
+(virtualenv-django) § python3 manage.py makemigrations
+  # Executamos as transações no banco de dados
+(virtualenv-django) § python3 manage.py migrate
+...
+  # Terminamos a imagem do banco de dados
+§ docker-compose -f (arquivo de configuração yml) down
+```
+
+## Execução do servidor
+
+Para completar, já que o Docker possui imagens configuradas, o banco de dados
+possui toda a estrutura atualizada dos modelos do site, basta executar todas as
+imagens do Docker:
+
+```
+§ docker-compose -f (arquivo de configuração yml) up
+```
 
 ## Referências
 
