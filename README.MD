@@ -8,8 +8,12 @@ Utilizei neste guia [Arch
 Linux](https://wiki.archlinux.org/index.php/Arch_Linux) e seu sistema de
 pacotes.
 
+## Estrutura do servidor
 
-## Estrutura básica
+Aqui será descrito o alicerce do servidor e todos os passos para sua
+configuração e inicialização.
+
+### Estrutura básica
 
 [nginx](https://www.nginx.com/) (pronunciado _engine x_) é um servidor web de
 alta performance. Será utilizado para servir arquivos estáticos e redirecionar
@@ -56,7 +60,7 @@ No nosso projeto, há diferentes arquivos `docker-compose.yml`:
 Independente do que escolher, a configuração do Docker é a mesma.
 
 
-## Configurando HTTPS
+### Configurando HTTPS
 
 Usamos o serviço do [Let's Encrypt](https://letsencrypt.org/). Na primeira
 execução, é necessário pedir certificados e comprovar que temos controle do
@@ -84,7 +88,7 @@ Esse é o "detalhezinho rs", é (quase) a única tarefa fora do Docker de que
 precisamos.
 
 
-## Configurando o Docker
+### Configurando o Docker
 
 Para entender a estrutura dos _containers_, é necessário entender alguns
 conceitos:
@@ -103,7 +107,7 @@ A estrutura dos _containers_ de produção (não inclui o _container_ usado para
 aquisição dos certificados HTTPS, que é usado apenas uma vez) é, em ordem
 crescente de "dependência":
 
-### `database`:
+#### `database`:
 É baseado na imagem `postgres:alpine` em configuração padrão (definimos apenas
 algumas [variáveis de
 _environment_](https://wiki.archlinux.org/index.php/Environment_variables) para
@@ -112,7 +116,7 @@ vir para a pasta raiz do projeto). Para ligarmos o Django ao banco de dados,
 utilizando um Unix socket que é mais eficiente do que conexões TCP. Esse arquivo
 socket ficará na raiz do projeto também.
 
-### `django-caco`:
+#### `django-caco`:
 Possui um `Dockerfile` para configuração do ambiente (que é baseado em uma
 imagem do Python na distribuição debian), instalando Django, uWSGi e
 dependências do site.
@@ -120,19 +124,19 @@ Possui uma dependência (irá ligar apenas depois do `database` estar ligado). A
 porta 8080 é exposta ao Docker para que nginx possa conversar com o Django. Não
 consegui ainda utilizar um Unix socket para isso.
 
-### `servidor`:
+#### `servidor`:
 É baseado na imagem `nginx:alpine`, mas possui arquivo de configuração. Tem
 acesso aos arquivos estáticos do site (`/media` e `/static`) e depende de
 `django-caco` e possui uma ligação ao _container_ (aquela porta 8080). As portas
 80 e 443 são abertas ao público.
 
-### `certbot_renew` (apenas HTTPS):
+#### `certbot_renew` (apenas HTTPS):
 Executa apenas um comando e termina. É para renovar os certificados HTTPS. Esses
 certificados serão utilizados pelo nginx, mantendo o site encriptado e mais
 seguro. Caso não haja um _script_ que execute este _container_ periodicamente,
 reiniciar a máquina antes dos 3 meses do certificado expirar basta.
 
-## Criação das imagens do docker
+### Criação das imagens do docker
 
 O Docker utiliza imagens configuradas para a execução dos _containers_, é o que
 traz estabilidade ao serviço, pois tudo se torna previsível se a imagem é
@@ -146,7 +150,7 @@ idêntica para qualquer máquina que a executa.
 Como dito anteriormente, as opções de configurações são HTTP ou HTTPS. A
 configuração é adicional com HTTPS pois é necessário adquirir um certificado.
 
-## (Re-)Configuração do banco de dados
+### (Re-)Configuração do banco de dados
 
 O banco de dados precisa receber a estrutura do site. Isso deve ser feito antes
 da execução do servidor através dos modelos criados em Django.
@@ -207,7 +211,24 @@ configurar as estruturas no banco de dados:
 § docker-compose -f (arquivo de configuração yml) down
 ```
 
-## Execução do servidor
+### Configuração HTTPS (apenas para o servidor HTTPS)
+
+Na primeira execução, é necessário adquirir os certificados para habilitar o
+serviço HTTPS. Utilizamos o arquivo `docker-compose-cert.yml`, que irá servir o
+comprovante de controle de domínio para Let's Encrypt.
+
+```
+  # Criamos as imagens para a configuração do certificado
+§ docker-compose -f docker-compose-cert.yml build
+§ docker-compose -f docker-compose-cert.yml up
+  # Aguardamos a verificação
+...
+§ docker-compose -f docker-compose-cert.yml down
+  # Criamos as imagens para o servidor HTTPS
+§ docker-compose -f docker-compose-https.yml build
+```
+
+### Execução do servidor
 
 Para completar, já que o Docker possui imagens configuradas, o banco de dados
 possui toda a estrutura atualizada dos modelos do site, basta executar todas as
@@ -217,10 +238,15 @@ imagens do Docker:
 § docker-compose -f (arquivo de configuração yml) up
 ```
 
+## Estrutura do site (Django)
+
+Aqui será descrito a estrutura do site como um projeto Django, presente na pasta
+`django-site/djangosite`.
+
 ## Referências
 
-Além das referências que usei que foram mencionadas pela descrição do sistema,
-utilizei estes guias:
+Além das referências que usei que foram mencionadas pela descrição do sistema e
+documentação de serviços utilizados (Django, Docker), utilizei estes guias:
 
 [Antigo setup do site do CACo](https://github.com/cacounicamp/Site)
 
