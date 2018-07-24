@@ -243,6 +243,31 @@ imagens do Docker:
 Aqui será descrito a estrutura do site como um projeto Django, presente na pasta
 `django-site/djangosite`.
 
+## Estrutura do site (páginas, design)
+
+Usamos [Material Design Components (MDC)](https://material.io/) construindo a
+página de maneira genérica na pasta `material-design-components` e alterando-a
+para os parâmetros genéricos de Django na pasta do projeto.
+
+### Configurando MDC
+
+Instalamos os pré-requisitos utilizando `npm` (gerenciador de pacotes
+JavaScript), que irá identificar o arquivo do projeto `package.json`:
+
+```
+§ cd material-design-components
+§ npm install
+```
+
+### Construindo arquivos estáticos
+
+Após modificar os arquivos `app.js`, `app.scss`, utilizamos o comando que irá
+construir na pasta `build/` os arquivos finais `bundle.js` e `bundle.css`:
+
+```
+§ npm run build
+```
+
 ## Referências
 
 Além das referências que usei que foram mencionadas pela descrição do sistema e
