@@ -245,18 +245,28 @@ Aqui será descrito a estrutura do site como um projeto Django, presente na past
 
 ## Estrutura do site (páginas, design)
 
-Usamos [Material Design Components (MDC)](https://material.io/) construindo a
-página de maneira genérica na pasta `material-design-components` e alterando-a
-para os parâmetros genéricos de Django na pasta do projeto.
+Usamos [Bootstrap](https://getbootstrap.com/) (pretendia utilizar _material
+design_ do Google, mas a documentação para web é terrível) construindo a página
+de maneira genérica na pasta `bootstrap` e alterando-a para os parâmetros
+genéricos de Django na pasta do projeto.
 
-### Configurando MDC
+### Configurando com `npm`
 
 Instalamos os pré-requisitos utilizando `npm` (gerenciador de pacotes
 JavaScript), que irá identificar o arquivo do projeto `package.json`:
 
 ```
-§ cd material-design-components
+§ cd bootstrap/
 § npm install
+```
+
+### Modificando o projeto
+
+Para modificar e testar essas alterações, utilizamos o `webpack-dev-server`, que
+irá servir os arquivos compilados:
+
+```
+§ npm start
 ```
 
 ### Construindo arquivos estáticos

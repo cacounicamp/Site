@@ -1,7 +1,8 @@
 database_data/
 django-site/*env*/
-material-design-components/node_modules
-material-design-components/package-lock.json
+bootstrap/node_modules/
+bootstrap/build/
+bootstrap/package-lock.json
 certificados/
 __pycache__
 *.key
