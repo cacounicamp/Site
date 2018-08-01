@@ -39,6 +39,8 @@ class ItemMenuAbstrato(models.Model):
 class MenuDropdown(ItemMenuAbstrato):
     #manager = MenuManager()
     class Meta:
+        verbose_name = "item dropdown do menu"
+        verbose_name_plural = "itens dropdown do menu"
         ordering = ['indice']
 
 class ItemMenu(ItemMenuAbstrato):
@@ -52,4 +54,6 @@ class ItemMenu(ItemMenuAbstrato):
     )
 
     class Meta:
+        verbose_name = "item do menu"
+        verbose_name_plural = "itens do menu"
         ordering = ['indice']

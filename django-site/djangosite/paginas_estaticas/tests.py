@@ -55,17 +55,17 @@ class MostrarMenu(TestCase):
 
     def test1(self):
         print('### Test 1')
-        itens = ItemMenu.objects.all().filter(dropdown=None).order_by('indice')
+        itens = ItemMenu.objects.filter(dropdown=None).order_by('indice')
         for item in itens:
             print(item)
         print('### End of test 1')
 
     def test2(self):
         print('### Test 2')
-        menus = MenuDropdown.objects.all().order_by('indice')
+        menus = MenuDropdown.objects.order_by('indice')
         for menu in menus:
             print(menu)
-            itens = ItemMenu.objects.all().filter(dropdown=menu).order_by('indice')
+            itens = ItemMenu.objects.filter(dropdown=menu).order_by('indice')
             for item in itens:
                 print('\t' + str(item))
         print('### End of test 2')

@@ -241,7 +241,25 @@ imagens do Docker:
 ## Estrutura do site (Django)
 
 Aqui será descrito a estrutura do site como um projeto Django, presente na pasta
-`django-site/djangosite`.
+`django-site/djangosite`. Django utiliza uma estrutura MCV (_Model, Controller,
+View_). Modelos controlam os objetos que serão trabalhados no controlador e
+mostrados na _view_.
+
+Django isola cada trecho do site em diversas aplicações, que possuem modelos,
+controladores e _views_ individuais. As aplicações do site são:
+
+### `paginas_estaticas`
+
+As páginas estáticas são controladas pelo _app_ `paginas_estaticas`. Há modelos
+que definem as coisas presentes na barra de menu e outros para cada página.
+
+O menu é composto por:
+* `ItemMenu` é um item do menu, filho ou não de um _dropdown_, com um índice que
+indica qual sua posição na barra ou dentro do _dropdown_, um endereço para o
+qual o item ao ser clicado redirecionará o usuário, um booleano para indicar se
+o item estará visível ou não e outro para indicar se é clicável ou não.
+* `MenuDropdown` é um `ItemMenu` que contém outros objetos `ItemMenu` e não
+possui endereço.
 
 ## Estrutura do site (páginas, design)
 
