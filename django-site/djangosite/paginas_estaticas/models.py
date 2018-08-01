@@ -2,7 +2,19 @@ from django.db import models
 
 class MenuManager(models.Manager):
     def get_itens(self):
-        return None
+        elementos = {}
+        for item in MenuDropdown.objects.all():
+            elementos[item] = []
+        for item in ItemMenu.objects.all():
+            if item.dropdown is not None:
+                elementos[item.dropdown].append(item)
+            else:
+                elementos[item] = None
+        for chave, valor in elementos.items():
+            if valor is not None:
+                sorted(valor, key=lambda item: item.indice)
+        sorted(elementos, key=lambda item: item.indice)
+        return elementos
 
 class ItemMenuAbstrato(models.Model):
     objects = MenuManager()

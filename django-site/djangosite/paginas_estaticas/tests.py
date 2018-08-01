@@ -13,7 +13,7 @@ class MostrarMenu(TestCase):
             visivel=True,
             endereco="google.com"
         )
-        item2 = ItemMenu(
+        item2 = ItemMenu.objects.create(
             indice=2,
             name="Item 2",
             visivel=True,
@@ -38,6 +38,19 @@ class MostrarMenu(TestCase):
             dropdown=item0_drop,
             endereco="google.com"
         )
+        item_drop0 = ItemMenu.objects.create(
+            indice=0,
+            name="Item 0 do dropdown",
+            visivel=True,
+            dropdown=item0_drop,
+            endereco="google.com"
+        )
+        item1 = ItemMenu.objects.create(
+            indice=1,
+            name="Item 1",
+            visivel=True,
+            endereco="google.com"
+        )
         print('Created objects for tests')
 
     def test1(self):
@@ -59,6 +72,5 @@ class MostrarMenu(TestCase):
 
     def test3(self):
         print('### Test 3')
-        itens = ItemMenu.objects.get_itens()
-        print(itens)
+        print(ItemMenu.objects.get_itens())
         print('### End of test 3')
