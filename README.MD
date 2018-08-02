@@ -261,6 +261,19 @@ o item estará visível ou não e outro para indicar se é clicável ou não.
 * `MenuDropdown` é um `ItemMenu` que contém outros objetos `ItemMenu` e não
 possui endereço.
 
+Para a composição das páginas, utilizamos o editor
+[CKEditorWidget](https://github.com/django-ckeditor/django-ckeditor#widget),
+que já é instalado através do `requirements.txt`. É necessário definir as
+variáveis `STATIC_ROOT`, `CKEDITOR_BASEPATH` e utilizar o comando:
+
+```
+§ python manage.py collectstatic
+```
+
+para organizar todos os arquivos estáticos na pasta que será servida. Isso é
+necessário para que os arquivos do `CKEditor` possam ser utilizados pelo
+navegador.
+
 ## Estrutura do site (páginas, design)
 
 Usamos [Bootstrap](https://getbootstrap.com/) (pretendia utilizar _material

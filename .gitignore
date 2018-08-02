@@ -1,5 +1,7 @@
 database_data/
 django-site/*env*/
+django-site/djangosite/static/admin
+django-site/djangosite/static/ckeditor
 bootstrap/node_modules/
 bootstrap/build/
 bootstrap/package-lock.json

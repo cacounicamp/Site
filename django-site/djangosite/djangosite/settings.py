@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     # Para o uso de páginas estáticas com FlatPages
     'django.contrib.sites',
     'django.contrib.flatpages',
+    # Para ediçao de páginas estáticas (requer o comando 'collectstatic' do
+    # django)
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +134,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Para o comando 'collectstatic'
+STATIC_ROOT = '/home/rafaelsartori96/Documents/CACo - Site/django-site/djangosite/static/'
+# Para o CKEditor (usado em paginas_estaticas)
+CKEDITOR_BASEPATH = 'static/ckeditor/ckeditor/'
