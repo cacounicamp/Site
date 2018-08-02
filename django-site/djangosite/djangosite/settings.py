@@ -30,7 +30,6 @@ DEBUG = True
 ALLOWED_HOSTS = [
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -57,7 +56,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Para o uso de páginas estáticas com FlatPages
+    # Para o uso de páginas estáticas com FlatPages sem precisar declarar em
+    # urls.py
+    # https://docs.djangoproject.com/en/2.0/ref/contrib/flatpages/
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
@@ -66,7 +67,9 @@ ROOT_URLCONF = 'djangosite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,10 +135,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-
 STATIC_URL = '/static/'
 
 # Para o comando 'collectstatic'
-STATIC_ROOT = '/home/rafaelsartori96/Documents/CACo - Site/django-site/djangosite/static/'
-# Para o CKEditor (usado em paginas_estaticas)
-CKEDITOR_BASEPATH = 'static/ckeditor/ckeditor/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'djangosite/adminstatic')
+
+# Para servirmos CSS e JS globalmente
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+# Por conta do FlatpageFallbackMiddleware
+SITE_ID = 1

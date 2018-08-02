@@ -8,19 +8,25 @@ from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.forms import FlatpageForm
 
 # Colocamos o editor no formulário de administrador
-class FormFlatPage(FlatpageForm):
-    content = forms.CharField(widget=CKEditorWidget())
+class FormPaginaEstatica(FlatpageForm):
+    content = forms.CharField(widget=CKEditorWidget(config_name='toolbar_Full'))
 
     class Meta:
-        model = FlatPage
+        model = PaginaEstatica
         fields = '__all__'
 
-class AdminFlatPage(admin.ModelAdmin):
-    form = FormFlatPage
+# Criamos o administrador para o formulário
+class AdminPaginaEstatica(admin.ModelAdmin):
+    form = FormPaginaEstatica
+    list_display = ('title', 'url')
+    fields = ('title','url','content')
+
 
 admin.site.register(MenuDropdown)
 admin.site.register(ItemMenu)
 
-# Recriamos o administrador para FlatPage
-admin.site.register(FlatPage, FormFlatPage)
-admin.site.unregister(FlatPage)
+# Registramos o administrador para PaginaEstatica
+admin.site.register(PaginaEstatica, AdminPaginaEstatica)
+# Não queremos mostrá-los no admin
+#admin.site.unregister(FlatPage)
+#admin.site.unregister(Site)

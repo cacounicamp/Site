@@ -246,7 +246,8 @@ View_). Modelos controlam os objetos que serão trabalhados no controlador e
 mostrados na _view_.
 
 Django isola cada trecho do site em diversas aplicações, que possuem modelos,
-controladores e _views_ individuais. As aplicações do site são:
+controladores e _views_ individuais. Cada modelo poderá ser editado na páginas
+de administrador quando configurado. As aplicações do site são:
 
 ### `paginas_estaticas`
 
@@ -263,8 +264,8 @@ possui endereço.
 
 Para a composição das páginas, utilizamos o editor
 [CKEditorWidget](https://github.com/django-ckeditor/django-ckeditor#widget),
-que já é instalado através do `requirements.txt`. É necessário definir as
-variáveis `STATIC_ROOT`, `CKEDITOR_BASEPATH` e utilizar o comando:
+que já é instalado através do `requirements.txt`. É necessário utilizar o
+comando:
 
 ```
 § python manage.py collectstatic
@@ -273,6 +274,8 @@ variáveis `STATIC_ROOT`, `CKEDITOR_BASEPATH` e utilizar o comando:
 para organizar todos os arquivos estáticos na pasta que será servida. Isso é
 necessário para que os arquivos do `CKEditor` possam ser utilizados pelo
 navegador.
+
+As páginas estáticas possuem o modelo `PaginaEstatica`.
 
 ## Estrutura do site (páginas, design)
 

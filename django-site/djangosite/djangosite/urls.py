@@ -18,7 +18,4 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Para o uso de páginas estáticas
-    # https://docs.djangoproject.com/en/2.0/ref/contrib/flatpages/
-    path('', include('django.contrib.flatpages.urls')),
 ]

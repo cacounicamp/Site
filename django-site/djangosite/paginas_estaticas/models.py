@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.flatpages.models import FlatPage
 
 class MenuManager(models.Manager):
     def get_itens(self):
@@ -57,3 +58,8 @@ class ItemMenu(ItemMenuAbstrato):
         verbose_name = "item do menu"
         verbose_name_plural = "itens do menu"
         ordering = ['indice']
+
+class PaginaEstatica(FlatPage):
+    class Meta:
+        verbose_name = "página estática"
+        verbose_name_plural = "páginas estáticas"
