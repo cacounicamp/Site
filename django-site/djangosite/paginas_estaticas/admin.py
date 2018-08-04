@@ -22,6 +22,10 @@ class AdminPaginaEstatica(admin.ModelAdmin):
     list_display = ('title', 'url')
     fields = ('title','url','content')
 
+    def save_model(self, request, object, form, change):
+        object.save()
+        # Definimos o site da página como o site atual (ou ele não aparecerá)
+        object.sites.add(Site.objects.get_current())
 
 admin.site.register(MenuDropdown)
 admin.site.register(ItemMenu)
