@@ -4,6 +4,7 @@ from .models import *
 # Para editor de content da página
 from ckeditor.widgets import CKEditorWidget
 # Para substituir o formulário de FlatPage para outro com editor
+from django.contrib.sites.models import Site
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.flatpages.forms import FlatpageForm
 
@@ -28,5 +29,5 @@ admin.site.register(ItemMenu)
 # Registramos o administrador para PaginaEstatica
 admin.site.register(PaginaEstatica, AdminPaginaEstatica)
 # Não queremos mostrá-los no admin
-#admin.site.unregister(FlatPage)
-#admin.site.unregister(Site)
+admin.site.unregister(FlatPage)
+admin.site.unregister(Site)

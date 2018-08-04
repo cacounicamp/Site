@@ -33,19 +33,24 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    # Padrão
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'paginas_estaticas',
+
+    # O que precisei adicionar
     # Para o uso de páginas estáticas com FlatPages
     'django.contrib.sites',
     'django.contrib.flatpages',
     # Para ediçao de páginas estáticas (requer o comando 'collectstatic' do
     # django)
     'ckeditor',
+
+    # Nossos aplicativos
+    'paginas_estaticas',
 ]
 
 MIDDLEWARE = [
