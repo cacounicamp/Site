@@ -41,10 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # O que precisei adicionar
-    # Para o uso de páginas estáticas com FlatPages
-    'django.contrib.sites',
-    'django.contrib.flatpages',
     # Para ediçao de páginas estáticas (requer o comando 'collectstatic' do
     # django)
     'ckeditor',
@@ -61,10 +57,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # Para o uso de páginas estáticas com FlatPages sem precisar declarar em
-    # urls.py
-    # https://docs.djangoproject.com/en/2.0/ref/contrib/flatpages/
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'djangosite.urls'
@@ -150,5 +142,4 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-# Por conta do FlatpageFallbackMiddleware
-SITE_ID = 1
+#APPEND_SLASH = True

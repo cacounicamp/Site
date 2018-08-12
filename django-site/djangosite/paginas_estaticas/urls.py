@@ -14,9 +14,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+
+from . import views
+from .models import PaginaEstatica
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('paginas_estaticas.urls'))
 ]
+
+# Para cada página dinãmica...
+for pagina in PaginaEstatica.objects.all():
+    # Registramos a URL
+    urlpatterns.append(
+        path(
+            # Endereço para o resolver
+            pagina.endereco,
+            # View para a página
+            views.PaginaEstaticaView,
+            # Passamos para a view o primary_key (do banco de dados) para
+            # conseguir a exata página com a melhor performance
+            {'pk': pagina.pk},
+            # Definimos o nome da URL como o próprio endereço, já que é único
+            pagina.endereco
+        )
+    )

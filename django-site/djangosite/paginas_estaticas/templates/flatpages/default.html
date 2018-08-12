@@ -1,9 +1,9 @@
 {% extends "layouts/base.html" %}
 
 {% block titulopagina %}
-{{flatpage.title}} | CACo
+{{pagina.titulo}} | CACo
 {% endblock %}
 
 {% block body %}
-{{flatpage.content}}
+{{pagina.conteudo|safe}}
 {% endblock %}

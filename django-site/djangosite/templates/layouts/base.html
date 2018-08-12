@@ -26,28 +26,51 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
+        {% with url_pagina=request.resolver_match.url_name %}
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
 
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-
-            <li class="nav-item dropdown active">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Disabled</a>
-            </li>
+            {% for pagina_estatica, dropdown in paginas_estaticas.items %}
+            {% if dropdown %}
+              {% if pagina_estatica.desativado %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link disabled">{{pagina_estatica.nome}}</a>
+                </li>
+              {% else %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{pagina_estatica.nome}}
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for item_dropdown in dropdown %}
+                      {% if not item_dropdown.desativado %}
+                        {% if item_dropdown.endereco is not None %}
+                          <a class="dropdown-item" href="{{item_dropdown.endereco}}">{{item_dropdown.nome}}</a>
+                        {% else %}
+                          <a class="dropdown-item {% if url_pagina == item_dropdown.pagina.endereco %}active{% endif %}" href="{% url item_dropdown.pagina.endereco %}">{{item_dropdown.nome}}</a>
+                        {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </li>
+              {% endif %}
+            {% else %}
+              {% if pagina_estatica.desativado %}
+              <li class="nav-item">
+                <a class="nav-link disabled">{{pagina_estatica.nome}}</a>
+              </li>
+              {% elif pagina_estatica.endereco is not None %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{pagina_estatica.endereco}}">{{pagina_estatica.nome}}</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link {% if url_pagina == pagina_estatica.pagina.endereco %}active{% endif %}" href="{% url pagina_estatica.pagina.endereco %}">{{pagina_estatica.nome}}</a>
+              </li>
+              {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% endwith %}
 
           </ul>
         </div>
@@ -74,18 +97,16 @@
     </div>
 
 
-    <footer>
-      <div class="bottom shadow-lg rounded-top container-fluid">
-        <div class="row mt-3">
+    <footer class="fixed-bottom">
+      <div class="shadow-lg rounded-top container-fluid">
+        <div class="row mt-3 navbar-footer-color">
 
-          <div class="col-sm navbar-footer-color rounded border p-3">
-            <ul>
-             <li>Morbi in sem quis dui placerat ornare. Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu. Cras consequat.</li>
-             <li>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus.</li>
-             <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.</li>
-             <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc.</li>
-           </ul>
-           <small>Centro acadêmico da computação - CACo</small>
+          <div class="col-sm p-3">
+            <center>
+            <h5><small>{% now "Y" as ano %}{% if ano == "2018" %}2018{% else %}2018-{{ano}}{% endif %} <strong>Centro acadêmico da computação</strong> - CACo,<br>
+            cac<span style="display:none"></span>o@ic.unicamp.br<br></small></h5>
+            <small class="font-weight-light"><a href="http://github.com/rafaelsartori96/caco-site">Código fonte no GitHub</a></small>
+            </center>
           </div>
 
         </div>

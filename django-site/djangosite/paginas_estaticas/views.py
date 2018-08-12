@@ -1,3 +1,12 @@
 from django.shortcuts import render
 
-# Create your views here.
+from .models import *
+
+def PaginaEstaticaView(request, pk):
+    pagina = PaginaEstatica.objects.get(pk=pk)
+    context = {
+        'pagina': pagina,
+        'paginas_estaticas': ItemMenu.objects.get_itens()
+    }
+
+    return render(request, 'flatpages/default.html', context=context)
