@@ -14,7 +14,7 @@ class FormPaginaEstatica(forms.ModelForm):
     endereco = forms.RegexField(
         label="URL",
         max_length=200,
-        regex=r'^[~.-\/\w]+\/$',
+        regex=r'^[~.-\/\w]*\/$',
         help_text="Exemplo: 'sobre/contato/'.",
         error_messages={
             "invalid": "Pode conter apenas letras, números, pontos, underlines, traços. Deve possuir barra no fim.",

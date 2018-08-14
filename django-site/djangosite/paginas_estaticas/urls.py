@@ -28,7 +28,7 @@ for pagina in PaginaEstatica.objects.all():
     urlpatterns.append(
         path(
             # Endereço para o resolver
-            pagina.endereco,
+            '' if pagina.endereco == '/' else pagina.endereco,
             # View para a página
             views.PaginaEstaticaView,
             # Passamos para a view o primary_key (do banco de dados) para
