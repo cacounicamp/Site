@@ -60,7 +60,7 @@ No nosso projeto, há diferentes arquivos `docker-compose.yml`:
 Independente do que escolher, a configuração do Docker é a mesma.
 
 
-### Configurando HTTPS
+### Estrutura do servidor HTTPS
 
 Usamos o serviço do [Let's Encrypt](https://letsencrypt.org/). Na primeira
 execução, é necessário pedir certificados e comprovar que temos controle do
@@ -216,6 +216,13 @@ configurar as estruturas no banco de dados:
 Na primeira execução, é necessário adquirir os certificados para habilitar o
 serviço HTTPS. Utilizamos o arquivo `docker-compose-cert.yml`, que irá servir o
 comprovante de controle de domínio para Let's Encrypt.
+
+É necessário para o servidor HTTPS que utilizamos, criar o arquivo `dhparam.pem`
+na pasta `certificados/`:
+
+```
+§ openssl dhparam -out certificados/dhparam.pem 2048
+```
 
 ```
   # Criamos as imagens para a configuração do certificado
