@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.db.utils import ProgrammingError
 
 from . import views
 from .models import PaginaEstatica
@@ -22,19 +23,22 @@ from .models import PaginaEstatica
 urlpatterns = [
 ]
 
-# Para cada página dinãmica...
-for pagina in PaginaEstatica.objects.all():
-    # Registramos a URL
-    urlpatterns.append(
-        path(
-            # Endereço para o resolver
-            pagina.endereco,
-            # View para a página
-            views.PaginaEstaticaView,
-            # Passamos para a view o primary_key (do banco de dados) para
-            # conseguir a exata página com a melhor performance
-            {'pk': pagina.pk},
-            # Definimos o nome da URL como o próprio endereço, já que é único
-            pagina.endereco
+try:
+    # Para cada página dinãmica...
+    for pagina in PaginaEstatica.objects.all():
+        # Registramos a URL
+        urlpatterns.append(
+            path(
+                # Endereço para o resolver
+                pagina.endereco,
+                # View para a página
+                views.PaginaEstaticaView,
+                # Passamos para a view o primary_key (do banco de dados) para
+                # conseguir a exata página com a melhor performance
+                {'pk': pagina.pk},
+                # Definimos o nome da URL como o próprio endereço, já que é único
+                pagina.endereco
+            )
         )
-    )
+except ProgrammingError:
+    pass
