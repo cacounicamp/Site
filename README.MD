@@ -282,6 +282,9 @@ para organizar todos os arquivos estáticos na pasta que será servida. Isso é
 necessário para que os arquivos do `CKEditor` possam ser utilizados pelo
 navegador.
 
+Utilizaremos este comando na próxima seção para organizar também os arquivos
+estáticos do Bootstrap.
+
 As páginas estáticas possuem o modelo `PaginaEstatica`.
 
 ## Estrutura do site (páginas, design)
@@ -317,6 +320,14 @@ construir na pasta `build/` os arquivos finais `bundle.js` e `bundle.css`:
 
 ```
 § npm run build
+```
+
+Agora colocamos esses arquivos na pasta que será servida pelo Django:
+`django-site/djangosite/static` e utilizamos o comando para reorganizar os
+arquivos estáticos:
+
+```
+§ python manage.py collectstatic
 ```
 
 ## Referências
