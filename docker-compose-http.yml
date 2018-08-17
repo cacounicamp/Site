@@ -48,10 +48,12 @@ services:
               protocol: tcp
         volumes:
             # Montamos as pastas django-site/djnangosite/media e
-            # django-site/djangosite/static em /media e /static do container
-            # para ser servido pelo nginx (mais rápido)
+            # django-site/djangosite/djangosite/adminstatic em /media e /static
+            # respectivamente do container para ser servido pelo nginx (mais
+            # rápido)
+            # Obs: adminstatic é resultado do comando de django `collectstatic`
             - ./django-site/djangosite/media:/media
-            - ./django-site/djangosite/static:/static
+            - ./django-site/djangosite/djangosite/adminstatic:/static
         depends_on:
             - django-caco
         links:
