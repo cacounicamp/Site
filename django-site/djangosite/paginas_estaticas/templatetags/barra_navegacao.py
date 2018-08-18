@@ -1,28 +1,29 @@
 from django import template
 from django.urls import reverse
 
-from ..models import MenuManager, MenuDropdown, ItemMenu
+from ..models import *
 
 # Registramos a tag
 register = template.Library()
 
-@register.tag
+@register.simple_tag
 def imprime_barra_navegacao(url):
     resultado = ""
+    url = reverse(url)
     itens = ItemMenu.objects.get_itens()
 
-    for menu, lista_dropdowns in itens:
-        if len(lista_dropdowns) > 0:
+    for menu, lista_dropdowns in itens.items():
+        if lista_dropdowns is not None:
             if menu.desativado:
                 resultado += \
                     """<li class="nav-item dropdown">
                       <a class="nav-link disabled">{0}</a>
-                    </li>""".format(pagina.nome)
+                    </li>""".format(menu.nome)
             else:
                 resultado += \
                     """<li class="nav-item dropdown">
                           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{0}</a>
-                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">"""
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">""".format(menu.nome)
 
                 for dropdown in lista_dropdowns:
                     if not dropdown.desativado:
@@ -30,7 +31,7 @@ def imprime_barra_navegacao(url):
                             resultado += """<a class="dropdown-item" href="{1}">{0}</a>""".format(dropdown.nome, dropdown.endereco)
                         else:
                             url_reverso = reverse(dropdown.pagina.endereco)
-                            resultado += """<a class="dropdown-item {2}" href="{1}">{0}</a>""".format(dropdown.nome, url_reverso, '' if url_reverso is not url else 'active')
+                            resultado += """<a class="dropdown-item {2}" href="{1}">{0}</a>""".format(dropdown.nome, url_reverso, '' if url_reverso != url else 'active')
 
                 # Terminamos o dropdown
                 resultado += \
@@ -39,19 +40,21 @@ def imprime_barra_navegacao(url):
 
         # Menus que não são dropdown
         else:
-            if pagina.desativado:
+            if menu.desativado:
                 resultado += \
                     """<li class="nav-item">
                       <a class="nav-link disabled">{0}</a>
-                    </li>""".format(pagina.nome)
-            elif pagina.endereco is not None:
+                    </li>""".format(menu.nome)
+            elif menu.endereco is not None:
                 resultado += \
                     """<li class="nav-item">
                       <a class="nav-link" href="{1}">{0}</a>
-                    </li>""".format(pagina.nome, pagina.endereco)
+                    </li>""".format(menu.nome, menu.endereco)
             else:
-                url_reverso = reverse(pagina.pagina.endereco)
+                url_reverso = reverse(menu.pagina.endereco)
                 resultado += \
                     """<li class="nav-item">
                       <a class="nav-link {2}" href="{1}">{0}</a>
-                    </li>""".format(pagina.nome, url_reverso, '' if url_reverso is not url else 'active')
+                    </li>""".format(menu.nome, url_reverso, '' if url_reverso != url else 'active')
+
+    return resultado
