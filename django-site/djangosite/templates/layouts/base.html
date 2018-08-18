@@ -26,52 +26,12 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        {% with url_pagina=request.resolver_match.url_name %}
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-
-            {% for pagina_estatica, dropdown in paginas_estaticas.items %}
-            {% if dropdown %}
-              {% if pagina_estatica.desativado %}
-                <li class="nav-item dropdown">
-                  <a class="nav-link disabled">{{pagina_estatica.nome}}</a>
-                </li>
-              {% else %}
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{pagina_estatica.nome}}
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    {% for item_dropdown in dropdown %}
-                      {% if not item_dropdown.desativado %}
-                        {% if item_dropdown.endereco is not None %}
-                          <a class="dropdown-item" href="{{item_dropdown.endereco}}">{{item_dropdown.nome}}</a>
-                        {% else %}
-                          <a class="dropdown-item {% if url_pagina == item_dropdown.pagina.endereco %}active{% endif %}" href="{% url item_dropdown.pagina.endereco %}">{{item_dropdown.nome}}</a>
-                        {% endif %}
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-                </li>
-              {% endif %}
-            {% else %}
-              {% if pagina_estatica.desativado %}
-              <li class="nav-item">
-                <a class="nav-link disabled">{{pagina_estatica.nome}}</a>
-              </li>
-              {% elif pagina_estatica.endereco is not None %}
-              <li class="nav-item">
-                <a class="nav-link" href="{{pagina_estatica.endereco}}">{{pagina_estatica.nome}}</a>
-              </li>
-              {% else %}
-              <li class="nav-item">
-                <a class="nav-link {% if url_pagina == pagina_estatica.pagina.endereco %}active{% endif %}" href="{% url pagina_estatica.pagina.endereco %}">{{pagina_estatica.nome}}</a>
-              </li>
-              {% endif %}
-            {% endif %}
-            {% endfor %}
+            {% with url_pagina=request.resolver_match.url_name %}
+            {% load barra_navegacao %}
+            {% imprime_barra_navegacao url_pagina %}
             {% endwith %}
-
           </ul>
         </div>
 
