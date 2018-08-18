@@ -25,7 +25,7 @@ services:
     certbot_acquire:
         container_name: certbot_acquire
         image: certbot/certbot
-        command: certonly --staging --webroot --webroot-path /data/letsencrypt -d domain.com
+        command: certonly --dry-run --webroot --webroot-path /data/letsencrypt --email email@domain.com -d domain.com
         depends_on:
             - servidor
         volumes:

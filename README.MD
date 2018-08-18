@@ -60,7 +60,7 @@ No nosso projeto, há diferentes arquivos `docker-compose.yml`:
 Independente do que escolher, a configuração do Docker é a mesma.
 
 
-### Configurando HTTPS
+### Estrutura do servidor HTTPS
 
 Usamos o serviço do [Let's Encrypt](https://letsencrypt.org/). Na primeira
 execução, é necessário pedir certificados e comprovar que temos controle do
@@ -217,6 +217,13 @@ Na primeira execução, é necessário adquirir os certificados para habilitar o
 serviço HTTPS. Utilizamos o arquivo `docker-compose-cert.yml`, que irá servir o
 comprovante de controle de domínio para Let's Encrypt.
 
+É necessário para o servidor HTTPS que utilizamos, criar o arquivo `dhparam.pem`
+na pasta `certificados/`:
+
+```
+§ openssl dhparam -out certificados/dhparam.pem 2048
+```
+
 ```
   # Criamos as imagens para a configuração do certificado
 § docker-compose -f docker-compose-cert.yml build
@@ -275,6 +282,9 @@ para organizar todos os arquivos estáticos na pasta que será servida. Isso é
 necessário para que os arquivos do `CKEditor` possam ser utilizados pelo
 navegador.
 
+Utilizaremos este comando na próxima seção para organizar também os arquivos
+estáticos do Bootstrap.
+
 As páginas estáticas possuem o modelo `PaginaEstatica`.
 
 ## Estrutura do site (páginas, design)
@@ -310,6 +320,14 @@ construir na pasta `build/` os arquivos finais `bundle.js` e `bundle.css`:
 
 ```
 § npm run build
+```
+
+Agora colocamos esses arquivos na pasta que será servida pelo Django:
+`django-site/djangosite/static` e utilizamos o comando para reorganizar os
+arquivos estáticos:
+
+```
+§ python manage.py collectstatic
 ```
 
 ## Referências

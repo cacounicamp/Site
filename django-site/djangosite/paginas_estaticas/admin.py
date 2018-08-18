@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.utils.translation import gettext
 
 from .models import *
+# Para recarregarmos as urls quando um novo site for adicionado
+from . import urls
 # Para editor de content da página
 from ckeditor.widgets import CKEditorWidget
 
@@ -52,6 +54,10 @@ class AdminPaginaEstatica(admin.ModelAdmin):
     list_display = ('endereco', 'titulo')
     search_fields = ('endereco', 'titulo')
     fields = ('endereco', 'titulo', 'conteudo')
+
+    def save_model(self, request, obj, form, change):
+        super(AdminPaginaEstatica, self).save_model(request, obj, form, change)
+        urls.recarregar_urls()
 
 # Registramos nossos modelos
 admin.site.register(MenuDropdown)
