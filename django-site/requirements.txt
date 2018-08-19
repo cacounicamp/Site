@@ -4,4 +4,4 @@ psycopg2-binary==2.7.5
 pytz
 uWSGI==2.0.17
 django-ckeditor==5.6.1
-
+requests==2.19.1

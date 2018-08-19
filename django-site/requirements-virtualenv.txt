@@ -1,6 +1,6 @@
-Django==2.0.6
-django-uwsgi==0.2.1
-psycopg2-binary==2.7.5
+Django
+django-uwsgi
+psycopg2-binary
 pytz
-django-ckeditor==5.6.1
-
+django-ckeditor
+requests

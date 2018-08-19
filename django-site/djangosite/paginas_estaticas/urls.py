@@ -39,7 +39,7 @@ def recarregar_urls():
                     # conseguir a exata página com a melhor performance
                     {'pk': pagina.pk},
                     # Definimos o nome da URL como o próprio endereço, já que é único
-                    pagina.endereco
+                    name=pagina.endereco
                 )
             )
     except ProgrammingError:

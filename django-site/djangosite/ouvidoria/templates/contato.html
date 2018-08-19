@@ -1,0 +1,37 @@
+{% extends "layouts/base.html" %}
+
+{% block titulopagina %}
+Contato | CACo
+{% endblock %}
+
+{% block extrahead %}
+<script src='https://www.google.com/recaptcha/api.js?render={{captcha_site_key}}'></script>
+{% endblock %}
+
+{% block body %}
+{# Colocamos o conteúdo da página estática se houver #}
+{% if pagina %}
+{{pagina.conteudo|safe}}
+{% endif %}
+
+{# Colocamos o formulário de contato #}
+<h2>Formulário de contato</h2><br>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
+
+  <script>
+  grecaptcha.ready(function() {
+    grecaptcha.execute('{{captcha_site_key}}', {action: 'social'}).then(function(token) {
+      document.getElementById('g-recaptcha-response').value=token;
+    });
+  });
+  </script>
+
+  <button type="submit" class="btn btn-primary">Enviar!</button>
+</form>
+
+{% endblock %}

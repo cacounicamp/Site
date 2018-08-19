@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     # Nossos aplicativos
     'paginas_estaticas',
+    'ouvidoria',
 ]
 
 MIDDLEWARE = [
@@ -142,4 +143,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-#APPEND_SLASH = True
+# Dados para captcha (página de contatos e membros)
+with open('captcha-secret.key') as arquivo:
+    CAPTCHA_SECRET_KEY = arquivo.readline().replace('\n', '')
+with open('captcha-site.key') as arquivo:
+    CAPTCHA_SITE_KEY = arquivo.readline().replace('\n', '')

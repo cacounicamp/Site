@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{% static "bundle.css" %}">
     <script src="{% static "bundle.js" %}" async></script>
     <link rel="shortcut icon" type="image/ico" href="{% static "favicon.ico" %}">
+    {% block extrahead %}{% endblock %}
   </head>
 
   <body class="bg-color">
@@ -58,7 +59,7 @@
     </div>
 
 
-    <footer class="fixed-bottom">
+    <footer class="bottom">
       <div class="shadow-lg rounded-top container-fluid">
         <div class="row mt-3 navbar-footer-color">
 

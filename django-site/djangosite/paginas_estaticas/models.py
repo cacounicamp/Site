@@ -10,7 +10,7 @@ class PaginaEstatica(models.Model):
     conteudo = models.TextField(blank=True)
 
     def __str__(self):
-        return "'" + self.titulo + "' em '" + self.endereco + "'"
+        return '"{}" @ "{}"'.format(self.titulo, self.endereco)
 
     class Meta:
         verbose_name = "página estática"
@@ -62,7 +62,7 @@ class ItemMenuAbstrato(models.Model):
     desativado = models.BooleanField(default=False)
 
     def __str__(self):
-        return "'" + self.nome + "' (" + str(self.id) + ")"
+        return '"{}" (id={})'.format(self.nome, self.id)
 
     class Meta:
         abstract = True
