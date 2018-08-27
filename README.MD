@@ -271,21 +271,47 @@ possui endereço.
 
 Para a composição das páginas, utilizamos o editor
 [CKEditorWidget](https://github.com/django-ckeditor/django-ckeditor#widget),
-que já é instalado através do `requirements.txt`. É necessário utilizar o
-comando:
+que já é instalado através do `requirements.txt`. No entanto, é necessário
+utilizar o comando:
 
 ```
 § python manage.py collectstatic
 ```
 
 para organizar todos os arquivos estáticos na pasta que será servida. Isso é
-necessário para que os arquivos do `CKEditor` possam ser utilizados pelo
+preciso para que os arquivos do `CKEditor` possam ser utilizados pelo
 navegador.
 
 Utilizaremos este comando na próxima seção para organizar também os arquivos
 estáticos do Bootstrap.
 
-As páginas estáticas possuem o modelo `PaginaEstatica`.
+As páginas estáticas possuem o modelo `PaginaEstatica`, que é simplesmente uma
+página com atributo de texto, editável através do `CKEditor`, associado a um
+endereço que será servido.
+
+#### Observação:
+
+Após a criação de uma página, é necessário reiniciar o servidor para que o novo
+endereço seja servido corretamente.
+
+### `ouvidoria`
+
+É um _app_ que controla todo contato feito através da página `contato/`, ele
+enviará um e-mail para a própria gestão do CACo através de um e-mail da gestão
+do CACo (configurado através do Django).
+
+Planejamos incluir, em caso de falha ao enviar o e-mail, um modelo que guardará
+as informações do pedido do contato, assim não perderemos nenhuma informação.
+Gostaria ainda que na próxima tentativa de envio de e-mail, o servidor envie os
+contatos salvos.
+
+A página de contato pode ser associada a uma instância de `PaginaEstatica`,
+dessa maneira, então, é possível adicionar/editar/remover textos da página de
+contato facilmente, sem alterar o código fonte da página através do servidor.
+
+Além da página de contato, devemos criar instâncias de `PaginaEstatica` para os
+endereços `contato/sucesso/` e `contato/falha/` que aparecem respectivamente ao
+tentar utilizar a página de contato obtendo sucesso e falha.
 
 ## Estrutura do site (páginas, design)
 
