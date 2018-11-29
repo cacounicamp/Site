@@ -20,8 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open('secret.key') as arquivo:
-    SECRET_KEY = arquivo.readline()
+secret_path = os.path.join(BASE_DIR, 'secret.key')
+if os.path.exists(secret_path):
+    with open(secret_path) as arquivo:
+        SECRET_KEY = arquivo.readline()
+else:
+    raise ValueError('Crie um arquivo "secret.key" com uma chave secreta para'
+                     ' segurança!')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -130,6 +135,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+APPEND_SLASH = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -144,7 +150,18 @@ STATICFILES_DIRS = [
 ]
 
 # Dados para captcha (página de contatos e membros)
-with open('captcha-secret.key') as arquivo:
-    CAPTCHA_SECRET_KEY = arquivo.readline().replace('\n', '')
-with open('captcha-site.key') as arquivo:
-    CAPTCHA_SITE_KEY = arquivo.readline().replace('\n', '')
+captcha_site_path = os.path.join(BASE_DIR, 'captcha-site.key')
+if os.path.exists(captcha_site_path):
+    with open(captcha_site_path) as arquivo:
+        CAPTCHA_SITE_KEY = arquivo.readline().replace('\n', '')
+else:
+    raise ValueError('Crie um arquivo "captcha-site.key" com a chave pública'
+                     ' do serviço ReCaptcha da Google')
+
+captcha_secret_path = os.path.join(BASE_DIR, 'captcha-secret.key')
+if os.path.exists(captcha_secret_path):
+    with open(captcha_secret_path) as arquivo:
+        CAPTCHA_SECRET_KEY = arquivo.readline().replace('\n', '')
+else:
+    raise ValueError('Crie um arquivo "captcha-secret.key" com a chave secreta'
+                     ' do serviço ReCaptcha da Google')
