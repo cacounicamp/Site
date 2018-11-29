@@ -15,23 +15,29 @@ Contato | CACo
 {% endif %}
 
 {# Colocamos o formulário de contato #}
-<h2>Formulário de contato</h2><br>
+<div class="row">
+  <h2>Formulário de contato</h2><br>
+</div>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
+<div class="row">
+  <form method="post">
+    {% csrf_token %}
+    <table class="table table-borderless">
+      {{ form.as_table }}
+    </table>
 
-  <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
+    <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
 
-  <script>
-  grecaptcha.ready(function() {
-    grecaptcha.execute('{{captcha_site_key}}', {action: 'social'}).then(function(token) {
-      document.getElementById('g-recaptcha-response').value=token;
+    <script>
+    grecaptcha.ready(function() {
+      grecaptcha.execute('{{captcha_site_key}}', {action: 'social'}).then(function(token) {
+        document.getElementById('g-recaptcha-response').value=token;
+      });
     });
-  });
-  </script>
+    </script>
 
-  <button type="submit" class="btn btn-primary">Enviar!</button>
-</form>
+    <button type="submit" class="btn btn-primary">Enviar!</button>
+  </form>
+</div>
 
 {% endblock %}
