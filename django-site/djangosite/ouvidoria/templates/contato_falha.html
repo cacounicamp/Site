@@ -1,0 +1,28 @@
+{% extends "layouts/base.html" %}
+
+{% block titulopagina %}
+Contato falhou! | CACo
+{% endblock %}
+
+{% block body %}
+
+{# Colocamos o conteúdo da página estática se houver. Se não, colocamos a página padrão #}
+{% if pagina %}
+  {{pagina.conteudo|safe}}
+{% else %}
+
+  {# Explicamos que houve uma falha #}
+  <div class"col">
+    <div class="row">
+      <h2>Falha no contato!</h2><br>
+    </div>
+
+    <p class="text-justify">Olá, computeir*!</p>
+    <p class="text-justify">Sentimos muito em informar que nossa página de contato falhou. Pedimos que envie-nos um e-mail manualmente avisando que a página de contato está com problema. O seu formulário de contato provavelmente foi salvo (a não ser que o erro tenha acontecido nesse trecho), então provavelmente não será necessário reenviar o texto, basta nos avisar que houve um problema nesta página. :)</p>
+    <p class="text-justify">Nosso e-mail é <a href="mailto:{{email}}">{{email}}</a>, por favor, nos avise! ♥</p>
+    <p class="text-justify">Agradecemos o contato e pedimos desculpas pelo inconveniente!</p>
+  </div>
+
+{% endif %}
+
+{% endblock %}

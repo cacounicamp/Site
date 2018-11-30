@@ -165,3 +165,22 @@ if os.path.exists(captcha_secret_path):
 else:
     raise ValueError('Crie um arquivo "captcha-secret.key" com a chave secreta'
                      ' do serviço ReCaptcha da Google')
+
+# Configurações de e-mail para página de contato
+EMAIL_HOST = ''
+EMAIL_PORT = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = ''
+EMAIL_USE_SSL = ''
+# Qual o e-mail que aparecerá como remetente
+EMAIL_REMETENTE = 'caco@ic.unicamp.br'
+# Qual o e-mail que aparecerá na página de contato em caso de falha
+EMAIL_CONTATO = 'caco@ic.unicamp.br'
+# Qual o(s) destinatário(s) para os e-mails da ouvidoria (página '/contato/')
+if DEBUG:
+    EMAIL_CONTATO_DESTINATARIO = ['rafael.sartori96@gmail.com']
+else:
+    EMAIL_CONTATO_DESTINATARIO = [
+        'caco@ic.unicamp.br',
+    ]

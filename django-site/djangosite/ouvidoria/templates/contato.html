@@ -20,7 +20,7 @@ Contato | CACo
 </div>
 
 <div class="row">
-  <form method="post">
+  <form method="post" autocomplete="off">
     {% csrf_token %}
     <table class="table table-borderless">
       {{ form.as_table }}
