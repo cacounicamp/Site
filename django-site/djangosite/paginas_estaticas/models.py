@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+
 class PaginaEstatica(models.Model):
     # Título da página (aparecerá no nome do endereço)
     titulo = models.CharField(max_length=32, null=False)
@@ -16,6 +17,7 @@ class PaginaEstatica(models.Model):
         verbose_name = "página estática"
         verbose_name_plural = "páginas estáticas"
         ordering = ['endereco']
+
 
 class MenuManager(models.Manager):
     def get_itens(self):
@@ -47,6 +49,7 @@ class MenuManager(models.Manager):
 
         return elementos
 
+
 class ItemMenuAbstrato(models.Model):
     objects = MenuManager()
     # Identificador do item (para podermos criar itens com mesmo nome,
@@ -67,11 +70,13 @@ class ItemMenuAbstrato(models.Model):
     class Meta:
         abstract = True
 
+
 class MenuDropdown(ItemMenuAbstrato):
     class Meta:
         verbose_name = "item dropdown do menu"
         verbose_name_plural = "itens dropdown do menu"
         ordering = ['indice']
+
 
 class ItemMenu(ItemMenuAbstrato):
     # Colocamos a opção de páginas estáticas permitindo null
@@ -88,7 +93,8 @@ class ItemMenu(ItemMenuAbstrato):
 
     def clean(self):
         if self.endereco is None and self.pagina is None:
-            raise ValidationError('O item ou deve possuir um endereço ou deve possuir uma página associada.')
+            raise ValidationError('O item ou deve possuir um endereço ou deve '
+                                  'possuir uma página associada.')
 
     class Meta:
         verbose_name = "item do menu"
