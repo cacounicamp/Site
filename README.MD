@@ -313,6 +313,44 @@ Além da página de contato, devemos criar instâncias de `PaginaEstatica` para 
 endereços `contato/sucesso/` e `contato/falha/` que aparecem respectivamente ao
 tentar utilizar a página de contato obtendo sucesso e falha.
 
+### Configuração do site Django
+
+Adicione na raiz do projeto Django (`django-site/djangosite/`) um arquivo
+`config.json`:
+
+```
+{
+    // Chave secreta de segurança
+    "SECRET_KEY": "",
+
+    // Servidor está em DEBUG
+    "DEBUG": true,
+
+    // Configurações do ReCaptcha
+    "CAPTCHA_SECRET_KEY": "",
+    "CAPTCHA_SITE_KEY": "",
+
+    // Configurações do servidor do e-mail
+    "EMAIL_HOST": "",
+    "EMAIL_PORT": 0,
+    "EMAIL_HOST_USER": "",
+    "EMAIL_HOST_PASSWORD": "",
+    "EMAIL_USE_TLS": false,
+    "EMAIL_USE_SSL": false,
+
+    // Quem enviará o e-mail de contato ao centro acadêmico
+    "EMAIL_REMETENTE": "caco@ic.unicamp.br",
+
+    // Qual o e-mail de contato do centro acadêmico (para mostrar na página de contato)
+    "EMAIL_CONTATO": "caco@ic.unicamp.br",
+
+    // Quem receberá o e-mail de contato
+    "EMAIL_CONTATO_DESTINATARIO": [
+        "caco@ic.unicamp.br"
+    ]
+}
+```
+
 ## Estrutura do site (páginas, design)
 
 Usamos [Bootstrap](https://getbootstrap.com/) (pretendia utilizar _material

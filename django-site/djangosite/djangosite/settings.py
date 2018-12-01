@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
-
 import os
+import json
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,18 +20,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-secret_path = os.path.join(BASE_DIR, 'secret.key')
-if os.path.exists(secret_path):
-    with open(secret_path) as arquivo:
-        SECRET_KEY = arquivo.readline()
+configuracao_path = os.path.join(BASE_DIR, 'config.json')
+if os.path.exists(configuracao_path):
+    with open(configuracao_path) as arquivo:
+        configuracao = json.load(arquivo)
 else:
-    raise ValueError('Crie um arquivo "secret.key" com uma chave secreta para'
-                     ' segurança!')
+    raise ValueError('Arquivo de configuração "config.json" não existente!')
 
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = configuracao['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = configuracao['DEBUG']
 
 ALLOWED_HOSTS = [
 ]
@@ -150,37 +152,19 @@ STATICFILES_DIRS = [
 ]
 
 # Dados para captcha (página de contatos e membros)
-captcha_site_path = os.path.join(BASE_DIR, 'captcha-site.key')
-if os.path.exists(captcha_site_path):
-    with open(captcha_site_path) as arquivo:
-        CAPTCHA_SITE_KEY = arquivo.readline().replace('\n', '')
-else:
-    raise ValueError('Crie um arquivo "captcha-site.key" com a chave pública'
-                     ' do serviço ReCaptcha da Google')
-
-captcha_secret_path = os.path.join(BASE_DIR, 'captcha-secret.key')
-if os.path.exists(captcha_secret_path):
-    with open(captcha_secret_path) as arquivo:
-        CAPTCHA_SECRET_KEY = arquivo.readline().replace('\n', '')
-else:
-    raise ValueError('Crie um arquivo "captcha-secret.key" com a chave secreta'
-                     ' do serviço ReCaptcha da Google')
+CAPTCHA_SITE_KEY = configuracao['CAPTCHA_SITE_KEY']
+CAPTCHA_SECRET_KEY = configuracao['CAPTCHA_SECRET_KEY']
 
 # Configurações de e-mail para página de contato
-EMAIL_HOST = ''
-EMAIL_PORT = ''
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_USE_TLS = ''
-EMAIL_USE_SSL = ''
+EMAIL_HOST = configuracao['EMAIL_HOST']
+EMAIL_PORT = configuracao['EMAIL_PORT']
+EMAIL_HOST_USER = configuracao['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = configuracao['EMAIL_HOST_PASSWORD']
+EMAIL_USE_TLS = configuracao['EMAIL_USE_TLS']
+EMAIL_USE_SSL = configuracao['EMAIL_USE_SSL']
 # Qual o e-mail que aparecerá como remetente
-EMAIL_REMETENTE = 'caco@ic.unicamp.br'
+EMAIL_REMETENTE = configuracao['EMAIL_REMETENTE']
 # Qual o e-mail que aparecerá na página de contato em caso de falha
-EMAIL_CONTATO = 'caco@ic.unicamp.br'
+EMAIL_CONTATO = configuracao['EMAIL_CONTATO']
 # Qual o(s) destinatário(s) para os e-mails da ouvidoria (página '/contato/')
-if DEBUG:
-    EMAIL_CONTATO_DESTINATARIO = ['rafael.sartori96@gmail.com']
-else:
-    EMAIL_CONTATO_DESTINATARIO = [
-        'caco@ic.unicamp.br',
-    ]
+EMAIL_CONTATO_DESTINATARIO = configuracao['EMAIL_CONTATO_DESTINATARIO']

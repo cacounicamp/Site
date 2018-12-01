@@ -13,3 +13,4 @@ __pycache__
 *.key
 *.sqlite3
 *.pdf
+config.json
