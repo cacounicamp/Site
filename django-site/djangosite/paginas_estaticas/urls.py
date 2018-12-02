@@ -23,11 +23,16 @@ from .models import PaginaEstatica
 urlpatterns = [
 ]
 
+# Função prepara todas as URLs de páginas estáticas
 def recarregar_urls():
     try:
         urlpatterns.clear()
         # Para cada página dinãmica...
         for pagina in PaginaEstatica.objects.all():
+            # Não fazemos o endereço para páginas com URL ativa
+            if not pagina.url_ativa:
+                continue
+
             # Registramos a URL
             urlpatterns.append(
                 path(
@@ -45,4 +50,6 @@ def recarregar_urls():
     except ProgrammingError:
         pass
 
+
+# Definimos todas as URLs
 recarregar_urls()

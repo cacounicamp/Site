@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 class PaginaEstatica(models.Model):
     # Título da página (aparecerá no nome do endereço)
     titulo = models.CharField(max_length=32, null=False)
+    url_ativa = models.BooleanField(null=False, default=False)
     # URL da página
     endereco = models.CharField(unique=True, max_length=200, null=False)
     # Conteúdo da página

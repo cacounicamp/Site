@@ -1,6 +1,7 @@
 import requests
 
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
@@ -19,8 +20,8 @@ EMAIL_MENSAGEM_BASE = """Olá, computeir*s,
 
 Recebemos uma mensagem através do site da ouvidoria do CACo.
 
-Remetente: {remetente}
-Assunto: {assunto}
+Remetente: "{remetente}"
+Assunto: "{assunto}"
 
 A mensagem é:
 "{mensagem}"
@@ -72,7 +73,7 @@ def ContatoView(request):
                             mensagem=formulario.mensagem,
                             remetente=formulario.contato
                         ),
-                        from_email=settings.EMAIL_REMETENTE,
+                        from_email=settings.EMAIL_CONTATO_REMETENTE,
                         recipient_list=settings.EMAIL_CONTATO_DESTINATARIO
                     )
                     formulario.email_enviado = True
@@ -83,17 +84,17 @@ def ContatoView(request):
                     else:
                         # Se não estamos, mostramos a falha ao usuário
                         formulario.save()
-                        return redirect('falha/')
+                        return redirect_falha(request)
 
                 # Salvamos o e-mail de contato
                 formulario.save()
 
                 # Será enviado para 'contato/sucesso/'
-                return redirect('sucesso/')
+                return redirect_sucesso(request)
 
         # Em caso de falhas, será enviado para 'contato/falha' com os erros do
         # formulário
-        return redirect('falha/')
+        return redirect_falha(request)
     else:
 
         # Tentamos conseguir a página estática de contato
@@ -114,7 +115,7 @@ def ContatoView(request):
         return render(request, 'contato.html', context=context)
 
 
-def ContatoFalhaView(request):
+def redirect_falha(request):
     # Tentamos conseguir a página estática de contato
     try:
         pagina = PaginaEstatica.objects.get(endereco='contato/falha/')
@@ -123,6 +124,20 @@ def ContatoFalhaView(request):
 
     context = {
         'pagina': pagina,
-        'email': settings.EMAIL_CONTATO
+        'email': settings.EMAIL_CONTATO_DISPLAY
     }
     return render(request, 'contato_falha.html', context=context)
+
+
+def redirect_sucesso(request):
+    # Tentamos conseguir a página estática de contato
+    try:
+        pagina = PaginaEstatica.objects.get(endereco='contato/sucesso/')
+    except ObjectDoesNotExist:
+        pagina = None
+
+    context = {
+        'pagina': pagina,
+        'email': settings.EMAIL_CONTATO_DISPLAY
+    }
+    return render(request, 'contato_sucesso.html', context=context)

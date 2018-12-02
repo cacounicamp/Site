@@ -19,5 +19,4 @@ from . import views
 
 urlpatterns = [
     path('contato/', views.ContatoView, name='contato/'),
-    path('contato/falha/', views.ContatoFalhaView, name='contato/falha/'),
 ]
