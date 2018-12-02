@@ -322,17 +322,13 @@ Adicione na raiz do projeto Django (`django-site/djangosite/`) o arquivo
 
 ```javascript
 {
-    // Chave secreta de segurança
     "SECRET_KEY": "",
 
-    // Servidor está em DEBUG
     "DEBUG": true,
 
-    // Configurações do ReCaptcha
     "CAPTCHA_SECRET_KEY": "",
     "CAPTCHA_SITE_KEY": "",
 
-    // Configurações do servidor do e-mail
     "EMAIL_HOST": "",
     "EMAIL_PORT": 0,
     "EMAIL_HOST_USER": "",
@@ -340,13 +336,8 @@ Adicione na raiz do projeto Django (`django-site/djangosite/`) o arquivo
     "EMAIL_USE_TLS": false,
     "EMAIL_USE_SSL": false,
 
-    // Quem enviará o e-mail de contato ao centro acadêmico
-    "EMAIL_REMETENTE": "caco@ic.unicamp.br",
-
-    // Qual o e-mail de contato do centro acadêmico (para mostrar na página de contato)
-    "EMAIL_CONTATO": "caco@ic.unicamp.br",
-
-    // Quem receberá o e-mail de contato
+    "EMAIL_CONTATO_REMETENTE": "caco@ic.unicamp.br",
+    "EMAIL_CONTATO_DISPLAY": "caco@ic.unicamp.br",
     "EMAIL_CONTATO_DESTINATARIO": [
         "caco@ic.unicamp.br"
     ]
@@ -356,7 +347,20 @@ Adicione na raiz do projeto Django (`django-site/djangosite/`) o arquivo
 E configure corretamente os valores. É necessário configurar o ReCaptcha e um
 servidor de e-mail para a página de contato.
 
-Observação importante: JSON não suporta comentários, então lembre de apagá-los!
+| Configuração | Significado |
+| ------------ | ----------- |
+| `SECRET_KEY` | Chave de segurança utilizada internamente pelo Django. Deve ser uma grande string e deve ser secreta |
+| `DEBUG` | Valor de true ou false, define diversos parâmetros no servidor. NÃO deve ser true em produção |
+| `CAPTCHA_SECRET_KEY`, `CAPTCHA_SITE_KEY` | Chave privada e pública respectivamente do ReCaptcha (página de contato) |
+| `EMAIL_CONTATO_DESTINATARIO` | Define a lista de e-mails que receberá os contatos do site |
+| `EMAIL_CONTATO_REMETENTE` | Define qual será o remetente do e-mail que será enviado à lista `EMAIL_CONTATO_DESTINATARIO` |
+| `EMAIL_CONTATO_DISPLAY` | Define qual e-mail (único) da gestão que aparecerá na página de contato em caso de falhas no site ou no ReCaptcha |
+| `EMAIL_*` | Configurações de e-mail para utilizarmos na página de contato principalmente |
+
+Para explicar melhor as diferentes configurações de `EMAIL_CONTATO_*`, vamos
+supor que alguém preencha o formulário de contato no site. As informações desse
+formulário serão enviadas em um e-mail. O destinatário do e-mail será a lista
+`EMAIL_CONTATO_DESTINATARIO`, o remetente será `EMAIL_CONTATO_REMETENTE`.
 
 
 ## Estrutura do site (páginas, design)

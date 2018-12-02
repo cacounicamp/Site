@@ -163,8 +163,8 @@ EMAIL_HOST_PASSWORD = configuracao['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = configuracao['EMAIL_USE_TLS']
 EMAIL_USE_SSL = configuracao['EMAIL_USE_SSL']
 # Qual o e-mail que aparecerá como remetente
-EMAIL_REMETENTE = configuracao['EMAIL_REMETENTE']
-# Qual o e-mail que aparecerá na página de contato em caso de falha
-EMAIL_CONTATO = configuracao['EMAIL_CONTATO']
+EMAIL_CONTATO_REMETENTE = configuracao['EMAIL_CONTATO_REMETENTE']
 # Qual o(s) destinatário(s) para os e-mails da ouvidoria (página '/contato/')
 EMAIL_CONTATO_DESTINATARIO = configuracao['EMAIL_CONTATO_DESTINATARIO']
+# Qual o e-mail que aparecerá na página de contato em caso de falha
+EMAIL_CONTATO_DISPLAY = configuracao['EMAIL_CONTATO_DISPLAY']
