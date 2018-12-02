@@ -320,7 +320,7 @@ tentar utilizar a página de contato obtendo sucesso e falha.
 Adicione na raiz do projeto Django (`django-site/djangosite/`) o arquivo
 `config.json`:
 
-```json
+```javascript
 {
     // Chave secreta de segurança
     "SECRET_KEY": "",
