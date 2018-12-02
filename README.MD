@@ -356,6 +356,8 @@ Adicione na raiz do projeto Django (`django-site/djangosite/`) o arquivo
 E configure corretamente os valores. É necessário configurar o ReCaptcha e um
 servidor de e-mail para a página de contato.
 
+Observação importante: JSON não suporta comentários, então lembre de apagá-los!
+
 
 ## Estrutura do site (páginas, design)
 
