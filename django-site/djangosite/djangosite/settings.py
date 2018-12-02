@@ -51,10 +51,12 @@ INSTALLED_APPS = [
     # Para ediçao de páginas estáticas (requer o comando 'collectstatic' do
     # django)
     'ckeditor',
+    'ckeditor_uploader',
 
     # Nossos aplicativos
     'paginas_estaticas',
     'ouvidoria',
+    #'noticias',
 ]
 
 MIDDLEWARE = [
@@ -151,6 +153,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+# Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
+CKEDITOR_UPLOAD_PATH = 'uploaded/'
+
 # Dados para captcha (página de contatos e membros)
 CAPTCHA_SITE_KEY = configuracao['CAPTCHA_SITE_KEY']
 CAPTCHA_SECRET_KEY = configuracao['CAPTCHA_SECRET_KEY']
@@ -168,3 +175,6 @@ EMAIL_CONTATO_REMETENTE = configuracao['EMAIL_CONTATO_REMETENTE']
 EMAIL_CONTATO_DESTINATARIO = configuracao['EMAIL_CONTATO_DESTINATARIO']
 # Qual o e-mail que aparecerá na página de contato em caso de falha
 EMAIL_CONTATO_DISPLAY = configuracao['EMAIL_CONTATO_DISPLAY']
+
+# Notícias por página no site
+NOTICIAS_POR_PAGINA = 5

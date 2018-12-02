@@ -1,6 +1,12 @@
+certifi
+chardet
 Django
+django-ckeditor
+django-js-asset
 django-uwsgi
+idna
+Pillow
 psycopg2-binary
 pytz
-django-ckeditor
 requests
+urllib3

@@ -9,6 +9,7 @@ bootstrap/package-lock.json
 nginx/certificados/*
 !nginx/certificados/.touch
 migrations/
+media/
 __pycache__
 *.key
 *.sqlite3

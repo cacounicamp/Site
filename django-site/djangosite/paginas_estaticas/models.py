@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from ckeditor_uploader.fields import RichTextUploadingField
+
 
 class PaginaEstatica(models.Model):
     # Título da página (aparecerá no nome do endereço)
@@ -9,7 +11,7 @@ class PaginaEstatica(models.Model):
     # URL da página
     endereco = models.CharField(unique=True, max_length=200, null=False)
     # Conteúdo da página
-    conteudo = models.TextField(blank=True)
+    conteudo = RichTextUploadingField(blank=True)
 
     def __str__(self):
         return '"{}" @ "{}"'.format(self.titulo, self.endereco)

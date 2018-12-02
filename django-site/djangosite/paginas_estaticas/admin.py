@@ -8,7 +8,7 @@ from .models import *
 # Para recarregarmos as urls quando um novo site for adicionado
 from . import urls
 # Para editor de content da página
-from ckeditor.widgets import CKEditorWidget
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 # Colocamos o editor no formulário de administrador
@@ -26,7 +26,7 @@ class FormPaginaEstatica(forms.ModelForm):
     )
 
     # Utilizamos o editor melhorado no campo de conteúdo
-    conteudo = forms.CharField(widget=CKEditorWidget())
+    conteudo = forms.CharField(widget=CKEditorUploadingWidget())
 
     class Meta:
         model = PaginaEstatica
