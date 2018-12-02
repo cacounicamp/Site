@@ -8,6 +8,7 @@ Utilizei neste guia [Arch
 Linux](https://wiki.archlinux.org/index.php/Arch_Linux) e seu sistema de
 pacotes.
 
+
 ## Estrutura do servidor
 
 Aqui será descrito o alicerce do servidor e todos os passos para sua
@@ -245,6 +246,7 @@ imagens do Docker:
 § docker-compose -f (arquivo de configuração yml) up
 ```
 
+
 ## Estrutura do site (Django)
 
 Aqui será descrito a estrutura do site como um projeto Django, presente na pasta
@@ -315,10 +317,10 @@ tentar utilizar a página de contato obtendo sucesso e falha.
 
 ### Configuração do site Django
 
-Adicione na raiz do projeto Django (`django-site/djangosite/`) um arquivo
+Adicione na raiz do projeto Django (`django-site/djangosite/`) o arquivo
 `config.json`:
 
-```
+```json
 {
     // Chave secreta de segurança
     "SECRET_KEY": "",
@@ -350,6 +352,10 @@ Adicione na raiz do projeto Django (`django-site/djangosite/`) um arquivo
     ]
 }
 ```
+
+E configure corretamente os valores. É necessário configurar o ReCaptcha e um
+servidor de e-mail para a página de contato.
+
 
 ## Estrutura do site (páginas, design)
 
@@ -393,6 +399,7 @@ arquivos estáticos:
 ```
 § python manage.py collectstatic
 ```
+
 
 ## Referências
 
