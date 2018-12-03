@@ -7,3 +7,7 @@ class FormularioContato(models.Model):
     assunto = models.CharField(max_length=140)
     mensagem = models.TextField(max_length=4000)
     email_enviado = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "formulário de contato"
+        verbose_name_plural = "formulários de contato"

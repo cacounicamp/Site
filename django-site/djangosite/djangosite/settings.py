@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     # Nossos aplicativos
     'paginas_estaticas',
     'ouvidoria',
-    #'noticias',
+    'noticias',
 ]
 
 MIDDLEWARE = [
@@ -178,3 +178,4 @@ EMAIL_CONTATO_DISPLAY = configuracao['EMAIL_CONTATO_DISPLAY']
 
 # Notícias por página no site
 NOTICIAS_POR_PAGINA = 5
+NOTICIAS_POR_PAGINA_RAIZ = 3
