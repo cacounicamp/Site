@@ -7,7 +7,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 class PaginaEstatica(models.Model):
     # Título da página (aparecerá no nome do endereço)
     titulo = models.CharField(max_length=32, null=False)
-    url_ativa = models.BooleanField(null=False, default=False)
+    url_ativa = models.BooleanField("URL acessível", null=False, default=False)
     # URL da página
     endereco = models.CharField(unique=True, max_length=200, null=False)
     # Conteúdo da página

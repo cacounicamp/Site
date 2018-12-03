@@ -1,7 +1,8 @@
 from django import template
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 
 from ..models import *
+
 
 # Registramos a tag
 register = template.Library()
@@ -9,7 +10,10 @@ register = template.Library()
 @register.simple_tag
 def imprime_barra_navegacao(url):
     resultado = ""
-    url = reverse(url)
+    try:
+        url = reverse(url)
+    except NoReverseMatch:
+        url = ''
     itens = ItemMenu.objects.get_itens()
 
     for menu, lista_dropdowns in itens.items():
@@ -48,8 +52,8 @@ def imprime_barra_navegacao(url):
             elif menu.endereco is not None:
                 resultado += \
                     """<li class="nav-item">
-                      <a class="nav-link" href="{1}">{0}</a>
-                    </li>""".format(menu.nome, menu.endereco)
+                      <a class="nav-link {2}" href="{1}">{0}</a>
+                    </li>""".format(menu.nome, menu.endereco, '' if menu.endereco != url else 'active')
             else:
                 url_reverso = reverse(menu.pagina.endereco)
                 resultado += \
