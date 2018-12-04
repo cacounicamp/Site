@@ -1,0 +1,60 @@
+{% extends "layouts/base.html" %}
+
+{% block titulopagina %}
+{{titulo}} | CACo
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+  {% load atas %}
+
+  <div class="row">
+    <div class="col">
+
+      <h2>{{titulo}}</h2>
+      <hr>
+
+      <div class="container">
+
+        {% for ata in objetos %}
+          <div class="row">
+            <div class="col">
+              <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
+                <p><h5><a href="{% url ata_url ata.pk ata.data_criacao|slugify %}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5></p>
+                <p><i>{{ata.highlights}}</i></p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+        {# Próximas páginas/páginas anteriores #}
+        {% if possui_mais_recente or possui_mais_antiga %}
+          <div class="row rounded border shadow-sm">
+            {% if possui_mais_antiga %}
+              <div class="col">
+                <div class="float-left">
+                  <a class="btn btn-sm btn-link" href="{% url atas_pagina_url pagina_atual|add:1 %}" role="button">Atas mais antigas</a>
+                </div>
+              </div>
+            {% endif %}
+
+            {% if possui_mais_recente %}
+              <div class="col">
+                <div class="float-right">
+                  <a class="btn btn-sm btn-link" href="{% url atas_pagina_url pagina_atual|add:-1 %}" role="button">Atas mais recentes</a>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

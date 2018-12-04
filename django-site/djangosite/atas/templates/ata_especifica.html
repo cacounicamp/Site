@@ -1,0 +1,50 @@
+{% extends "layouts/base.html" %}
+
+{% load atas %}
+
+{% block titulopagina %}
+{% imprime_tipo_ata ata %} {{ata.data_criacao}} | CACo
+{% endblock %}
+
+{% block extrahead%}
+<script>
+function goBack() {
+    window.history.back()
+}
+</script>
+{% endblock%}
+
+{% block body %}
+
+<div class="row">
+  <div class="col">
+    <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
+      <h2><p class="text-left alert-link">{% imprime_tipo_ata ata %}</p></h2>
+        {% if ata.highlights %}
+          <hr>
+          <h4><p class="text-justify"><small>{{ata.highlights}}</small></p></h4>
+        {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="row rounded border shadow-sm">
+    <div class="col">
+      <div class="float-left">
+        <small>Em <b>{{ata.data_criacao}}</b></small>
+      </div>
+      <div class="float-right">
+        <button title="Volta a página anterior" class="btn btn-sm btn-link" onClick="goBack()">Retornar às atas</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row p-4">
+    {{ata.conteudo|safe}}
+  </div>
+
+</div>
+
+{% endblock %}

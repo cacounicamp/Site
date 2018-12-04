@@ -34,8 +34,7 @@ SECRET_KEY = configuracao['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = configuracao['DEBUG']
 
-ALLOWED_HOSTS = [
-]
+ALLOWED_HOSTS = configuracao['ALLOWED_HOSTS']
 
 # Application definition
 
@@ -57,6 +56,7 @@ INSTALLED_APPS = [
     'paginas_estaticas',
     'ouvidoria',
     'noticias',
+    'atas',
 ]
 
 MIDDLEWARE = [
@@ -179,3 +179,8 @@ EMAIL_CONTATO_DISPLAY = configuracao['EMAIL_CONTATO_DISPLAY']
 # Notícias por página no site
 NOTICIAS_POR_PAGINA = 5
 NOTICIAS_POR_PAGINA_RAIZ = 3
+
+# Atas por página no site
+ATAS_POR_PAGINA = 3
+ATAS_REUNIAO_POR_PAGINA = 7
+ATAS_ASSEMBLEIA_POR_PAGINA = 7
