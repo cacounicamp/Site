@@ -1,0 +1,33 @@
+{% extends "layouts/base.html" %}
+
+{% block titulopagina %}
+Erro no servidor! | CACo
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+  {% if pagina %}
+    {{pagina|safe}}
+  {% else %}
+    <div class="row">
+      <div class="col">
+        <div class="alert alert-danger shadow-sm" role="alert">
+          <h2><b>500</b>: Erro no servidor!</h2>
+          <hr>
+          <p class="text-justify">Se você acredita que esse erro requer nossa atenção, utilize a página de contato, nosso Facebook ou nosso e-mail para nos avisar!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        {% load static %}
+        <center><img class="rounded shadow-lg" width="60%" src="{% static "500_kermit-panic.gif" %}" alt="Caco entrando em pânico"></center>
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}
