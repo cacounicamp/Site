@@ -1,5 +1,3 @@
-import math
-
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.conf import settings
@@ -7,6 +5,7 @@ from django.http import Http404
 from django.utils.text import slugify
 from django.core.exceptions import ObjectDoesNotExist
 
+from util import util
 from .models import Noticia
 
 
@@ -35,38 +34,11 @@ def NoticiaDetalheView(request, identificador, titulo=None):
     return render(request, 'noticia_detalhe.html', context=context)
 
 
-def get_noticias(request, noticias_pagina, pagina, html):
-    # Eliminamos páginas inexistentes
-    if pagina <= 0:
-        raise Http404('Página de notícias inexistente!')
-
-    # Calculamo o número de páginas
-    num_noticias = Noticia.objects.count()
-    num_paginas = math.ceil(num_noticias / noticias_pagina)
-
-    # Eliminamos páginas inexistentes
-    if pagina > num_paginas:
-        raise Http404('Página de notícias inexistente!')
-
-    indice_inicio = (pagina - 1) * noticias_pagina
-    indice_fim = pagina * noticias_pagina
-    noticias = Noticia.objects.all()[indice_inicio : indice_fim]
-
-    # Mostramos a página
-    context = {
-        'possui_mais_antiga': (pagina < num_paginas),
-        'possui_mais_recente': (pagina > 1),
-        'pagina_atual': pagina,
-        'noticias': noticias
-    }
-    return render(request, html, context=context)
-
-
 def NoticiasView(request, pagina=1):
-    return get_noticias(request, settings.NOTICIAS_POR_PAGINA, pagina, 'noticias.html')
+    return util.pegar_pagina(request, Noticia, settings.NOTICIAS_POR_PAGINA, pagina, 'noticias.html')
 
 
 # Caso especial para a primeira página do site: menos notícias, aparecem por
 # completo
 def NoticiasRaizView(request, pagina=1):
-    return get_noticias(request, settings.NOTICIAS_POR_PAGINA_RAIZ, pagina, 'noticias_raiz.html')
+    return util.pegar_pagina(request, Noticia, settings.NOTICIAS_POR_PAGINA_RAIZ, pagina, 'noticias_raiz.html')
