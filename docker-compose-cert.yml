@@ -7,6 +7,9 @@ services:
             context: ./nginx
             dockerfile: Dockerfile-cert-acquire
         restart: always
+        environment:
+            - LANG=C.UTF-8
+            - LC_ALL=C.UTF-8
         ports:
             - target: 80
               published: 80
@@ -26,6 +29,9 @@ services:
         container_name: certbot_acquire
         image: certbot/certbot
         command: certonly --dry-run --webroot --webroot-path /data/letsencrypt --email email@domain.com -d domain.com
+        environment:
+            - LANG=C.UTF-8
+            - LC_ALL=C.UTF-8
         depends_on:
             - servidor
         volumes:

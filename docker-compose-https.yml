@@ -7,6 +7,9 @@ services:
         build: ./django-site
         # Deverá sempre estar ativo
         restart: always
+        environment:
+            - LANG=C.UTF-8
+            - LC_ALL=C.UTF-8
         expose:
             # Mostraremos a porta 8080 entre containers (para o nginx)
             - "8080"
@@ -27,6 +30,8 @@ services:
             - POSTGRES_DB=postgresql
             - POSTGRES_USER=postgresql
             - POSTGRES_PASSWORD=postgresql
+            - LANG=C.UTF-8
+            - LC_ALL=C.UTF-8
         volumes:
             # Passamos o banco de dados para a nossa pasta
             - ./database_data:/var/lib/postgresql/data
@@ -41,6 +46,9 @@ services:
             context: ./nginx
             dockerfile: Dockerfile-https
         restart: always
+        environment:
+            - LANG=C.UTF-8
+            - LC_ALL=C.UTF-8
         ports:
             - target: 80
               published: 80
