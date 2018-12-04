@@ -35,10 +35,10 @@ def NoticiaDetalheView(request, identificador, titulo=None):
 
 
 def NoticiasView(request, pagina=1):
-    return util.pegar_pagina(request, Noticia, settings.NOTICIAS_POR_PAGINA, pagina, 'noticias.html')
+    return util.pegar_pagina(request, Noticia, 'noticias.html', settings.NOTICIAS_POR_PAGINA, pagina)
 
 
 # Caso especial para a primeira página do site: menos notícias, aparecem por
 # completo
 def NoticiasRaizView(request, pagina=1):
-    return util.pegar_pagina(request, Noticia, settings.NOTICIAS_POR_PAGINA_RAIZ, pagina, 'noticias_raiz.html')
+    return util.pegar_pagina(request, Noticia, 'noticias_raiz.html', settings.NOTICIAS_POR_PAGINA_RAIZ, pagina)
