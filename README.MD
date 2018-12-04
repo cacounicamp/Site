@@ -254,11 +254,14 @@ Aqui será descrito a estrutura do site como um projeto Django, presente na past
 View_). Modelos controlam os objetos que serão trabalhados no controlador e
 mostrados na _view_.
 
+### Aplicações Django
+
 Django isola cada trecho do site em diversas aplicações, que possuem modelos,
 controladores e _views_ individuais. Cada modelo poderá ser editado na páginas
-de administrador quando configurado. As aplicações do site são:
+de administrador quando configurado. As aplicações do site são em ordem
+aleatória:
 
-### `paginas_estaticas`
+#### `paginas_estaticas`
 
 As páginas estáticas são controladas pelo _app_ `paginas_estaticas`. Há modelos
 que definem as coisas presentes na barra de menu e outros para cada página.
@@ -289,31 +292,70 @@ estáticos do Bootstrap.
 
 As páginas estáticas possuem o modelo `PaginaEstatica`, que é simplesmente uma
 página com atributo de texto, editável através do `CKEditor`, associado a um
-endereço que será servido.
+endereço que será servido se a opção `URL acessível` for `True`. Essa opção é
+para podermos fazer páginas que não são servidas mas são contidas em outras
+páginas (por exemplo, para customizar a página `contato/sucesso/` sem alterar o
+código).
 
-#### Observação:
+É possível em qualquer página enviar imagens (e arquivos) dinâmicamente.
+
+##### Observação:
 
 Após a criação de uma página, é necessário reiniciar o servidor para que o novo
 endereço seja servido corretamente.
 
-### `ouvidoria`
+#### `ouvidoria`
 
 É um _app_ que controla todo contato feito através da página `contato/`, ele
 enviará um e-mail para a própria gestão do CACo através de um e-mail da gestão
-do CACo (configurado através do Django).
+do CACo (configurado através do Django em `config.json`).
 
-Planejamos incluir, em caso de falha ao enviar o e-mail, um modelo que guardará
-as informações do pedido do contato, assim não perderemos nenhuma informação.
-Gostaria ainda que na próxima tentativa de envio de e-mail, o servidor envie os
-contatos salvos.
+Um modelo que guardará as informações do pedido de contato, assim não perderemos
+nenhuma informação caso o envio do e-mail falhe.
 
-A página de contato pode ser associada a uma instância de `PaginaEstatica`,
-dessa maneira, então, é possível adicionar/editar/remover textos da página de
-contato facilmente, sem alterar o código fonte da página através do servidor.
+A página de contato pode ser associada a uma instância de `PaginaEstatica` (com
+endereço `contato/`), dessa maneira, então, é possível adicionar/editar/remover
+textos da página de contato facilmente, sem alterar o código fonte da página
+através do servidor.
 
 Além da página de contato, devemos criar instâncias de `PaginaEstatica` para os
 endereços `contato/sucesso/` e `contato/falha/` que aparecem respectivamente ao
 tentar utilizar a página de contato obtendo sucesso e falha.
+
+#### `atas`
+
+_App_ que controla as atas de reunião e de assembleias. A página principal
+(`atas/`) está ligada à página estática `atas/` para produzir uma página
+dinâmica.
+
+Há dois modelos: `AtaReuniao` e `AtaAssembleia`. As atas de assembleia podem ser
+marcadas como deliberativas ou não. Já as de reunião, podem ser marcadas como
+extraordinárias ou não. Ambas possuem conteúdo dinâmico, permitem envio de
+arquivos e possuem um trecho sobre _highlights_, para atrair mais usuários à
+leitura.
+
+O _app_ ainda descreve o _templatetags_:
+
+##### _templatetag atas_
+Auxilia na fabricação da página de atas (há um HTML para os 2 tipos de atas,
+esse _template_ possui funções que auxiliam em diferenciar essas atas) e também
+processa as últimas atas para ficar ao lado direito do site para fácil acesso.
+
+##### Observação
+Junto com `noticias`, `atas` utiliza o serviço de paginação descrito em
+`util/util.py`.
+
+#### `noticias`
+
+_App_ controla as notícias do site. Contém a página raiz (`/`, a inicial). O
+único modelo descrito é `Noticia`, que guarda o conteúdo (editável pelo
+`CKEditor`), a data de criação e um resumo que aparecerá nas listagens de
+notícias (página inicial, página `noticias/`). Não há nenhuma página estática
+usada nas _views_ de notícias.
+
+Para a _view_ de notícias e atas, temos o documento `util/util.py`, que conta o
+número de itens e separa em páginas. O número de itens mostrado por página é
+customizável em `settings.py`.
 
 ### Configuração do site Django
 
@@ -354,6 +396,7 @@ servidor de e-mail para a página de contato.
 | ------------ | ----------- |
 | `SECRET_KEY` | Chave de segurança utilizada internamente pelo Django. Deve ser uma grande string e deve ser secreta |
 | `DEBUG` | Valor de true ou false, define diversos parâmetros no servidor. NÃO deve ser true em produção |
+| `ALLOWED_HOSTS` | Lista de _hosts_ aceitos para respondermos à requisição HTTP |
 | `CAPTCHA_SECRET_KEY`, `CAPTCHA_SITE_KEY` | Chave privada e pública respectivamente do ReCaptcha (página de contato) |
 | `EMAIL_CONTATO_DESTINATARIO` | Define a lista de e-mails que receberá os contatos do site |
 | `EMAIL_CONTATO_REMETENTE` | Define qual será o remetente do e-mail que será enviado à lista `EMAIL_CONTATO_DESTINATARIO` |
