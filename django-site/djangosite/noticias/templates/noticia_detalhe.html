@@ -4,6 +4,14 @@
 {{noticia.titulo}} | CACo
 {% endblock %}
 
+{% block extrahead%}
+<script>
+function goBack() {
+    window.history.back()
+}
+</script>
+{% endblock%}
+
 {% block body %}
 
 <div class="row">
@@ -23,13 +31,13 @@
         <small>Notícia criada em <b>{{noticia.data_criacao}}</b></small>
       </div>
       <div class="float-right">
-        <a class="btn btn-sm btn-link" href="{% url "noticias/" %}" role="button">Retornar às notícias</a>
+        <button title="Volta a página anterior" class="btn btn-sm btn-link" onClick="goBack()">Retornar às notícias</button>
       </div>
     </div>
   </div>
 
   <div class="row p-4">
-    <div class="container">
+    <div class="col">
       {{noticia.conteudo|safe}}
     </div>
   </div>
