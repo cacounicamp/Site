@@ -325,6 +325,9 @@ Adicione na raiz do projeto Django (`django-site/djangosite/`) o arquivo
     "SECRET_KEY": "",
 
     "DEBUG": true,
+    "ALLOWED_HOSTS": [
+        "*"
+    ],
 
     "CAPTCHA_SECRET_KEY": "",
     "CAPTCHA_SITE_KEY": "",
