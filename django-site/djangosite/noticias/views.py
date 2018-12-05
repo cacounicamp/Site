@@ -12,7 +12,7 @@ from .models import Noticia
 def NoticiaDetalheView(request, identificador, titulo=None):
     try:
         # Encontramos a notícia pelo identificador (não pelo nome)
-        noticia = Noticia.objects.get(pk=identificador)
+        noticia = Noticia.objects.get(pk=identificador, visivel=True)
 
         # Conferimos se devemos mostrar essa notícia
         if not noticia.visivel:
@@ -34,11 +34,15 @@ def NoticiaDetalheView(request, identificador, titulo=None):
     return render(request, 'noticia_detalhe.html', context=context)
 
 
+def filtrar_noticias_visiveis():
+    return Noticia.objects.filter(visivel=True)
+
+
 def NoticiasView(request, pagina=1):
-    return util.pegar_pagina(request, Noticia, 'noticias.html', settings.NOTICIAS_POR_PAGINA, pagina)
+    return util.pegar_pagina(request, filtrar_noticias_visiveis(), 'noticias.html', settings.NOTICIAS_POR_PAGINA, pagina)
 
 
 # Caso especial para a primeira página do site: menos notícias, aparecem por
 # completo
 def NoticiasRaizView(request, pagina=1):
-    return util.pegar_pagina(request, Noticia, 'noticias_raiz.html', settings.NOTICIAS_POR_PAGINA_RAIZ, pagina)
+    return util.pegar_pagina(request, filtrar_noticias_visiveis(), 'noticias_raiz.html', settings.NOTICIAS_POR_PAGINA_RAIZ, pagina)

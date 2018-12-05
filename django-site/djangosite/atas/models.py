@@ -14,6 +14,8 @@ class Ata(models.Model):
     highlights = models.CharField(max_length=300, blank=True, null=False)
     # Data de criação
     data_criacao = models.DateTimeField(null=False)
+    # Se a ata está visível ou não
+    visivel = models.BooleanField(default=True, null=False, blank=False)
 
     class Meta:
         abstract = True

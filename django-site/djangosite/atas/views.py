@@ -13,10 +13,10 @@ from util import util
 
 def AtasView(request):
     # Buscamos as N primeiras atas de assembleia
-    atas_reunioes = AtaReuniao.objects.all()[0 : settings.ATAS_POR_PAGINA]
+    atas_reunioes = AtaReuniao.objects.filter(visivel=True).all()[0 : settings.ATAS_POR_PAGINA]
 
     # Analogamente às de reunião
-    atas_assembleias = AtaAssembleia.objects.all()[0 : settings.ATAS_POR_PAGINA]
+    atas_assembleias = AtaAssembleia.objects.filter(visivel=True).all()[0 : settings.ATAS_POR_PAGINA]
 
     # Pegamos a página atas/participe/
     try:
@@ -32,9 +32,13 @@ def AtasView(request):
     return render(request, 'atas.html', context=context)
 
 
+def get_atas_visiveis(classe):
+    return classe.objects.filter(visivel=True)
+
+
 def AtasAssembleiasView(request, pagina=1):
     return util.pegar_pagina(
-        request, AtaAssembleia, 'atas_especificas.html',
+        request, get_atas_visiveis(AtaAssembleia), 'atas_especificas.html',
         settings.ATAS_ASSEMBLEIA_POR_PAGINA, pagina, context={
             'titulo': 'Atas de assembleias',
             'ata_url': 'ata/assembleia/',
@@ -45,7 +49,7 @@ def AtasAssembleiasView(request, pagina=1):
 
 def AtasReunioesView(request, pagina=1):
     return util.pegar_pagina(
-        request, AtaReuniao, 'atas_especificas.html',
+        request, get_atas_visiveis(AtaReuniao), 'atas_especificas.html',
         settings.ATAS_REUNIAO_POR_PAGINA, pagina, context={
             'titulo': 'Atas de reuniões',
             'ata_url': 'ata/reuniao/',
@@ -57,7 +61,7 @@ def AtasReunioesView(request, pagina=1):
 def pagina_ata_especifica(request, classe_ata, url_retorno, url_especifica, identificador, data):
     try:
         # Encontramos a ata pelo identificador
-        ata = classe_ata.objects.get(pk=identificador)
+        ata = classe_ata.objects.get(pk=identificador, visivel=True)
 
         # Conferimos se precisamos corrigir a URL
         data_slug = slugify(ata.data_criacao)

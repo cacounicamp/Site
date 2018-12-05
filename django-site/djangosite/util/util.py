@@ -4,13 +4,13 @@ from django.shortcuts import render, redirect
 from django.http import Http404
 
 
-def pegar_pagina(request, model, pagina_html, itens_por_pagina, pagina_atual, context={}):
+def pegar_pagina(request, objects, pagina_html, itens_por_pagina, pagina_atual, context={}):
     # Eliminamos páginas inexistentes
     if pagina_atual <= 0:
         raise Http404('Página inexistente!')
 
     # Calculamo o número de páginas
-    num_objetos = model.objects.count()
+    num_objetos = objects.count()
     num_paginas = math.ceil(num_objetos / itens_por_pagina)
 
     # Eliminamos páginas inexistentes
@@ -19,7 +19,7 @@ def pegar_pagina(request, model, pagina_html, itens_por_pagina, pagina_atual, co
 
     indice_inicio = (pagina_atual - 1) * itens_por_pagina
     indice_fim = pagina_atual * itens_por_pagina
-    objetos = model.objects.all()[indice_inicio : indice_fim]
+    objetos = objects.all()[indice_inicio : indice_fim]
 
     # Mostramos a página
     context['possui_mais_antiga'] = (pagina_atual < num_paginas)

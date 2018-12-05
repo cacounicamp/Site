@@ -32,8 +32,8 @@ def cor_alert_ata(ata):
 @register.simple_tag
 def ultimas_atas():
     # Pegamos as atas
-    reunioes = AtaReuniao.objects.all()[0 : settings.ATAS_BARRA_LATERAL]
-    assembleias = AtaAssembleia.objects.all()[0 : settings.ATAS_BARRA_LATERAL]
+    reunioes = AtaReuniao.objects.filter(visivel=True).all()[0 : settings.ATAS_BARRA_LATERAL]
+    assembleias = AtaAssembleia.objects.filter(visivel=True).all()[0 : settings.ATAS_BARRA_LATERAL]
 
     # Fazemos uma lista de atas
     atas = []
