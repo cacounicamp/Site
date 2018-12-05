@@ -1,6 +1,7 @@
 database_data/
 django-site/*env*/
 django-site/djangosite/static/
+django-site/djangosite/media/
 django-site/djangosite/djangosite/static/*.js
 django-site/djangosite/djangosite/static/*.css
 bootstrap/node_modules/
@@ -9,7 +10,6 @@ bootstrap/package-lock.json
 nginx/certificados/*
 !nginx/certificados/.touch
 migrations/
-media/
 __pycache__
 *.key
 *.sqlite3
