@@ -146,11 +146,11 @@ APPEND_SLASH = True
 STATIC_URL = '/static/'
 
 # Para o comando 'collectstatic'
-STATIC_ROOT = os.path.join(BASE_DIR, 'djangosite/adminstatic')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Para servirmos CSS e JS globalmente
+# Arquivos estáticos a serem servidos
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "djangosite/static/"),
 ]
 
 # Configurações do CKEditor
