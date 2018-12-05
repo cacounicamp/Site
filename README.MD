@@ -1,8 +1,17 @@
 # caco-site
 
 Este é um repositório da segunda versão para o site do CACo. O motivo de existir
-uma segunda versão é eu querer aprender a utilizar servidores web, framework
-Django e Docker.
+uma segunda versão é, além de querer aprender a utilizar servidores web,
+framework Django e Docker, padronizar o site (diminuindo a quantidade de páginas
+jogadas, provas sem uniformização dos nomes), melhorar a qualidade do que já
+existe (permitir envio de imagens nas páginas sem precisar hospedar
+externamente, lista de membros que permite _reset_ fácil, avisando todos os
+membros devidamente) e atualizar as versões do que já era utilizado (utilizando
+os _rewrites_ de Bootstrap e de Django).
+
+Por questão de legibilidade, não me preocupei em utilizar gêneros neutros em
+variáveis dentro do código. Porém esse assunto é de extrema importância e DEVE
+ser levado em consideração enquanto o conteúdo do site é reescrito.
 
 Utilizei neste guia [Arch
 Linux](https://wiki.archlinux.org/index.php/Arch_Linux) e seu sistema de
