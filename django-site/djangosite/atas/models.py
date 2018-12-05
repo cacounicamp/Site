@@ -4,7 +4,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 
 def formatar_data(data):
-    return data.strftime("%H:%M %d/%m/%Y")
+    return data.strftime("%d/%m/%Y")
 
 
 class Ata(models.Model):
