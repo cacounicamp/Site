@@ -366,6 +366,17 @@ Para a _view_ de notícias e atas, temos o documento `util/util.py`, que conta o
 número de itens e separa em páginas. O número de itens mostrado por página é
 customizável em `settings.py`.
 
+#### `gestoes`
+
+_App_ controla o histórico de gestões do CACo. Ele existe (diferente da criação
+de páginas estaticas manualmente que era feito nos anos anteriores) apenas para
+uniformizar a apresentação de informações.
+
+Como há grande número de gestões, utiliza uma versão modificada de
+`util/util.py`. Não pode utilizar a versão exata pois a apresentação de
+informações requer processamento que é mais fácil se fosse feito na _view_ do
+que em _templates_.
+
 ### Configuração do site Django
 
 Adicione na raiz do projeto Django (`django-site/djangosite/`) o arquivo

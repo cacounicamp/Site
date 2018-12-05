@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'ouvidoria',
     'noticias',
     'atas',
+    'gestoes',
 ]
 
 MIDDLEWARE = [
@@ -194,3 +195,6 @@ ATAS_BARRA_LATERAL = 3
 ATAS_POR_PAGINA = 3
 ATAS_REUNIAO_POR_PAGINA = 7
 ATAS_ASSEMBLEIA_POR_PAGINA = 7
+
+# Gestões por página no site
+GESTOES_POR_PAGINA = 10
