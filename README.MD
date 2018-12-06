@@ -374,8 +374,8 @@ uniformizar a apresentação de informações.
 
 Como há grande número de gestões, utiliza uma versão modificada da função de
 páginas definida em `util/util.py`. Não pode utilizar a versão exata pois a
-apresentação de informações requer processamento que é mais fácil se fosse feito
-na _view_ (em Python) do que em _templates_.
+apresentação de informações requer uma alteração antes de disponibilizar a
+página.
 
 ### Configuração do site Django
 

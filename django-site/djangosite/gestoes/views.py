@@ -1,3 +1,5 @@
+import math
+
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.conf import settings
@@ -48,4 +50,33 @@ def GestaoView(request, ano_eleito, nome=None):
 
 
 def GestoesView(request, pagina=1):
-    pass
+    # Eliminamos páginas inexistentes
+    if pagina <= 0:
+        raise Http404('Página inexistente!')
+
+    # Calculamo o número de páginas
+    num_objetos = Gestao.objects.count()
+    num_paginas = math.ceil(num_objetos / settings.GESTOES_POR_PAGINA)
+
+    # Eliminamos páginas inexistentes
+    if pagina > num_paginas:
+        raise Http404('Página inexistente!')
+
+    indice_inicio = (pagina - 1) * settings.GESTOES_POR_PAGINA
+    indice_fim = pagina * settings.GESTOES_POR_PAGINA
+    objetos = Gestao.objects.all()[indice_inicio : indice_fim]
+
+    # Para cada gestão, contamos quantos integrantes possuem
+    gestoes = {}
+    for gestao in objetos:
+        gestoes[gestao] = Membro.objects.filter(gestao=gestao).count()
+
+    # Mostramos a página
+    context = {
+        'possui_mais_antiga': (pagina < num_paginas),
+        'possui_mais_recente': (pagina > 1),
+        'pagina_atual': pagina,
+        'gestoes': gestoes,
+    }
+
+    return render(request, 'gestoes.html', context=context)
