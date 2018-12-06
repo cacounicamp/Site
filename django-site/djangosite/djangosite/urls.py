@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('paginas_estaticas.urls')),
     path('', include('noticias.urls')), # Notícias possuirá a raiz do site
     path('', include('atas.urls')),
+    path('', include('gestoes.urls')),
 ]
 
 # Em desenvolvemento, servimos manualmente media/

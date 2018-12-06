@@ -21,6 +21,6 @@ from . import views
 urlpatterns = [
     path('gestoes/', views.GestoesView, name='gestoes/'),
     path('gestoes/pagina-<int:pagina>/', views.GestoesView, name='gestoes/pagina/'),
-    path('gestoes/<int:ano>/', views.GestaoView),
-    path('gestoes/<int:ano>-<slug:nome>/', views.GestaoView, name='gestao/'),
+    path('gestoes/<int:ano_eleito>/', views.GestaoView),
+    path('gestoes/<int:ano_eleito>-<slug:nome>/', views.GestaoView, name='gestao/'),
 ]
