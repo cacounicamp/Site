@@ -372,10 +372,10 @@ _App_ controla o histórico de gestões do CACo. Ele existe (diferente da criaç
 de páginas estaticas manualmente que era feito nos anos anteriores) apenas para
 uniformizar a apresentação de informações.
 
-Como há grande número de gestões, utiliza uma versão modificada de
-`util/util.py`. Não pode utilizar a versão exata pois a apresentação de
-informações requer processamento que é mais fácil se fosse feito na _view_ do
-que em _templates_.
+Como há grande número de gestões, utiliza uma versão modificada da função de
+páginas definida em `util/util.py`. Não pode utilizar a versão exata pois a
+apresentação de informações requer processamento que é mais fácil se fosse feito
+na _view_ (em Python) do que em _templates_.
 
 ### Configuração do site Django
 

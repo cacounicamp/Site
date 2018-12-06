@@ -10,7 +10,7 @@ class EscondeAdmin(admin.ModelAdmin):
 
 
 class MembroAdmin(admin.ModelAdmin):
-    list_display = ('gestao', 'cargo', 'nome')
+    list_display = ('gestao', 'cargo', 'nome', 'apelido', 'ano_ingresso', 'curso')
 
 
 admin.site.register(Gestao, EscondeAdmin)
