@@ -7,7 +7,7 @@ class Gestao(models.Model):
     # Nome da gestão
     nome = models.CharField(max_length=42, null=False, blank=False)
     # Ano de eleicao (ano de atuacao - 1)
-    ano_eleito = models.IntegerField(unique=True, null=False)
+    ano_eleito = models.PositiveIntegerField(unique=True, null=False)
     # Conteúdo da página da gestão (texto de posse, informações sobre eleição
     # etc)
     conteudo = RichTextUploadingField()
@@ -53,7 +53,7 @@ class Membro(models.Model):
     # Curso do membro
     curso = models.CharField(max_length=4, null=False, blank=False, choices=CURSOS)
     # Ano de ingresso do membro
-    ano_ingresso = models.IntegerField(null=False, blank=False)
+    ano_ingresso = models.PositiveIntegerField(null=False, blank=False)
 
     def __str__(self):
         return '{membro.nome} "{membro.apelido}" {membro.curso} {membro.ano_ingresso}'.format(membro=self)
