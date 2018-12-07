@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'noticias',
     'atas',
     'gestoes',
+    'representantes_discentes',
 ]
 
 MIDDLEWARE = [
@@ -198,3 +199,6 @@ ATAS_ASSEMBLEIA_POR_PAGINA = 7
 
 # Gestões por página no site
 GESTOES_POR_PAGINA = 10
+
+# Anos de representantes discentes no site
+REPRESENTANTES_DISCENTES_ANOS_POR_PAGINA = 10

@@ -27,6 +27,7 @@ urlpatterns = [
     path('', include('noticias.urls')), # Notícias possuirá a raiz do site
     path('', include('atas.urls')),
     path('', include('gestoes.urls')),
+    path('', include('representantes_discentes.urls')),
 ]
 
 # Em desenvolvemento, servimos manualmente media/
