@@ -1,4 +1,4 @@
-# caco-site
+# CACo-site
 
 Este é um repositório da segunda versão para o site do CACo. O motivo de existir
 uma segunda versão é, além de querer aprender a utilizar servidores web,
@@ -16,6 +16,9 @@ ser levado em consideração enquanto o conteúdo do site é reescrito.
 Utilizei neste guia [Arch
 Linux](https://wiki.archlinux.org/index.php/Arch_Linux) e seu sistema de
 pacotes.
+
+Um guia rápido de configuração e instalação pode ser encontrado
+[aqui](GUIA-RAPIDO.MD).
 
 
 ## Estrutura do servidor
