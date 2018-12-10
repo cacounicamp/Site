@@ -40,11 +40,20 @@ def ultimas_atas():
     atas += reunioes
     atas += assembleias
 
+    # Conferimos se não há atas
+    if len(atas) == 0:
+        return ""
+
     # Ordenamos por data
     atas.sort(key=lambda ata: ata.data_criacao, reverse=True)
 
     # Construímos a saída
     saida = """"""
+    # Iniciamos uma linha
+    saida += """<div class="row">"""
+    # Iniciamos um container
+    saida += """<div class="container">"""
+
     # Fazemos uma caixa em volta de tudo
     saida += """<div class="alert alert-secondary rounded shadow-sm">"""
     # Fazemos um header
@@ -87,6 +96,11 @@ def ultimas_atas():
             break
 
     # Terminamos a caixa
+    saida += """</div>"""
+
+    # Terminamos o container
+    saida += """</div>"""
+    # Terminamos a linha
     saida += """</div>"""
 
     # Imprimimos
