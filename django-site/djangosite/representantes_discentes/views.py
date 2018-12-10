@@ -9,7 +9,8 @@ from .models import RepresentanteDiscente
 def RepresentantesDiscentesPagina(request, pagina=1):
     # objects vai retornar um dicionário cuja chave é 'ano_atuacao'
     return util.pegar_pagina(
-        request, RepresentanteDiscente.objects.values('ano_atuacao').distinct('ano_atuacao'), 'representantes_discentes_pagina.html',
+        # Por conta de .values(), receberemos um dicionário com uma chave 'ano_atuacao'
+        request, RepresentanteDiscente.objects.values('ano_atuacao').distinct('ano_atuacao'), 'representantes_discentes_lista.html',
         settings.REPRESENTANTES_DISCENTES_ANOS_POR_PAGINA, pagina
     )
 
