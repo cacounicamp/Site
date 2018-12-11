@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -11,7 +12,7 @@ class Ata(models.Model):
     # Conteúdo da ata
     conteudo = RichTextUploadingField(null=False, blank=False)
     # Highlights da ata para atrair visualizações
-    highlights = models.CharField(max_length=300, blank=True, null=False)
+    highlights = models.CharField(max_length=settings.MAX_LENGTH_HIGHLIGHT_ATAS, blank=True, null=False)
     # Data de criação
     data_criacao = models.DateTimeField(null=False)
     # Se a ata está visível ou não

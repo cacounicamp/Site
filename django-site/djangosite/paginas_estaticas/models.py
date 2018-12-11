@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -6,10 +7,10 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 class PaginaEstatica(models.Model):
     # Título da página (aparecerá no nome do endereço)
-    titulo = models.CharField(max_length=32, null=False)
+    titulo = models.CharField(max_length=settings.MAX_LEGNTH_TITULO_PAGINA, null=False)
     url_ativa = models.BooleanField("URL acessível", null=False, default=False)
     # URL da página
-    endereco = models.CharField(unique=True, max_length=200, null=False)
+    endereco = models.CharField(unique=True, max_length=settings.MAX_LEGNTH_ENDERECO_PAGINA, null=False)
     # Conteúdo da página
     conteudo = RichTextUploadingField(blank=True)
 
@@ -61,7 +62,7 @@ class ItemMenuAbstrato(models.Model):
     # Ordem que aparecerá na página
     indice = models.IntegerField(null=False)
     # Nome que será exposto ao público
-    nome = models.CharField(max_length=32, null=False)
+    nome = models.CharField(max_length=settings.MAX_LENGTH_TITULO_ITEM_MENU, null=False)
     # Se aparecerá na página
     visivel = models.BooleanField(default=False)
     # Se aparecerá de forma não clicável
@@ -87,7 +88,7 @@ class ItemMenu(ItemMenuAbstrato):
         PaginaEstatica, null=True, blank=True, on_delete=models.CASCADE
     )
     # O endereço que o item possuirá caso não possua página
-    endereco = models.CharField(max_length=200, null=True, blank=True)
+    endereco = models.CharField(max_length=settings.MAX_LEGNTH_ENDERECO_MENU, null=True, blank=True)
     # Cada ItemMenu pode ter apenas um MenuDropdown (cada MenuDropdown pode
     # possuir vários ItemMenu)
     dropdown = models.ForeignKey(

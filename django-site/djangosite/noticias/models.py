@@ -1,13 +1,14 @@
 from django.db import models
+from django.conf import settings
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Noticia(models.Model):
     # Título da notícia
-    titulo = models.CharField(max_length=60, null=False, blank=False)
+    titulo = models.CharField(max_length=settings.MAX_LENGTH_TITULO_NOTICIAS, null=False, blank=False)
     # Subtítulo/descricao/resumo da notícia
-    resumo = models.CharField(max_length=120, null=False, blank=False)
+    resumo = models.CharField(max_length=settings.MAX_LENGTH_RESUMO_NOTICIAS, null=False, blank=False)
     # Notícia visível
     visivel = models.BooleanField(default=True, null=False)
     # Conteúdo da notícia

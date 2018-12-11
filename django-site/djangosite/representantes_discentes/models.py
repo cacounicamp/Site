@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 from gestoes.models import Membro
 
@@ -6,7 +7,7 @@ from gestoes.models import Membro
 # Instituição em que a Comissão/Congregação/Conselho ocorre (ex. Unicamp, IC, FEEC)
 class Instituicao(models.Model):
     # Nome da instituição
-    nome = models.CharField(max_length=128, unique=True, null=False, blank=False)
+    nome = models.CharField(max_length=settings.MAX_LENGTH_NOME, null=False, blank=False)
 
     def __str__(self):
         return self.nome
@@ -20,7 +21,7 @@ class Instituicao(models.Model):
 # Comissão/Congregação/Conselho em que possuimos representantes
 class Comissao(models.Model):
     # Nome da comissão
-    nome = models.CharField(max_length=128, unique=True, null=False, blank=False)
+    nome = models.CharField(max_length=settings.MAX_LENGTH_NOME, null=False, blank=False)
     # Instituição em que a comissão atua
     instituicao = models.ForeignKey(
         Instituicao, null=False, blank=False, on_delete=models.CASCADE
@@ -37,7 +38,7 @@ class Comissao(models.Model):
 
 class RepresentanteDiscente(models.Model):
     # Nome d* representante discente
-    nome = models.CharField(max_length=128, null=False, blank=False)
+    nome = models.CharField(max_length=settings.MAX_LENGTH_NOME, null=False, blank=False)
 
     # Se representante é titular
     titular = models.BooleanField(default=True, null=False, blank=False)
@@ -45,7 +46,7 @@ class RepresentanteDiscente(models.Model):
     # Ano de ingresso d* representante
     ano_ingresso = models.PositiveIntegerField(null=False, blank=False)
     # Curso d* representante
-    curso = models.CharField(max_length=4, null=False, blank=False, choices=Membro.CURSOS)
+    curso = models.CharField(max_length=settings.MAX_LENGTH_CURSOS, null=False, blank=False, choices=settings.CURSOS)
 
     # Ano de atuação d* representante
     ano_atuacao = models.PositiveIntegerField(null=False, blank=False)

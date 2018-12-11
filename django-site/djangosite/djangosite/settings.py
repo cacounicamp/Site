@@ -187,6 +187,11 @@ EMAIL_CONTATO_DESTINATARIO = configuracao['EMAIL_CONTATO_DESTINATARIO']
 # Qual o e-mail que aparecerá na página de contato em caso de falha
 EMAIL_CONTATO_DISPLAY = configuracao['EMAIL_CONTATO_DISPLAY']
 
+
+#
+# PARAMETRIZAÇÃO DA EXIBIÇÃO DO SITE
+#
+
 # Notícias por página no site
 NOTICIAS_POR_PAGINA = 5
 NOTICIAS_POR_PAGINA_RAIZ = 3
@@ -202,3 +207,43 @@ GESTOES_POR_PAGINA = 10
 
 # Anos de representantes discentes no site
 REPRESENTANTES_DISCENTES_ANOS_POR_PAGINA = 10
+
+
+#
+# PARAMETRIZAÇÃO DO BANCO DE DADOS
+#
+
+# MAX_LENGTH_* define o tamanho máximo em caracteres para cada item
+
+# Nome de pessoas, comissões, gestões e instituições
+MAX_LENGTH_NOME = 160
+MAX_LENGTH_APELIDO = 32
+MAX_LENGTH_CARGOS = 64
+# Página de atas
+MAX_LENGTH_HIGHLIGHT_ATAS = 320
+# Página de notícias
+MAX_LENGTH_TITULO_NOTICIAS = 64
+MAX_LENGTH_RESUMO_NOTICIAS = 128
+# Página de contato
+MAX_LENGTH_CONTATO_CONTATO = 320
+MAX_LENGTH_ASSUNTO_CONTATO = 160
+MAX_LENGTH_MENSAGEM_CONTATO = 4096
+# Páginas estáticas
+MAX_LEGNTH_TITULO_PAGINA = 32
+MAX_LEGNTH_ENDERECO_PAGINA = 192
+# Menu do site
+MAX_LENGTH_TITULO_ITEM_MENU = 32
+MAX_LEGNTH_ENDERECO_MENU = 512
+
+# Lista de cursos
+CURSOS = (
+    ('EC', 'Engenharia de computação'),
+    ('CC', 'Ciência da computação'),
+    ('Pós', 'Pós-graduação do IC'),
+)
+# Máximo caractere para a sigla do curso (automatizada pela tupla acima)
+MAX_LENGTH_CURSOS = 0
+for sigla, _ in CURSOS:
+    tamanho_sigla = len(sigla)
+    if tamanho_sigla >= MAX_LENGTH_CURSOS:
+        MAX_LENGTH_CURSOS = tamanho_sigla + 1
