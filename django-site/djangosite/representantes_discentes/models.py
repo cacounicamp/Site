@@ -1,8 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-from gestoes.models import Membro
-
 
 # Instituição em que a Comissão/Congregação/Conselho ocorre (ex. Unicamp, IC, FEEC)
 class Instituicao(models.Model):
@@ -54,6 +52,9 @@ class RepresentanteDiscente(models.Model):
     comissao = models.ForeignKey(
         Comissao, null=False, blank=False, on_delete=models.CASCADE
     )
+
+    def __str__(self):
+        return '{rd.nome} ({rd.curso} {rd.ano_ingresso}): {titularidade} em {rd.ano_atuacao} de {rd.comissao}'.format(rd=self, titularidade='titular' if self.titular else 'suplente')
 
     class Meta:
         verbose_name = "representante discente"
