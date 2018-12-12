@@ -1,6 +1,6 @@
 import requests
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist

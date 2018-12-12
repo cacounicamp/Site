@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/2.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
+from datetime import timedelta
+
 import os
 import json
 
@@ -59,6 +61,7 @@ INSTALLED_APPS = [
     'atas',
     'gestoes',
     'representantes_discentes',
+    'membros',
 ]
 
 MIDDLEWARE = [
@@ -208,6 +211,13 @@ GESTOES_POR_PAGINA = 10
 # Anos de representantes discentes no site
 REPRESENTANTES_DISCENTES_ANOS_POR_PAGINA = 10
 
+# Caminho até o estatuto (será utilizado na página de membros)
+ESTATUTO_URL = '/media/estatuto.pdf'
+
+# Tempo para confirmação dos membros (seja para vincular, seja para
+# desvincular-se)
+TEMPO_CONFIRMACAO_MEMBROS = timedelta(days=1)
+
 
 #
 # PARAMETRIZAÇÃO DO BANCO DE DADOS
@@ -225,7 +235,7 @@ MAX_LENGTH_HIGHLIGHT_ATAS = 320
 MAX_LENGTH_TITULO_NOTICIAS = 64
 MAX_LENGTH_RESUMO_NOTICIAS = 128
 # Página de contato
-MAX_LENGTH_CONTATO_CONTATO = 320
+MAX_LENGTH_EMAIL = 320
 MAX_LENGTH_ASSUNTO_CONTATO = 160
 MAX_LENGTH_MENSAGEM_CONTATO = 4096
 # Páginas estáticas
@@ -237,8 +247,8 @@ MAX_LEGNTH_ENDERECO_MENU = 512
 
 # Lista de cursos
 CURSOS = (
-    ('EC', 'Engenharia de computação'),
     ('CC', 'Ciência da computação'),
+    ('EC', 'Engenharia de computação'),
     ('Pós', 'Pós-graduação do IC'),
 )
 # Máximo caractere para a sigla do curso (automatizada pela tupla acima)
