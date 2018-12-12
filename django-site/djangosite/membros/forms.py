@@ -57,4 +57,4 @@ class FormularioDesvinculo(forms.Form):
     registro_academico = forms.IntegerField(required=True, label='Seu registro acadêmico (RA)*:', min_value=0)
 
     # Ano de ingresso do membro
-    ano_ingresso = forms.DateField(required=True, label='Ano de ingresso:*', help_text=exemplo_ano(), input_formats=['%Y'])
+    ano_ingresso = forms.DateField(required=True, label='Ano de ingresso*:', help_text=exemplo_ano(), input_formats=['%Y'])
