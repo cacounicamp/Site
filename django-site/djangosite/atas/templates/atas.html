@@ -6,102 +6,98 @@ Atas | CACo
 
 {% block body %}
 
-<div class="container">
+{% load atas %}
 
-  {% load atas %}
-
-  {% if pagina_participe %}
-    <div class="row">
-      <div class="col">
-        {{pagina_participe.conteudo|safe}}
-      </div>
-    </div>
-  {%endif %}
-
-  <div class="row pt-3">
+{% if pagina_participe %}
+  <div class="row">
     <div class="col">
-
-      <h2>Últimas atas de reunião</h2>
-      <hr>
-
-      <div class="container">
-
-        <div class="row">
-          <div class="col">
-            <div class="container">
-
-              {% for ata in atas_reunioes %}
-                <div class="row">
-                  <div class="col">
-                    <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
-                      <p><h5><a href="{% url "ata/reuniao/" ata.pk ata.data_criacao|slugify %}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5></p>
-                      <p><i>{{ata.highlights}}</i></p>
-                    </div>
-                  </div>
-                </div>
-              {% endfor %}
-
-            </div>
-          </div>
-        </div>
-
-        <div class="container pl-4 pr-4">
-          <div class="row rounded border shadow-sm">
-            <div class="col">
-              <div class="float-right">
-                <a class="btn btn-sm btn-link" href="{% url 'atas/reunioes/' %}" role="button">Ver mais atas de reuniões...</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
+      {{pagina_participe.conteudo|safe}}
     </div>
   </div>
+{%endif %}
 
-  <div class="row pt-3">
-    <div class="col">
+<div class="row pt-3">
+  <div class="col">
 
-      <h2>Últimas atas de assembleia</h2>
-      <hr>
+    <h2>Últimas atas de reunião</h2>
+    <hr>
 
-      <div class="container">
+    <div class="container">
 
-        <div class="row">
-          <div class="col">
-            <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="container">
 
-              {% for ata in atas_assembleias %}
-                <div class="row">
-                  <div class="col">
-                    <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
-                      <p><h5><a href="{% url "ata/assembleia/" ata.pk ata.data_criacao|slugify %}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5></p>
-                      <p><i>{{ata.highlights}}</i></p>
-                    </div>
+            {% for ata in atas_reunioes %}
+              <div class="row">
+                <div class="col">
+                  <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
+                    <p><h5><a href="{% url "ata/reuniao/" ata.pk ata.data_criacao|slugify %}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5></p>
+                    <p><i>{{ata.highlights}}</i></p>
                   </div>
                 </div>
-              {% endfor %}
-
-            </div>
-          </div>
-        </div>
-
-        <div class="container pl-4 pr-4">
-          <div class="row rounded border shadow-sm">
-            <div class="col">
-              <div class="float-right">
-                <a class="btn btn-sm btn-link" href="{% url 'atas/assembleias/' %}" role="button">Ver mais atas de assembleias...</a>
               </div>
+            {% endfor %}
+
+          </div>
+        </div>
+      </div>
+
+      <div class="container pl-4 pr-4">
+        <div class="row rounded border shadow-sm">
+          <div class="col">
+            <div class="float-right">
+              <a class="btn btn-sm btn-link" href="{% url 'atas/reunioes/' %}" role="button">Ver mais atas de reuniões...</a>
             </div>
           </div>
         </div>
-
       </div>
 
     </div>
-  </div>
 
+  </div>
+</div>
+
+<div class="row pt-3">
+  <div class="col">
+
+    <h2>Últimas atas de assembleia</h2>
+    <hr>
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col">
+          <div class="container">
+
+            {% for ata in atas_assembleias %}
+              <div class="row">
+                <div class="col">
+                  <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
+                    <p><h5><a href="{% url "ata/assembleia/" ata.pk ata.data_criacao|slugify %}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5></p>
+                    <p><i>{{ata.highlights}}</i></p>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+
+          </div>
+        </div>
+      </div>
+
+      <div class="container pl-4 pr-4">
+        <div class="row rounded border shadow-sm">
+          <div class="col">
+            <div class="float-right">
+              <a class="btn btn-sm btn-link" href="{% url 'atas/assembleias/' %}" role="button">Ver mais atas de assembleias...</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 </div>
 
 {% endblock %}

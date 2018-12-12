@@ -14,86 +14,82 @@ function goBack() {
 
 {% block body %}
 
-<div class="container">
-
-  <div class="alert alert-info shadow-sm" role="alert">
-    <div class="row">
-      <div class="col">
-        <p><h1>Representantes discentes de {{ano_atuacao}}</h1></p>
-      </div>
-    </div>
-
-    <div class="row bg-light rounded border shadow-sm">
-      <div class="col">
-        <div class="float-left">
-          <small>Se precisar entrar em contato com algum representante discente, utilize <a href="mailto:{{email_contato}}">nosso e-mail</a> ou <a href="{% url 'contato/' %}">nossa página de contato</a>.</small>
-        </div>
-        <div class="float-right">
-          <button title="Volta a página anterior" class="btn btn-sm btn-link" onClick="goBack()">Retornar à página anterior</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
+<div class="alert alert-info shadow-sm" role="alert">
   <div class="row">
     <div class="col">
-
-      <div class="container">
-
-        {% for unidade, cargos_representantes in unidade_cargos_representantes.items %}
-
-        <div class="row p-3">
-          <div class="col">
-
-            <h4>{{unidade}}</h4>
-
-            <table class="table table-striped shadow">
-              <thead class="thead-dark">
-                <tr>
-                  <th scope="col"></th>
-                  <th scope="col">Representante discente</th>
-                  <th scope="col">Curso, ano de ingresso</th>
-                  <th scope="col">Exercício</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for cargo, representantes in cargos_representantes.items %}
-                <tr>
-                  <th scope="row">{{cargo.nome}}</th>
-                  <td>
-                    {% for representante in representantes %}
-                    {{representante.nome}}<br>
-                    {% endfor %}
-                  </td>
-                  <td>
-                    {% for representante in representantes %}
-                      {{representante.curso}}, {{representante.ano_ingresso}}<br>
-                    {% endfor %}
-                  </td>
-                  <td>
-                    {% for representante in representantes %}
-                      {% if representante.titular %}
-                      Titular
-                      {% else %}
-                      Suplente
-                      {% endif %}<br>
-                    {% endfor %}
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-
-          </div>
-        </div>
-
-        {% endfor %}
-
-      </div>
-
+      <p><h1>Representantes discentes de {{ano_atuacao}}</h1></p>
     </div>
   </div>
 
+  <div class="row bg-light rounded border shadow-sm">
+    <div class="col">
+      <div class="float-left">
+        <small>Se precisar entrar em contato com algum representante discente, utilize <a href="mailto:{{email_contato}}">nosso e-mail</a> ou <a href="{% url 'contato/' %}">nossa página de contato</a>.</small>
+      </div>
+      <div class="float-right">
+        <button title="Volta a página anterior" class="btn btn-sm btn-link" onClick="goBack()">Retornar à página anterior</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+
+    <div class="container">
+
+      {% for unidade, cargos_representantes in unidade_cargos_representantes.items %}
+
+      <div class="row p-3">
+        <div class="col">
+
+          <h4>{{unidade}}</h4>
+
+          <table class="table table-striped shadow">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Representante discente</th>
+                <th scope="col">Curso, ano de ingresso</th>
+                <th scope="col">Exercício</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cargo, representantes in cargos_representantes.items %}
+              <tr>
+                <th scope="row">{{cargo.nome}}</th>
+                <td>
+                  {% for representante in representantes %}
+                  {{representante.nome}}<br>
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for representante in representantes %}
+                    {{representante.curso}}, {{representante.ano_ingresso}}<br>
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for representante in representantes %}
+                    {% if representante.titular %}
+                    Titular
+                    {% else %}
+                    Suplente
+                    {% endif %}<br>
+                  {% endfor %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+  </div>
 </div>
 
 {% endblock %}

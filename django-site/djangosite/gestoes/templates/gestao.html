@@ -14,92 +14,88 @@ function goBack() {
 
 {% block body %}
 
-<div class="container">
-
-  <div class="alert alert-secondary shadow-sm" role="alert">
-    <div class="row">
-      <div class="col">
-        <p><h1>Gestão {{gestao.nome}}</h1></p>
-      </div>
-    </div>
-
-    <div class="row bg-light rounded border shadow-sm">
-      <div class="col">
-        <div class="float-left">
-          <small>Eleita em <b>{{gestao.ano_eleito}}</b>, exerce em <b>{{gestao.ano_eleito|add:1}}</b> com <b>{{membros}}</b> integrantes.</small>
-        </div>
-        <div class="float-right">
-          <button title="Volta a página anterior" class="btn btn-sm btn-link" onClick="goBack()">Retornar à página anterior</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row p-3">
+<div class="alert alert-secondary shadow-sm" role="alert">
+  <div class="row">
     <div class="col">
-
-      <div class="container">
-
-        <div class="row">
-          <div class="col">
-            {{gestao.conteudo|safe}}
-          </div>
-        </div>
-
-        <div class="row p-2">
-          <div class="col">
-
-            <table class="table table-striped shadow">
-              <thead class="thead-dark">
-                <tr>
-                  <th scope="col">Cargo</th>
-                  <th scope="col">Nome</th>
-                  <th scope="col">Apelido</th>
-                  <th scope="col">Curso</th>
-                  <th scope="col">Ano de ingresso</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for cargo, membros in cargo_membros.items %}
-                <tr>
-                  <th scope="row">{{cargo}}</th>
-                  <td>
-                    {% for membro in membros %}
-                    {{membro.nome}}<br>
-                    {% endfor %}
-                  </td>
-                  <td>
-                    {% for membro in membros %}
-                    {% if membro.apelido %}
-                    <i>"{{membro.apelido}}"</i><br>
-                    {% else %}
-                    -<br>
-                    {% endif %}
-                    {% endfor %}
-                  </td>
-                  <td>
-                    {% for membro in membros %}
-                    {{membro.curso}}<br>
-                    {% endfor %}
-                  </td>
-                  <td>
-                    {% for membro in membros %}
-                    {{membro.ano_ingresso}}<br>
-                    {% endfor %}
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-
-          </div>
-        </div>
-
-      </div>
-
+      <p><h1>Gestão {{gestao.nome}}</h1></p>
     </div>
   </div>
 
+  <div class="row bg-light rounded border shadow-sm">
+    <div class="col">
+      <div class="float-left">
+        <small>Eleita em <b>{{gestao.ano_eleito}}</b>, exerce em <b>{{gestao.ano_eleito|add:1}}</b> com <b>{{membros}}</b> integrantes.</small>
+      </div>
+      <div class="float-right">
+        <button title="Volta a página anterior" class="btn btn-sm btn-link" onClick="goBack()">Retornar à página anterior</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row p-3">
+  <div class="col">
+
+    <div class="container">
+
+      <div class="row">
+        <div class="col">
+          {{gestao.conteudo|safe}}
+        </div>
+      </div>
+
+      <div class="row p-2">
+        <div class="col">
+
+          <table class="table table-striped shadow">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Cargo</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Apelido</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Ano de ingresso</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cargo, membros in cargo_membros.items %}
+              <tr>
+                <th scope="row">{{cargo}}</th>
+                <td>
+                  {% for membro in membros %}
+                  {{membro.nome}}<br>
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for membro in membros %}
+                  {% if membro.apelido %}
+                  <i>"{{membro.apelido}}"</i><br>
+                  {% else %}
+                  -<br>
+                  {% endif %}
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for membro in membros %}
+                  {{membro.curso}}<br>
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for membro in membros %}
+                  {{membro.ano_ingresso}}<br>
+                  {% endfor %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
 </div>
 
 {% endblock %}
