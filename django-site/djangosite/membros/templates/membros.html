@@ -1,0 +1,94 @@
+{% extends "layouts/base.html" %}
+
+{% block titulopagina %}
+Membros do centro acadêmico | CACo
+{% endblock %}
+
+{% block body %}
+
+{# Colocamos o conteúdo da página estática se houver #}
+{% if pagina %}
+<div class="row">
+  <div class="col">
+    {{pagina.conteudo|safe}}
+  </div>
+</div>
+{% endif %}
+
+{# Colocamos as mensagens, se houver #}
+{% if messages %}
+{% for message in messages %}
+  <div class="row">
+    <div class="col">
+        <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
+          <h6 class="m-2 alert-link">{{message}}</h6>
+        </div>
+    </div>
+  </div>
+{% endfor %}
+{% endif %}
+
+<div class="row">
+  <div class="col">
+    <h2>Faça parte!</h2>
+    <hr>
+    <p>De acordo com o estatuto, apenas estudantes de computação (graduação ou pós-graduação) da Unicamp podem se vincular ao CACo.</p>
+  </div>
+</div>
+
+<div class="row p-3 justify-content-center">
+  <div class="col-md-auto">
+    <a class="btn btn-primary" role="button" href="{% url 'membro/vincular/' %}">Vincular-se</a>
+  </div>
+  <div class="col-3"></div>
+  <div class="col-md-auto">
+    <a class="btn btn-primary" role="button" href="{% url 'membro/desvincular/' %}">Desvincular-se</a>
+  </div>
+</div>
+
+{% if membros.count > 0 %}
+<div class="row">
+  <div class="col">
+    <h2>Lista de membros</h2>
+    <hr>
+    <div class="container">
+      <div class="row p-3">
+        <div class="col">
+
+          <table class="table table-striped shadow">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Registro acadêmico</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for membro in membros %}
+                <tr>
+                  <th scole="row">{{membro.nome}}</th>
+                  <th>{{membro.registro_academico}}</th>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% else %}
+
+<div class="row">
+  <div class="col">
+    <div class="alert alert-danger">
+      <h4 class="alert-link">Não há membros confirmados!</h4>
+      <hr>
+      <p>Atualmente a lista de membros está vazia. Isso significa que as pessoas que preencheram o formulário ainda não confirmaram que possuem acesso ao e-mail institucional do Instituto da Computação da Unicamp.</p>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

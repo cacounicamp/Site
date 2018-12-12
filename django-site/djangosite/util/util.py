@@ -1,7 +1,31 @@
 import math
+import requests
 
-from django.shortcuts import render, redirect
 from django.http import Http404
+from django.conf import settings
+from django.shortcuts import render, redirect
+
+
+RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify'
+
+
+def recaptcha_valido(request):
+    # Pegamos da request o código do usuário
+    recaptcha_resposta = request.POST.get('g-recaptcha-response')
+
+    dados = {
+        'secret': settings.CAPTCHA_SECRET_KEY,
+        'response': recaptcha_resposta
+    }
+    # Verificamos o Recaptcha
+    recaptcha_resultado = requests.post(RECAPTCHA_URL, data=dados).json()
+
+    # Imprimimos o resultado do recaptcha se estivermos em DEBUG
+    if settings.DEBUG:
+        print('Resultado do recaptcha: "{}"'.format(recaptcha_resultado))
+
+    # Retornamos o resultado
+    return recaptcha_resultado['success']
 
 
 def pegar_pagina(request, objects, pagina_html, itens_por_pagina, pagina_atual, context={}):

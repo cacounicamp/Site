@@ -215,7 +215,7 @@ REPRESENTANTES_DISCENTES_ANOS_POR_PAGINA = 10
 ESTATUTO_URL = '/media/estatuto.pdf'
 
 # Tempo para confirmação dos membros (seja para vincular, seja para
-# desvincular-se)
+# desvincular-se). Se ultrapassar esse tempo, será inválido.
 TEMPO_CONFIRMACAO_MEMBROS = timedelta(days=1)
 
 

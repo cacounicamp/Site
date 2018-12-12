@@ -1,4 +1,5 @@
-import requests
+# Para os erros ao enviar e-mail
+from smtplib import SMTPException
 
 from django.shortcuts import render
 from django.urls import reverse
@@ -7,11 +8,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 
 from paginas_estaticas.models import PaginaEstatica
+from util import util
+
 from .forms import FormContato
 from .models import FormularioContato
-
-# Para os erros ao enviar e-mail
-from smtplib import SMTPException
 
 
 EMAIL_ASSUNTO_BASE = """[CACo] [Ouvidoria] {assunto}"""
@@ -30,8 +30,6 @@ Atenciosamente,
 Centro acadêmico da computação
 """
 
-RECAPTCHA_URL = 'https://www.google.com/recaptcha/api/siteverify'
-
 
 def ContatoView(request):
     # Verificamos se estamos recebendo informação ou temos que servir o
@@ -43,18 +41,7 @@ def ContatoView(request):
         if form.is_valid():
 
             # Verificamos a resposta do recaptcha
-            recaptcha_resposta = request.POST.get('g-recaptcha-response')
-            dados = {
-                'secret': settings.CAPTCHA_SECRET_KEY,
-                'response': recaptcha_resposta
-            }
-            recaptcha_resultado = requests.post(RECAPTCHA_URL, data=dados).json()
-            if settings.DEBUG:
-                # Imprimimos o resultado do recaptcha se estivermos em DEBUG
-                print('Resultado do recaptcha: "{}"'.format(recaptcha_resultado))
-
-            # Verificamos se o recaptcha permitiu
-            if recaptcha_resultado['success']:
+            if util.recaptcha_valido(request):
                 # Inserimos um modelo
                 formulario = FormularioContato(
                     contato=form.cleaned_data['contato'],
