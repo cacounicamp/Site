@@ -170,7 +170,10 @@ CKEDITOR_CONFIGS = {
 # Media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
+# Para onde os arquivos de mídia serão enviados
 CKEDITOR_UPLOAD_PATH = 'uploaded/'
+# Para onde as provas serão enviadas (dentro de MEDIA_ROOT)
+PROVAS_PATH = 'provas/'
 
 # Dados para captcha (página de contatos e membros)
 CAPTCHA_SITE_KEY = configuracao['CAPTCHA_SITE_KEY']
@@ -244,6 +247,11 @@ MAX_LEGNTH_ENDERECO_PAGINA = 192
 # Menu do site
 MAX_LENGTH_TITULO_ITEM_MENU = 32
 MAX_LEGNTH_ENDERECO_MENU = 512
+# Banco de provas
+MAX_LENGTH_TIPO_AVALIACAO = 64
+MAX_LENGTH_PERIODO = 64
+MAX_LENGTH_CODIGO_DISCIPLINA = 6
+MAX_LENGTH_DOCENTE = 32             # Tão grande quanto um apelido
 
 # Lista de cursos
 CURSOS = (
