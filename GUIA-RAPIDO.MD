@@ -116,7 +116,12 @@ $ EDITOR_PREFERIDO config.json
 Abrimos outro terminal e, na pasta raiz, ativamos o banco de dados através do
 Docker:
 ```
-$ docker-compose -f docker-compose-http.yml up database
+$ docker-compose -f (arquivo docker-compose) up database
+```
+Ou, sem abrir outro terminal, inicializamos o banco de dados com um _daemon_
+(opção `-d`):
+```
+$ docker-compose -f (arquivo docker-compose) up -d database
 ```
 
 Voltando à pasta Django, preparamos a estrutura do banco de dados:
@@ -143,6 +148,55 @@ $ python manage.py runserver ip:porta
 No nosso navegador, acessamos o site com o final do endereço `/admin` para
 acessarmos a página de administrador e criar páginas, notícias, menu etc.
 
-Após concluído, fechamos o servidor e o banco de dados utilizando `Ctrl + C`.
+Após concluído, fechamos o servidor e o banco de dados utilizando `Ctrl + C` (ou
+parando o _daemon_, usando  `docker-compose -f (arquivo docker-compose) down`.
 Para sair do _virtual environment_, utilize o comando `deactivate`.
 
+
+## Para produção
+
+Após executar os mesmos passos para desenvolvimento (preparar o _workspace_ é
+bem parecido com preparar o website para produção, pois inicializamos o banco de
+dados, criamos um _super user_ etc).
+
+### Configurando HTTPS
+
+Na primeira execução, é necessário adquirir os certificados para habilitar o
+serviço HTTPS. Utilizamos o arquivo `docker-compose-cert.yml`, que irá servir o
+comprovante de controle de domínio para Let's Encrypt.
+
+É necessário para o servidor HTTPS que utilizamos criar o arquivo `dhparam.pem`
+na pasta `nginx/certificados/`:
+```
+§ openssl dhparam -out certificados/dhparam.pem 2048
+```
+
+Criamos as imagens do Docker para a aquisição do primeiro certificado:
+```
+§ docker-compose -f docker-compose-cert.yml build
+§ docker-compose -f docker-compose-cert.yml up
+... Aguardamos a verificação ...
+(Ctrl + C para parar)
+```
+
+Finalmente, criamos as imagens para o servidor HTTPS:
+```
+§ docker-compose -f docker-compose-https.yml build
+```
+
+### Inicializando o servidor
+
+Podemos executar o Docker para produção com um _daemon_:
+```
+$ docker-compose -f (arquivo docker-compose) up -d
+```
+
+Podemos ver quais os _containers_ ativos no Docker através do comando:
+```
+$ docker ps
+```
+
+Para parar o Docker, utilizamos:
+```
+$ docker-compose -f (arquivo docker-compose) down
+```
