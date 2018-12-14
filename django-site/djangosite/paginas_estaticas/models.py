@@ -101,6 +101,6 @@ class ItemMenu(ItemMenuAbstrato):
                                   'possuir uma página associada.')
 
     class Meta:
-        verbose_name = "item do menu"
-        verbose_name_plural = "itens do menu"
+        verbose_name = "item comum do menu"
+        verbose_name_plural = "itens comuns do menu"
         ordering = ['indice']

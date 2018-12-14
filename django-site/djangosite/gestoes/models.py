@@ -30,6 +30,10 @@ class Cargo(models.Model):
     def __str__(self):
         return self.nome
 
+    class Meta:
+        verbose_name = "cargo da gestão"
+        verbose_name_plural = "cargos das gestões"
+
 
 # Para os cargos
 class Membro(models.Model):
@@ -52,3 +56,7 @@ class Membro(models.Model):
 
     def __str__(self):
         return '{membro.nome} "{membro.apelido}" {membro.curso} {membro.ano_ingresso}'.format(membro=self)
+
+    class Meta:
+        verbose_name = "membro da gestão"
+        verbose_name_plural = "membros das gestões"

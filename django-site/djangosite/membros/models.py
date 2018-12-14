@@ -86,6 +86,6 @@ class Membro(models.Model):
         return '{membro.nome} ({membro.registro_academico}, e-mail pessoal: "{membro.email}", {membro.curso} {membro.ano_ingresso}), {status}'.format(membro=self, status='confirmado em {0}'.format(self.data_confirmacao) if self.data_confirmacao is not None else 'não confirmado')
 
     class Meta:
-        verbose_name = "membro"
-        verbose_name_plural = "membros"
+        verbose_name = "membro do centro acadêmico"
+        verbose_name_plural = "membros do centro acadêmico"
         ordering = ['registro_academico']

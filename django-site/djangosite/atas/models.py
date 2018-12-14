@@ -40,7 +40,7 @@ class AtaAssembleia(Ata):
 
     class Meta:
         verbose_name = "ata de assembleia"
-        verbose_name_plural = "atas de assembleia"
+        verbose_name_plural = "atas de assembleias"
         # Ordenamos do mais novo ao mais velho
         ordering = ['-data_criacao']
 
@@ -63,6 +63,6 @@ class AtaReuniao(Ata):
 
     class Meta:
         verbose_name = "ata de reunião"
-        verbose_name_plural = "atas de reunião"
+        verbose_name_plural = "atas de reuniões"
         # Ordenamos do mais novo ao mais velho
         ordering = ['-data_criacao']
