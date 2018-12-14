@@ -13,12 +13,15 @@ Por questão de legibilidade, não me preocupei em utilizar gêneros neutros em
 variáveis dentro do código. Porém esse assunto é de extrema importância e DEVE
 ser levado em consideração enquanto o conteúdo do site é reescrito.
 
-Utilizei neste guia [Arch
+
+## Guia rápido de instalação
+
+O guia rápido pode ser encontrado [aqui](GUIA-RAPIDO.MD) e utiliza [Arch
 Linux](https://wiki.archlinux.org/index.php/Arch_Linux) e seu sistema de
 pacotes.
 
-Um guia rápido de configuração e instalação pode ser encontrado
-[aqui](GUIA-RAPIDO.MD).
+No entanto, para **desenvolvimento** e **configuração**, é necessário entender
+toda a estrutura, descrita neste arquivo.
 
 
 ## Estrutura do servidor
@@ -93,6 +96,13 @@ dados vir para a pasta raiz do projeto). A ligação entre o Django ao banco de
 dados é feita através de um [Unix
 socket](https://en.wikipedia.org/wiki/Unix_domain_socket) que é mais eficiente
 do que conexões TCP. Esse arquivo socket ficará na raiz do projeto também.
+
+A configuração do banco de dados para o servidor deve ser realizada manualmente
+através de um [_virtual
+environment_](https://docs.python.org/3/tutorial/venv.html) de Python (descrito
+no guia rápido), que possui benefícios parecidos com os de Docker, pois permite
+a instalação de pacotes localmente e controladamente, mantendo o sistema
+estável.
 
 #### `django-caco`:
 Possui um `Dockerfile` para configuração do ambiente (que é baseado em uma
@@ -191,6 +201,62 @@ que a tabela era formatada diferente de outras, por exemplo). Hoje isso virou um
 app e basta ir à página de administrador e descrever a gestão, de maneira fácil
 e simples, com uma visualização única para todas as gestões.
 
+##### Arquivo de configuração
+
+Para segurança do site, guardamos informações e opções importantes em um arquivo
+de configurações `django-site/djangosite/config.json`.
+
+Note que é necessário configurar o ReCaptcha e um servidor de e-mail para a
+página de contato. Então preencha corretamente este arquivo seguindo este
+modelo:
+
+```javascript
+{
+    "SECRET_KEY": "",
+
+    "DEBUG": true,
+    "ALLOWED_HOSTS": [
+        "*"
+    ],
+
+    "CAPTCHA_SECRET_KEY": "",
+    "CAPTCHA_SITE_KEY": "",
+
+    "EMAIL_HOST": "",
+    "EMAIL_PORT": 0,
+    "EMAIL_HOST_USER": "",
+    "EMAIL_HOST_PASSWORD": "",
+    "EMAIL_USE_TLS": false,
+    "EMAIL_USE_SSL": false,
+
+    "EMAIL_CONTATO_REMETENTE": "caco@ic.unicamp.br",
+    "EMAIL_CONTATO_DISPLAY": "caco@ic.unicamp.br",
+    "EMAIL_CONTATO_DESTINATARIO": [
+        "caco@ic.unicamp.br"
+    ]
+}
+```
+
+O significado de cada opção constam nessa tabela:
+
+| Configuração | Significado |
+| ------------ | ----------- |
+| `SECRET_KEY` | Chave de segurança utilizada internamente pelo Django. Deve ser uma grande string e deve ser secreta |
+| `DEBUG` | Valor de true ou false, define diversos parâmetros no servidor. NÃO deve ser true em produção |
+| `ALLOWED_HOSTS` | Lista de _hosts_ aceitos para respondermos à requisição HTTP |
+| `CAPTCHA_SECRET_KEY`, `CAPTCHA_SITE_KEY` | Chave privada e pública respectivamente do ReCaptcha (página de contato) |
+| `EMAIL_CONTATO_DESTINATARIO` | Define a lista de e-mails que receberá os contatos do site |
+| `EMAIL_CONTATO_REMETENTE` | Define qual será o remetente do e-mail que será enviado à lista `EMAIL_CONTATO_DESTINATARIO` |
+| `EMAIL_CONTATO_DISPLAY` | Define qual e-mail (único) da gestão que aparecerá na página de contato em caso de falhas no site ou no ReCaptcha |
+| `EMAIL_*` | Configurações de e-mail para utilizarmos na página de contato principalmente |
+
+Para explicar melhor as diferentes configurações de `EMAIL_CONTATO_*`, vamos
+supor que alguém preencha o formulário de contato no site. As informações desse
+formulário serão enviadas em um e-mail. O destinatário do e-mail será a lista
+`EMAIL_CONTATO_DESTINATARIO`, o remetente será `EMAIL_CONTATO_REMETENTE`. O
+e-mail de display `EMAIL_CONTATO_DISPLAY` será mostrado em algumas partes do
+site.
+
 As aplicações do site em ordem aleatória são:
 
 ##### `paginas_estaticas`
@@ -249,6 +315,8 @@ Além da página de contato, devemos criar instâncias de `PaginaEstatica` para 
 endereços `contato/sucesso/` e `contato/falha/` que aparecem respectivamente ao
 tentar utilizar a página de contato obtendo sucesso e falha.
 
+Utiliza ReCaptcha para evitar spam.
+
 ##### `atas`
 
 _App_ que controla as atas de reunião e de assembleias. A página principal
@@ -296,6 +364,60 @@ páginas definida em `util/util.py`. Não pode utilizar a versão exata pois a
 apresentação de informações requer uma alteração antes de disponibilizar a
 página.
 
+##### `representantes_discentes`
+
+_App_ que controla a lista de representantes discentes de cada
+comissão/congregação/conselho dos principais institutos da Unicamp (ou os mais
+relevantes à computação, IC e FEEC).
+
+##### `membros`
+
+_App_ que controla o cadastro e exibição de membros no site, permite o vínculo
+e desvínculo de membros através de um e-mail institucional do IC da Unicamp.
+
+A confirmação é feita através de um token aleatório de duração temporária, então
+caso alguém digite algo errado, poderá se inscrever novamente após um período
+determinado em `settings.py`.
+
+Utiliza ReCaptcha para evitar spam.
+
+##### `banco_de_provas`
+
+_App_ que controla o cadastro e exibição de provas de anos anteriores para
+auxiliar no estudo.
+
+Comparado à versão anterior do site, tentamos fazer algo dinâmico para ser
+facilmente arrumado (por exemplo, adicionar uma categoria de avaliação além de
+"prova" e "testinho", como "lista de exercícios" pode ser feito pela página de
+administração), mas rígido para tornar a busca, ordenação e visualizações mais
+fáceis.
+
+Utiliza ReCaptcha para evitar spam.
+
+### Páginas HTML e design do site
+
+Usamos [Bootstrap](https://getbootstrap.com/) (pretendia utilizar _material
+design_ do Google, mas a documentação para web é terrível), construído na pasta
+`bootstrap`, alterando alguns parâmetros para adequar-se melhor ao site do CACo,
+como as cores do menu.
+
+A construção é feita utilizando o gerenciador de pacotes JavaScript
+[`npm`](https://www.npmjs.com/), que instalará os pacotes necessários localmente
+e também provê uma interface de desenvolvimento através do `webpack-dev-server`.
+Esse projeto `npm` é descrito no arquivo `package.json`.
+
+As páginas HTML do site são descritas no projeto Django nas pastas `templates/`
+de cada aplicativo. A base `layouts/base.html` contém todo o formato do site de
+forma geral, enquanto os aplicativos descrevem as visões mais especializadas.
+
+Utilizamos _templatetags_ para escrever HTML que envolvem modelos de aplicativos
+específicos na base (por exemplo, o trecho da barra lateral que contém as atas
+ou o próprio menu do site, que é dinâmico).
+
+É recomendável utilizar ReCaptcha v3 em todo o site, porém adicionamos somente
+nos trechos cruciais (`contato/` e `membros/`) para tornar o site mais leve e
+responsivo.
+
 
 ## Referências
 
@@ -307,3 +429,6 @@ documentação de serviços utilizados (Django, Docker), utilizei estes guias:
 [Setting up Django and your web server with uWSGI and nginx](https://uwsgi-docs.readthedocs.io/en/latest/tutorials/Django_and_nginx.html)
 
 [How to Set Up Free SSL Certificates from Let's Encrypt using Docker and Nginx](https://www.humankode.com/ssl/how-to-set-up-free-ssl-certificates-from-lets-encrypt-using-docker-and-nginx)
+
+Muitas pesquisas no Google e perguntas já respondidas no [Stack
+Overflow](http://stackoverflow.com/).
