@@ -18,7 +18,7 @@ Membros do centro acadêmico | CACo
 {# Colocamos as mensagens, se houver #}
 {% if messages %}
 {% for message in messages %}
-  <div class="row">
+  <div class="row p-2">
     <div class="col">
         <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
           <h6 class="m-2 alert-link">{{message}}</h6>
@@ -32,17 +32,22 @@ Membros do centro acadêmico | CACo
   <div class="col">
     <h2>Faça parte!</h2>
     <hr>
-    <p>De acordo com o estatuto, apenas estudantes de computação (graduação ou pós-graduação) da Unicamp podem se vincular ao CACo.</p>
   </div>
 </div>
+<div class="row p-2">
+  <div class="col">
+    <p>De acordo com o estatuto, apenas estudantes de computação (graduação ou pós-graduação) da Unicamp podem se vincular ao CACo.</p>
 
-<div class="row p-3 justify-content-center">
-  <div class="col-md-auto">
-    <a class="btn btn-primary" role="button" href="{% url 'membro/vincular/' %}">Vincular-se</a>
-  </div>
-  <div class="col-3"></div>
-  <div class="col-md-auto">
-    <a class="btn btn-primary" role="button" href="{% url 'membro/desvincular/' %}">Desvincular-se</a>
+    <div class="row pl-3 pr-3 pt-1 pb-3 justify-content-center">
+      <div class="col-md-auto">
+        <a class="btn btn-primary" role="button" href="{% url 'membro/vincular/' %}">Vincular-se</a>
+      </div>
+      <div class="col-3"></div>
+      <div class="col-md-auto">
+        <a class="btn btn-primary" role="button" href="{% url 'membro/desvincular/' %}">Desvincular-se</a>
+      </div>
+    </div>
+
   </div>
 </div>
 
