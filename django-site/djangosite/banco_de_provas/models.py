@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
 
 
 class TipoAvaliacao(models.Model):
@@ -39,6 +40,12 @@ class Periodo(models.Model):
 class Disciplina(models.Model):
     id = models.AutoField(primary_key=True)
 
+    def display(self):
+        codigos = []
+        for codigo in CodigoDisciplina.objects.filter(disciplina=self).all():
+            codigos.append(codigo.codigo)
+        return ', '.join(codigos)
+
     def __str__(self):
         codigos = []
         for codigo in CodigoDisciplina.objects.filter(disciplina=self).all():
@@ -73,10 +80,15 @@ class CodigoDisciplina(models.Model):
 
 # Nome do arquivo da avaliação a ser salva
 def determinar_nome_arquivo(instance, filename):
+    if instance.quantificador_avaliacao is None:
+        quantificador = ''
+    else:
+        quantificador = str(instance.quantificador_avaliacao)
+
     # Começamos com a lista de atributos obrigatórios
     atributos = [
         str(instance.disciplina.id),
-        instance.tipo_avaliacao.nome + str(instance.quantificador_avaliacao),
+        instance.tipo_avaliacao.nome + quantificador,
     ]
 
     # Incluímos com o número de opcionais
@@ -94,7 +106,7 @@ def determinar_nome_arquivo(instance, filename):
     else:
         extensao = '.extensao_desconhecida'
 
-    return settings.PROVAS_PATH + '-'.join(atributos) + extensao
+    return settings.PROVAS_PATH + slugify('-'.join(atributos)) + extensao
 
 
 class Avaliacao(models.Model):
@@ -131,15 +143,24 @@ class Avaliacao(models.Model):
     visivel = models.BooleanField(default=False, null=False, blank=False)
 
     def __str__(self):
-        return ' - '.join([
+        atributos = [
             str(self.disciplina),
-            self.docente,
             str(self.tipo_avaliacao),
-            str(self.quantificador_avaliacao),
-            str(self.periodo),
-            str(self.ano),
             'visivel' if self.visivel else 'invisível'
-        ])
+        ]
+
+        # Verificamos os atributos opcionais
+        if self.docente is not None:
+            atributos.append(self.docente)
+        if self.quantificador_avaliacao is not None:
+            atributos.append(str(self.quantificador_avaliacao))
+        if self.periodo is not None:
+            atributos.append(str(self.periodo))
+        if self.ano is not None:
+            atributos.append(str(self.ano))
+
+        # Fazemos a string
+        return ' - '.join(atributos)
 
     class Meta:
         verbose_name = "avaliação"

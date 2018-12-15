@@ -50,9 +50,10 @@ def BancoDeProvasView(request):
     # Servimos a página
     context = {
         'pagina': pagina,
+        'busca': busca,
         'avaliacoes': avaliacoes,
     }
-    return render(request, 'membros.html', context=context)
+    return render(request, 'banco_de_provas.html', context=context)
 
 
 def SubmeterProvaView(request):
