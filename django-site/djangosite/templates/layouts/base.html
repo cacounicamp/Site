@@ -51,19 +51,18 @@
     </header>
 
     <div class="container-fluid">
-      <div class="row m-3">
+      <div class="row m-1 p-2">
 
-        <div class="col-sm-8 bg-light-color shadow rounded border m-2 p-3">
-          <div class="container p-3">
+        <div class="col-lg-8 bg-light-color shadow rounded border m-2 p-3">
+          <div class="container p-2 pt-3">
             {% block body %}
             {% endblock %}
           </div>
         </div>
 
-        <div class="col-sm bg-light-color shadow rounded border m-2 p-3">
+        <div class="col-md bg-light-color shadow rounded border m-2 p-3">
           {% load atas %}
           {% autoescape off %}{% ultimas_atas %}{% endautoescape %}
-          <div class="row p-2"></div>
           <div class="row">
             <div class="container">
               <div class="alert alert-secondary shadow-sm">
