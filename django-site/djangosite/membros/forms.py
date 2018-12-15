@@ -48,9 +48,6 @@ class FormularioVinculo(forms.Form):
 
         return email
 
-    class Meta:
-        model = Membro
-
 
 class FormularioDesvinculo(forms.Form):
     # Registro acadêmico do membro
