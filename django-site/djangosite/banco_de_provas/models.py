@@ -40,7 +40,10 @@ class Disciplina(models.Model):
     id = models.AutoField(primary_key=True)
 
     def __str__(self):
-        return 'Disciplina id={disciplina.id}'.format(disciplina=self)
+        codigos = []
+        for codigo in CodigoDisciplina.objects.filter(disciplina=self).all():
+            codigos.append(codigo.codigo)
+        return 'Disciplina #{disciplina.id} <-- {codigos}'.format(disciplina=self, codigos=codigos)
 
     class Meta:
         verbose_name = "disciplina"
@@ -72,7 +75,7 @@ class CodigoDisciplina(models.Model):
 def determinar_nome_arquivo(instance, filename):
     # Começamos com a lista de atributos obrigatórios
     atributos = [
-        instance.disciplina.id,
+        str(instance.disciplina.id),
         instance.tipo_avaliacao.nome + str(instance.quantificador_avaliacao),
     ]
 
@@ -82,7 +85,7 @@ def determinar_nome_arquivo(instance, filename):
     if instance.periodo is not None:
         atributos.append(instance.periodo.nome)
     if instance.ano is not None:
-        atributos.append(instance.ano)
+        atributos.append(str(instance.ano))
 
     # Pegamos a extensão do nome do arquivo
     if len(filename) > 0:
@@ -112,8 +115,8 @@ class Avaliacao(models.Model):
     # enviando..
     # Por exemplo "Prova"
     tipo_avaliacao = models.ForeignKey('TipoAvaliacao', on_delete=models.PROTECT, null=False, blank=False)
-    # Por exemplo 1, para formar "Prova 1"
-    quantificador_avaliacao = models.PositiveIntegerField(null=False, blank=False)
+    # Por exemplo 1, para formar "Prova 1". Pode ser dispensado
+    quantificador_avaliacao = models.PositiveIntegerField(null=True, blank=True)
 
     #   Semestre da avaliação (pode ser omitido)
     # Período
@@ -126,6 +129,17 @@ class Avaliacao(models.Model):
 
     # Se a avaliação está visível a tod*s
     visivel = models.BooleanField(default=False, null=False, blank=False)
+
+    def __str__(self):
+        return ' - '.join([
+            str(self.disciplina),
+            self.docente,
+            str(self.tipo_avaliacao),
+            str(self.quantificador_avaliacao),
+            str(self.periodo),
+            str(self.ano),
+            'visivel' if self.visivel else 'invisível'
+        ])
 
     class Meta:
         verbose_name = "avaliação"

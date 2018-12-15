@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'gestoes',
     'representantes_discentes',
     'membros',
+    'banco_de_provas',
 ]
 
 MIDDLEWARE = [

@@ -14,6 +14,7 @@ urlpatterns = [
     path('', include('gestoes.urls')),
     path('', include('representantes_discentes.urls')),
     path('', include('membros.urls')),
+    path('', include('banco_de_provas.urls')),
 ]
 
 # Em desenvolvemento, servimos manualmente media/
