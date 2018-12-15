@@ -16,32 +16,39 @@ Contato | CACo
 
 {# Colocamos o formulário de contato #}
 <div class="row">
-  <h2>Formulário de contato</h2><br>
+  <div class="col">
+    <h2>Formulário de contato</h2>
+    <hr>
+  </div>
 </div>
 
 <div class="row">
-  <p>Os itens marcados com <b>*</b> são obrigatórios.</p>
+  <div class="col">
+    <p>Os itens marcados com <b>*</b> são obrigatórios.</p>
+  </div>
 </div>
 
-<div class="row">
-  <form method="post" autocomplete="off">
-    {% csrf_token %}
-    <table class="table table-borderless">
-      {{ form.as_table }}
-    </table>
+<div class="row p-3">
+  <div class="col-auto">
+    <form method="post" autocomplete="off">
+      {% csrf_token %}
+      <table class="table table-borderless">
+        {{ form.as_table }}
+      </table>
 
-    <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
+      <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
 
-    <script>
-    grecaptcha.ready(function() {
-      grecaptcha.execute('{{captcha_site_key}}', {action: 'social'}).then(function(token) {
-        document.getElementById('g-recaptcha-response').value=token;
+      <script>
+      grecaptcha.ready(function() {
+        grecaptcha.execute('{{captcha_site_key}}', {action: 'social'}).then(function(token) {
+          document.getElementById('g-recaptcha-response').value=token;
+        });
       });
-    });
-    </script>
+      </script>
 
-    <button type="submit" class="btn btn-primary">Enviar!</button>
-  </form>
+      <button type="submit" class="btn btn-primary">Enviar!</button>
+    </form>
+  </div>
 </div>
 
 {% endblock %}
