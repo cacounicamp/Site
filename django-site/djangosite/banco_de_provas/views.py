@@ -45,7 +45,7 @@ def BancoDeProvasView(request):
             Q(ano__icontains=busca),
             # Filtramos as avaliações visíveis
             visivel=True
-        ).all()
+        ).all()[0:settings.MAX_LENGTH_MAX_AVALIACOES]
 
     # Servimos a página
     context = {

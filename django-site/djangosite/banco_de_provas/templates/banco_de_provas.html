@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block titulopagina %}
-Banco de provas | CACo
+Banco de provas {% if busca %}- "{{busca}}"{% endif %} | CACo
 {% endblock%}
 
 {% block body %}

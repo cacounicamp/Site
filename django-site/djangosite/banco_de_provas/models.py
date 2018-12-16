@@ -40,17 +40,19 @@ class Periodo(models.Model):
 class Disciplina(models.Model):
     id = models.AutoField(primary_key=True)
 
+    # Função mostra apenas os nomes atualizados de tal disciplina
     def display(self):
         codigos = []
-        for codigo in CodigoDisciplina.objects.filter(disciplina=self).all():
+        for codigo in CodigoDisciplina.objects.filter(disciplina=self, nome_atualizado=True).all():
             codigos.append(codigo.codigo)
         return ', '.join(codigos)
 
+    # Função mostra nomes atualizados com asterisco
     def __str__(self):
         codigos = []
         for codigo in CodigoDisciplina.objects.filter(disciplina=self).all():
-            codigos.append(codigo.codigo)
-        return 'Disciplina #{disciplina.id} <-- {codigos}'.format(disciplina=self, codigos=codigos)
+            codigos.append(codigo.codigo + ('*' if codigo.nome_atualizado else ''))
+        return 'Disciplina #{disciplina.id} <-- {codigos}'.format(disciplina=self, codigos=', '.join(codigos))
 
     class Meta:
         verbose_name = "disciplina"
@@ -62,15 +64,27 @@ class Disciplina(models.Model):
 class CodigoDisciplina(models.Model):
     # Disciplina à qual associamos esse código
     disciplina = models.ForeignKey('Disciplina', on_delete=models.CASCADE)
+
+    # Se esse código é o código atual da disciplina
+    nome_atualizado = models.BooleanField(
+        default=True,
+        help_text='Diz se esse nome aparecerá como o nome da disciplina ao buscar uma prova.',
+        null=False, blank=False
+    )
+
     # Código da disciplina
     codigo = models.CharField(
-        primary_key=True, max_length=settings.MAX_LENGTH_CODIGO_DISCIPLINA,
+        # primary_key faz com que quando é alterado pelo administrador, crie uma
+        # duplicata. Por exemplo, temos "MC302". Se alterarmos o nome para
+        # "MC322", ele irá inserir um código com "MC322" e manter "MC302"
+        primary_key=True,
+        max_length=settings.MAX_LENGTH_CODIGO_DISCIPLINA,
         help_text='Por exemplo, "MC202", "F328"',
         null=False, blank=False
     )
 
     def __str__(self):
-        return 'codigo={modelo.codigo} --> id={modelo.disciplina.id}'.format(modelo=self)
+        return '{modelo.codigo} --> disciplina id={modelo.disciplina.id}'.format(modelo=self)
 
     class Meta:
         verbose_name = "código da disciplina"
@@ -165,4 +179,6 @@ class Avaliacao(models.Model):
     class Meta:
         verbose_name = "avaliação"
         verbose_name_plural = "avaliações"
-        ordering = ['-ano', '-periodo', 'docente', 'disciplina__id']
+        # Ordenamos em ordem cronológica de semestre (do mais recente ao mais
+        # antigo)
+        ordering = ['-ano', '-periodo', '-quantificador_avaliacao', 'tipo_avaliacao', 'disciplina__id', 'docente']
