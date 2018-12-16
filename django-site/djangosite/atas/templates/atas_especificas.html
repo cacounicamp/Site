@@ -8,6 +8,7 @@
 
 {% load atas %}
 
+{# Observação: esse HTML não pode ser visualizado sem atas cadastradas (erro 404) #}
 <div class="row">
   <div class="col">
 
@@ -20,7 +21,7 @@
         <div class="row">
           <div class="col">
             <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
-              <p><h5><a href="{% url ata_url ata.pk ata.data_criacao|slugify %}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5></p>
+              <p><h5><a href="{{ata.get_url}}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5></p>
               <p><i>{{ata.highlights}}</i></p>
             </div>
           </div>
