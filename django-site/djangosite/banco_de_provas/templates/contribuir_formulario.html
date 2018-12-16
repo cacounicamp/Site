@@ -1,0 +1,108 @@
+{% extends "layouts/base.html" %}
+
+{% block titulopagina %}
+Contribuir com o banco de provas | CACo
+{% endblock %}
+
+{% block extrahead %}
+<script src='https://www.google.com/recaptcha/api.js?render={{captcha_site_key}}'></script>
+{% endblock %}
+
+{% block body %}
+
+{# Colocamos o conteúdo da página estática se houver #}
+{% if pagina %}
+<div class="row">
+  <div class="col">
+    {{pagina.conteudo|safe}}
+  </div>
+</div>
+{% endif %}
+
+{# Colocamos as mensagens, se houver #}
+{% if messages %}
+{% for message in messages %}
+  <div class="row p-2">
+    <div class="col">
+        <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
+          <h6 class="m-2"><b>{{message}}</b></h6>
+        </div>
+    </div>
+  </div>
+{% endfor %}
+{% endif %}
+
+<div class="row">
+  <div class="col">
+    <h2>Contribuir com o banco de provas</h2>
+    <hr>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <p>Itens marcados com <b>*</b> são obrigatórios.</p>
+  </div>
+</div>
+
+<div class="row pl-4 pr-4 pb-2 pt-1">
+  <div class="col">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {% load banco_de_provas %}
+
+      {% if form.non_field_errors|length > 0 %}
+      {% endif %}
+
+      <table class="table table-borderless">
+        <tbody>
+          {% for campo in form %}
+            <tr>
+              <td class="row">
+                <label for="{{campo.id_for_label}}">
+
+                  {% if campo|field_obrigatorio %}
+                    <b>
+                  {% endif %}
+                    {{campo.label}}
+                  {% if campo|field_obrigatorio %}
+                    </b>
+                  {% endif %}
+
+                  {% if campo.errors|length > 0 %}
+                    <br>
+                    {% for erro in campo.errors %}
+                      <span class="badge badge-danger">{{erro}}</span><br>
+                    {% endfor %}
+                  {% endif %}
+
+                </label>
+              </td>
+
+              <td>
+                  {{campo}}<br>
+                  <p class="text-justify"><i><small>{{campo.help_text}}</small></i></p>
+              </td>
+            </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
+
+      <script>
+      grecaptcha.ready(function() {
+        grecaptcha.execute('{{captcha_site_key}}', {action: 'social'}).then(function(token) {
+          document.getElementById('g-recaptcha-response').value=token;
+        });
+      });
+      </script>
+
+      <button type="submit" class="btn btn-primary">Enviar!</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

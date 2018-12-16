@@ -21,35 +21,37 @@ class FormAvaliacao(forms.Form):
 
     # Docente que fez a prova: não obrigatória, precisaremos prestar atenção
     docente = forms.CharField(
+        required=False,
         max_length=settings.MAX_LENGTH_DOCENTE,
         label='"Código" d* docente que fez a prova',
-        help_text='Tente pegar o nome do e-mail ou site d* docente. Por exemplo: Sara Diaz Cardell do IMECC possui e-mail e site com o código "sdcardell". Se não conhecer, coloque apenas o sobrenome.',
+        help_text='Tente preencher com o nome no e-mail ou site d* docente. Por exemplo: Sara Diaz Cardell do IMECC possui e-mail e site com o código "sdcardell". Se não conhecer ou identificar, coloque apenas o sobrenome.',
     )
 
     # Tipo de avaliação: obrigatório
     tipo_avaliacao = forms.ModelChoiceField(
-        required=True,
+        required=False,
         label='Tipo de avaliação*',
-        help_text='Por exemplo: "Prova", "Exame", "Lista de exercícios", "Testinho"',
         queryset=TipoAvaliacao.objects.all(),
-        empty_label='Não encontrei o tipo que procuro'
+        empty_label='Não encontrei o tipo que procuro',
     )
 
     # Quantificador da avaliação: não obrigatório
     quantificador = forms.IntegerField(
+        required=False,
         min_value=0,
-        label='Quantificador de avaliação',
+        label='Número da avaliação',
         help_text='Seguindo as respostas do item anterior, formaríamos: "Prova 1", "Exame", "Lista de exercícios 4", "Testinho 3". Esse número distingue P1 da P2 da P3.'
     )
 
     # Período e ano da avaliação
     periodo = forms.ModelChoiceField(
+        required=False,
         label='Período da avaliação',
-        help_text='Por exemplo: "Férias de verão", "1º semestre", "2º semestre"',
         queryset=Periodo.objects.all(),
-        empty_label='Não encontrei o tipo que procuro'
+        empty_label='Não encontrei o tipo que procuro ou não sei'
     )
     ano = forms.IntegerField(
+        required=False,
         min_value=1970,
         label='Ano da avaliação',
         help_text=exemplo_ano()
@@ -61,12 +63,6 @@ class FormAvaliacao(forms.Form):
     arquivo = forms.FileField(
         required=True,
         allow_empty_file=False,
-        label='Arquivo da avaliação que quer compartilhar*',
-        help_text='Prefira o formato PDF! Há ferramentas que convertem fotos em PDF, vários PDF em um único PDF.'
+        label='Arquivo da avaliação*',
+        help_text='Prefira o formato PDF! Há ferramentas que convertem fotos em PDF ou ainda vários PDF em um único PDF.'
     )
-
-
-    contato = forms.EmailField(required=False, label='Seu e-mail:', max_length=settings.MAX_LENGTH_EMAIL)
-    assunto = forms.CharField(required=True, label='*Assunto:', max_length=settings.MAX_LENGTH_ASSUNTO_CONTATO)
-    mensagem = forms.CharField(required=True, label='*Mensagem:', widget=forms.Textarea, max_length=settings.MAX_LENGTH_MENSAGEM_CONTATO)
-

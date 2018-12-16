@@ -4,13 +4,13 @@ from smtplib import SMTPException
 from django.http import Http404
 from django.urls import reverse
 from django.conf import settings
-from django.contrib import messages
 from django.db.models import Q
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 
 from paginas_estaticas.models import PaginaEstatica
+from util import util
 
 from .models import Avaliacao, CodigoDisciplina, Disciplina, Periodo, TipoAvaliacao
 from .forms import FormAvaliacao
@@ -18,7 +18,7 @@ from .forms import FormAvaliacao
 
 def BancoDeProvasView(request):
     try:
-        # Tentamos conseguir a página estática de membros para vincularem-se
+        # Tentamos conseguir a página estática do banco de provas
         pagina = PaginaEstatica.objects.get(endereco='banco-de-provas/')
     except ObjectDoesNotExist:
         pagina = None
@@ -57,4 +57,58 @@ def BancoDeProvasView(request):
 
 
 def SubmeterProvaView(request):
-    pass
+    # Se não estamos em POST, temos que servir a página
+
+    try:
+        # Tentamos conseguir a página estática para contribuições
+        pagina = PaginaEstatica.objects.get(endereco='banco-de-provas/contribuir/')
+    except ObjectDoesNotExist:
+        pagina = None
+
+    # Inicializamos contexto
+    context = {
+        'captcha_site_key': settings.CAPTCHA_SITE_KEY,
+        'pagina': pagina,
+    }
+
+    # Verificamos se estamos recebendo informação ou temos que servir o
+    # formulário
+    if request.method != 'POST':
+
+        # Criamos o formulário
+        context['form'] = FormAvaliacao()
+
+        # Apenas servimos
+        return render(request, 'contribuir_formulario.html', context=context)
+
+    else:
+
+        # Se estamos em POST, estamos recebendo o formulário
+        form = FormAvaliacao(request.POST, request.FILES)
+        context['form'] = form
+
+        # Conferimos o Recaptcha
+        if not util.recaptcha_valido(request):
+            # Avisamos o usuário
+            form.add_error(
+                None,
+                'Recaptcha inválido! Atualize a página e tente novamente mais tarde.'
+            )
+
+            # Redirecionamos à página de contribuição novamente
+            return render(request, 'contribuir_formulario.html', context=context)
+
+        # Verificamos se todos os dados respeitam o formulário
+        if not form.is_valid():
+
+            # Caso o formulário não for preenchido corretamente, avisamos o
+            # usuário
+            form.add_error(
+                None,
+                'O formulário não foi preenchido corretamente!'
+            )
+
+            # Redirecionamos ao formulário
+            return render(request, 'contribuir_formulario.html', context=context)
+
+
