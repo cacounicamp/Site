@@ -111,4 +111,12 @@ def SubmeterProvaView(request):
             # Redirecionamos ao formulário
             return render(request, 'contribuir_formulario.html', context=context)
 
+        # Obtemos as informações limpas do formulário
+        # Observação: os tipos são mantidos, Django é excelente <3
+        docente = form.cleaned_data['docente']
+        tipo_avaliacao = form.cleaned_data['tipo_avaliacao']
+        quantificador = form.cleaned_data['quantificador']
+        periodo = form.cleaned_data['periodo']
+        ano = form.cleaned_data['ano']
+        arquivo = form.cleaned_data['arquivo']
 

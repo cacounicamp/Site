@@ -19,19 +19,6 @@ Contribuir com o banco de provas | CACo
 </div>
 {% endif %}
 
-{# Colocamos as mensagens, se houver #}
-{% if messages %}
-{% for message in messages %}
-  <div class="row p-2">
-    <div class="col">
-        <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
-          <h6 class="m-2"><b>{{message}}</b></h6>
-        </div>
-    </div>
-  </div>
-{% endfor %}
-{% endif %}
-
 <div class="row">
   <div class="col">
     <h2>Contribuir com o banco de provas</h2>
@@ -53,6 +40,15 @@ Contribuir com o banco de provas | CACo
       {% load banco_de_provas %}
 
       {% if form.non_field_errors|length > 0 %}
+      {% for erro in form.non_field_errors %}
+        <div class="row p-2">
+          <div class="col">
+              <div class="shadow-sm rounded alert alert-danger">
+                <h6 class="m-2"><b>{{erro}}</b></h6>
+              </div>
+          </div>
+        </div>
+      {% endfor %}
       {% endif %}
 
       <table class="table table-borderless">
