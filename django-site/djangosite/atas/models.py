@@ -1,5 +1,7 @@
 from django.db import models
+from django.urls import reverse
 from django.conf import settings
+from django.utils.text import slugify
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -18,6 +20,12 @@ class Ata(models.Model):
     # Se a ata está visível ou não
     visivel = models.BooleanField(default=True, null=False, blank=False)
 
+    def get_data_slug(self):
+        return slugify('ata de ' + self.data_criacao.strftime("%d-%m-%Y %H:%M %Z"))
+
+    def get_url(self):
+        return reverse(self.get_url_especifica(), args=[self.pk, self.get_data_slug()])
+
     class Meta:
         abstract = True
 
@@ -25,6 +33,9 @@ class Ata(models.Model):
 class AtaAssembleia(Ata):
     # Assembleia deliberativa ou não
     deliberativa = models.BooleanField(default=False, null=False)
+
+    def get_url_especifica(self):
+        return 'ata/assembleia/'
 
     def display_tipo_ata(ata):
         if ata.deliberativa:
@@ -48,6 +59,9 @@ class AtaAssembleia(Ata):
 class AtaReuniao(Ata):
     # Reunião extraordinária ou não
     extraordinaria = models.BooleanField(default=False, null=False, blank=False)
+
+    def get_url_especifica(self):
+        return 'ata/reuniao/'
 
     def display_tipo_ata(ata):
         if ata.extraordinaria:

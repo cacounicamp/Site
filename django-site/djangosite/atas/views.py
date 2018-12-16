@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.conf import settings
@@ -5,10 +7,10 @@ from django.http import Http404
 from django.utils.text import slugify
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import AtaReuniao, AtaAssembleia
 from paginas_estaticas.models import PaginaEstatica
 from util import util
 
+from .models import AtaReuniao, AtaAssembleia
 
 
 def AtasView(request):
@@ -64,10 +66,9 @@ def pagina_ata_especifica(request, classe_ata, url_retorno, url_especifica, iden
         ata = classe_ata.objects.get(pk=identificador, visivel=True)
 
         # Conferimos se precisamos corrigir a URL
-        data_slug = slugify(ata.data_criacao)
-        if data != data_slug:
+        if data != ata.get_data_slug():
             # Se o nome está incorreto, redirecionamos ao certo
-            return redirect(reverse(url_especifica, args=[identificador, data_slug]))
+            return redirect(ata.get_url())
     except ObjectDoesNotExist:
         # Caso não encontramos a ata, retornamos not found
         raise Http404('Ata não existe!')
