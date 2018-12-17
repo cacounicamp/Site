@@ -134,14 +134,28 @@ def MembroVincularView(request):
 
             # Caso o formulário não for preenchido corretamente, avisamos o
             # membro
-            messages.add_message(
-                request, messages.ERROR,
-                'Para tornar-se membro, é necessário aceitar as condições do estatuto e preencher o formulário corretamente.',
-                extra_tags='danger'
-            )
+            if form.cleaned_data['concordo'] is False:
+                form.add_error(
+                    'concordo',
+                    'Para tornar-se membro, é necessário aceitar as condições do estatuto e preencher o formulário corretamente.',
+                )
 
-            # Redirecionamos ao formulário
-            return redirect(reverse('membro/vincular/'))
+            try:
+                # Tentamos conseguir a página estática de membros para vincularem-se
+                pagina = PaginaEstatica.objects.get(endereco='membros/vincular-se/')
+            except ObjectDoesNotExist:
+                pagina = None
+
+            # Servimos a página informando o erro
+            context = {
+                'captcha_site_key': settings.CAPTCHA_SITE_KEY,
+                'pagina_titulo': 'Vincular-se ao centro acadêmico',
+                'formulario_titulo': 'Formulário de vinculo',
+                'pagina': pagina,
+                'form': form,
+            }
+            # Redirecionamos ao formulário com o erro
+            return render(request, 'membro_formulario.html', context=context)
 
         registro_academico = form.cleaned_data['registro_academico']
         try:
