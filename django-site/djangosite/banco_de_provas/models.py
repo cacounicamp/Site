@@ -100,8 +100,9 @@ def determinar_nome_arquivo(instance, filename):
         quantificador = str(instance.quantificador_avaliacao)
 
     # Começamos com a lista de atributos obrigatórios
+    id_disciplina = str(instance.disciplina.id)
     atributos = [
-        str(instance.disciplina.id),
+        id_disciplina,
         instance.tipo_avaliacao.nome + quantificador,
     ]
 
@@ -120,7 +121,7 @@ def determinar_nome_arquivo(instance, filename):
     else:
         extensao = '.extensao_desconhecida'
 
-    return settings.PROVAS_PATH + slugify('-'.join(atributos)) + extensao
+    return settings.PROVAS_PATH + id_disciplina + '/' + slugify('-'.join(atributos)) + extensao
 
 
 class Avaliacao(models.Model):
