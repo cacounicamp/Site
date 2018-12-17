@@ -8,7 +8,7 @@ Guia executado e testado em [Arch Linux](https://wiki.archlinux.org/index.php/Ar
 
 Instalamos os pacotes necessários:
 ```
-$ pacman -S docker docker-compose python3 python-pip npm
+$ pacman -S docker docker-compose python3 python-pipenv npm
 ```
 
 Ativamos o Docker na inicialização do computador:
@@ -20,11 +20,6 @@ Permitimos usuário possuir acesso ao docker (observação: esse grupo é
 equivalente a root, permita apenas usuários confiáveis):
 ```
 $ gpasswd -a USUÁRIO docker
-```
-
-Instalamos `virtualenv` (_virtual environment_) de Python:
-```
-$ pip install virtualenv
 ```
 
 Reiniciamos o computador para atualizar permissões (por conta do grupo `docker`):
@@ -72,7 +67,8 @@ Configuramos agora o site utilizando um [_virtual
 environment_](https://docs.python.org/3/tutorial/venv.html) (instala pacotes de
 Python sem que interfira com o resto do sistema, seguindo o mesmo conceito de
 Docker, permitindo estabilidade) para depois utilizá-lo inteiramente em
-`docker`.
+`docker`. Faremos isso através de `pipenv`, uma ferramenta que torna mais
+agradável trabalhar com _virtual environments_.
 
 Para configurar o ReCaptcha v3, [crie um aplicativo
 aqui](https://www.google.com/recaptcha/admin).
@@ -85,31 +81,32 @@ Entramos na pasta raiz do projeto Django (a partir da pasta raiz do projeto):
 $ cd django-site/
 ```
 
-Criamos um _virtual environment_:
+Criamos um _virtual environment_ instalando todos os pacotes do projeto
+(descritos nos arquivos `Pipfile` e `Pipfile.lock`):
 ```
-$ python -m venv NOME_DA_PASTA
+$ pipenv install
 ```
 
-Ativamos o _virtual environment_:
+Ativamos o _virtual environment_ através do `pipenv`:
 ```
-$ source NOME_DA_PASTA/bin/activate
+$ pipenv shell
 # Note que à esquerda aparece o nome do virtual environment
-(NOME_DA_PASTA) $
+(django-site) $
 ```
 
 Instalamos os pré requisitos de Python no _virtual environment_:
 ```
-(NOME_DA_PASTA) $ pip install -r requirements-virtualenv.txt
+(django-site) $ pip install -r requirements-virtualenv.txt
 ```
 
 Entramos no projeto Django (a partir da pasta raiz do projeto Django):
 ```
-$ cd djangosite/
+(django-site) $ cd djangosite/
 ```
 
 Criamos o arquivo `config.json` como diz [README.MD](README.MD):
 ```
-$ EDITOR_PREFERIDO config.json
+(django-site) $ EDITOR_PREFERIDO config.json
 # Copiamos e colamos o modelo, configurando o necessário
 ```
 
@@ -121,28 +118,28 @@ $ docker-compose -f (arquivo docker-compose) up database
 Ou, sem abrir outro terminal, inicializamos o banco de dados com um _daemon_
 (opção `-d`):
 ```
-$ docker-compose -f (arquivo docker-compose) up -d database
+(django-site) $ docker-compose -f (arquivo docker-compose) up -d database
 ```
 
 Voltando à pasta Django, preparamos a estrutura do banco de dados:
 ```
-$ python manage.py makemigrations atas banco_de_provas gestoes noticias membros ouvidoria paginas_estaticas representantes_discentes
+(django-site) $ python manage.py makemigrations atas banco_de_provas gestoes noticias membros ouvidoria paginas_estaticas representantes_discentes
 # Observação: conferir lista atualizada de aplicativos Django
 ```
 
 Colocamos a estrutura no banco de dados:
 ```
-$ python manage.py migrate
+(django-site) $ python manage.py migrate
 ```
 
 Criamos um super usuário (administrador do site):
 ```
-$ python manage.py createsuperuser
+(django-site) $ python manage.py createsuperuser
 ```
 
 Executamos o servidor para desenvolvimento e testes no IP e porta que quisermos:
 ```
-$ python manage.py runserver ip:porta
+(django-site) $ python manage.py runserver ip:porta
 ```
 
 No nosso navegador, acessamos o site com o final do endereço `/admin` para
@@ -150,7 +147,9 @@ acessarmos a página de administrador e criar páginas, notícias, menu etc.
 
 Após concluído, fechamos o servidor e o banco de dados utilizando `Ctrl + C` (ou
 parando o _daemon_, usando  `docker-compose -f (arquivo docker-compose) down`.
-Para sair do _virtual environment_, utilize o comando `deactivate`.
+Para sair do _virtual environment_, utilize o comando `exit` (isso não fechará o
+terminal, pois o `pipenv` abre uma sessão ao ser ativado) ou utilize o atalho
+`Ctrl + D`.
 
 
 ## Para produção

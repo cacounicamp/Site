@@ -1,5 +1,5 @@
 # alpine e slim são incompatíveis com uwsgi
-FROM python:3.6.5
+FROM python:3.7.1
 
 # Definimos o WORKDIR como pedido na configuração do docker para python
 WORKDIR /djangosite
