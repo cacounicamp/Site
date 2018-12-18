@@ -17,8 +17,6 @@ from .models import Membro
 from .forms import FormularioVinculo, FormularioDesvinculo
 
 
-EMAIL_ASSUNTO_BASE = """[CACo] {assunto}"""
-
 EMAIL_MENSAGEM_VINCULO = """Olá, {nome},
 
 Este e-mail contém um link com um token único e temporário que confirmará seu vínculo ao centro acadêmico da computação (CACo) da Unicamp. A confirmação é necessária para comprovar que possui algum acesso ao e-mail institucional do Instituto da Computação (IC) da Unicamp e, portanto, é estudante de computação.
@@ -232,7 +230,7 @@ def MembroVincularView(request):
         # Tentamos enviar o e-mail de confirmação
         try:
             send_mail(
-                subject=EMAIL_ASSUNTO_BASE.format(
+                subject=settings.EMAIL_ASSUNTO_BASE.format(
                     assunto='ASSOCIAR-SE ao centro acadêmico da computação'
                 ),
                 message=EMAIL_MENSAGEM_VINCULO.format(
@@ -355,7 +353,7 @@ def MembroDesvincularView(request):
             # Tentamos enviar o e-mail de confirmação
             try:
                 send_mail(
-                    subject=EMAIL_ASSUNTO_BASE.format(
+                    subject=settings.EMAIL_ASSUNTO_BASE.format(
                         assunto='DESASSOCIAR-SE do centro acadêmico da computação'
                     ),
                     message=EMAIL_MENSAGEM_DESVINCULO.format(
