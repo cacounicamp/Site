@@ -40,19 +40,58 @@ class Periodo(models.Model):
 class Disciplina(models.Model):
     id = models.AutoField(primary_key=True)
 
+    # Para verificarmos se a disciplina criada automáticamente já foi autorizada
+    # por um membro do centro acadêmico
+    autorizada = models.BooleanField(
+        default=True,
+        help_text='Define se a disciplina será mostrada nas pesquisas ou se foi criada automáticamente e ainda não aprovada. Para aprovar, confira se é uma disciplina que teve nome alterado recentemente e portanto já possui provas em outro nome.',
+        null=False, blank=False
+    )
+
     # Função mostra apenas os nomes atualizados de tal disciplina
     def display(self):
         codigos = []
         for codigo in CodigoDisciplina.objects.filter(disciplina=self, nome_atualizado=True).all():
             codigos.append(codigo.codigo)
-        return ', '.join(codigos)
+
+        if len(codigos) == 0:
+            return 'Código não especificado'
+        else:
+            return ', '.join(codigos)
 
     # Função mostra nomes atualizados com asterisco
     def __str__(self):
         codigos = []
         for codigo in CodigoDisciplina.objects.filter(disciplina=self).all():
             codigos.append(codigo.codigo + ('*' if codigo.nome_atualizado else ''))
-        return 'Disciplina #{disciplina.id} <-- {codigos}'.format(disciplina=self, codigos=', '.join(codigos))
+        return 'Disciplina #{disciplina.id} {status}<-- {codigos}'.format(
+            disciplina=self,
+            codigos=', '.join(codigos),
+            status='' if self.autorizada else '[NÃO CONFIRMADA] '
+        )
+
+    def save(self, *args, **kwargs):
+        # observação: isso não acontece sempre... em algumas páginas de
+        # administrador eu noto, mas não em todas. O mais efetivo é alterar
+        # na página de avaliações alguma disciplina qualquer
+
+        # Conferimos se há Disciplinas vazias e apagamos se houver
+
+        # Vemos quais são referenciadas por códigos
+        ids_utilizados = CodigoDisciplina.objects.values_list(
+            'disciplina__id', flat=True
+        )
+        # Apagamos os não utilizados
+        disciplinas = Disciplina.objects.exclude(id__in=ids_utilizados)
+        # Para não sermos redundantes...
+        if self.id is not None:
+            disciplinas = disciplinas.exclude(id=self.id)
+        disciplinas.delete()
+
+        if settings.DEBUG:
+            print('Possívelmente excluímos algumas disciplinas não referenciadas.')
+
+        super().save(*args, **kwargs) # continuamos o save normal
 
     class Meta:
         verbose_name = "disciplina"
@@ -121,7 +160,7 @@ def determinar_nome_arquivo(instance, filename):
     else:
         extensao = '.extensao_desconhecida'
 
-    return settings.PROVAS_PATH + id_disciplina + '/' + slugify('-'.join(atributos)) + extensao
+    return settings.PROVAS_PATH + slugify('-'.join(atributos)) + extensao
 
 
 class Avaliacao(models.Model):
