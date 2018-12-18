@@ -1,6 +1,3 @@
-# Para os erros ao enviar e-mail
-from smtplib import SMTPException
-
 from django.http import Http404
 from django.urls import reverse
 from django.conf import settings
@@ -15,6 +12,26 @@ from util import util
 
 from .models import Avaliacao, CodigoDisciplina, Disciplina, Periodo, TipoAvaliacao
 from .forms import FormAvaliacao
+
+
+EMAIL_MENSAGEM_AVALIACOES_ADICIONADA = """Olá,
+
+Uma avaliação foi adicionada ao banco de provas do site. É necessário revisar todas as informações, fazer as alterações necessárias e tornar a avaliação visível para ela aparecer aos usuários do site.
+
+O site tenta determinar a disciplina baseado no código. Se o código não foi registrado no passado, o site cria uma nova disciplina e associa o código preenchido no formulário a ela.
+Vamos supor que no banco de provas haja apenas provas de MC302 e alguém acaba de adicionar a prova de MC322 (novo código da disciplina). O site criará a disciplina MC322, mas você deve apagar essa disciplina e associar a prova à disciplina MC302. Depois disso, adicionar um novo código à disciplina MC302, o código "MC322".
+É um pouco confuso. Mas o que vocês devem fazer é apenas manter as disciplinas iguais juntas e permitir a criação de novas se não há nenhuma disciplina equivalente.
+
+Dito isso, os cuidados principais são:
+* Conferir se o sistema associou a prova à uma disciplina já existente ou se criou uma nova disciplina. Em ambos os casos, conferir se está corretamente configurado;
+* Conferir as informações do formulário, como docente, semestre e ano;
+* Aprovar a prova se o arquivo condiz com o que ela é.
+
+Página de administrador para a prova inserida: {url_avaliacao}
+
+Atenciosamente,
+Centro acadêmico da computação
+"""
 
 
 def BancoDeProvasView(request):
@@ -172,7 +189,20 @@ def SubmeterProvaView(request):
         avaliacao.save()
 
         # Agora mandamos um e-mail
-
+        send_mail(
+            subject=settings.EMAIL_ASSUNTO_BASE.format(
+                assunto='Avaliação pendente no banco de provas'
+            ),
+            message=EMAIL_MENSAGEM_AVALIACOES_ADICIONADA.format(
+                url_avaliacao=request.build_absolute_uri(reverse(
+                    'admin:banco_de_provas_avaliacao_change',
+                    args=[avaliacao.id]
+                ))
+            ),
+            from_email=settings.EMAIL_CONTATO_REMETENTE,
+            recipient_list=[settings.EMAIL_CONTATO_DESTINATARIO],
+            fail_silently=True
+        )
 
         # Falamos ao usuário que o formulário foi enviado com sucesso e que
         # avaliaremos
