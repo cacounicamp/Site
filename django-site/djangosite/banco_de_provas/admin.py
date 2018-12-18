@@ -8,7 +8,7 @@ class CodigoDisciplinaAdmin(admin.ModelAdmin):
 
 
 class AvaliacoesAdmin(admin.ModelAdmin):
-    list_display = ('disciplina', 'periodo', 'ano', 'tipo_avaliacao', 'quantificador_avaliacao', 'docente', 'visivel')
+    list_display = ('disciplina', 'periodo', 'ano', 'tipo_avaliacao', 'quantificador_avaliacao', 'docente', 'possui_resolucao', 'visivel')
     ordering = ['visivel', '-ano', '-periodo', '-quantificador_avaliacao', 'tipo_avaliacao', 'disciplina__id', 'docente']
 
 

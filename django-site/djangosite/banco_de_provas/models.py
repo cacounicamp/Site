@@ -190,6 +190,9 @@ class Avaliacao(models.Model):
     # Ano
     ano = models.PositiveIntegerField(null=True, blank=True)
 
+    # Se a prova possui resolução
+    possui_resolucao = models.BooleanField(default=False, null=False, blank=False)
+
     # Arquivo associado à avaliação
     arquivo = models.FileField(upload_to=determinar_nome_arquivo)
 

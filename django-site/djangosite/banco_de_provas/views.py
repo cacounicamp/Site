@@ -144,6 +144,7 @@ def SubmeterProvaView(request):
         quantificador = form.cleaned_data['quantificador']
         periodo = form.cleaned_data['periodo']
         ano = form.cleaned_data['ano']
+        possui_resolucao = form.cleaned_data['possui_resolucao']
         arquivo = form.cleaned_data['arquivo']
 
         # Temos que determinar em qual disciplina colocamos. Fazemos isso pelo
@@ -184,6 +185,7 @@ def SubmeterProvaView(request):
             quantificador_avaliacao=quantificador,
             periodo=periodo, # aceita None (período é uma instância mesmo)
             ano=ano,
+            possui_resolucao=possui_resolucao,
             arquivo=arquivo
         )
         avaliacao.save()

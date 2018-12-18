@@ -56,6 +56,13 @@ class FormAvaliacao(forms.Form):
         help_text=exemplo_ano()
     )
 
+    # Se a avaliação possui resolução
+    possui_resolucao = forms.BooleanField(
+        required=False,
+        label='Avaliação possui resolução*',
+        help_text='Deve dizer se o arquivo que está enviando possui resolução dos exercícios ou se é apenas os enunciados de questões (não possui resolução)'
+    )
+
     #   Arquivo a ser enviado
     # Exige tratamento especial:
     # https://docs.djangoproject.com/en/2.1/ref/forms/api/#binding-uploaded-files
