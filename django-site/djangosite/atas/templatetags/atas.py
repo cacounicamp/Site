@@ -66,10 +66,6 @@ def ultimas_atas():
     for ata in atas:
         num_atas += 1
 
-        # Variáveis da ata
-        base_url = 'ata/{}/'.format('reuniao' if isinstance(ata, AtaReuniao) else 'assembleia')
-        url_ata = reverse(base_url, args=[ata.pk, slugify(ata.data_criacao)])
-
         # Abrimos a linha
         saida += """<div class="row">"""
         # Abrimos a coluna
@@ -77,7 +73,7 @@ def ultimas_atas():
         # Abrimos o alerta
         saida += """<div class="alert alert-{0} shadow-sm" role="alert">""".format(cor_alert_ata(ata))
         # Iniciamos o link
-        saida += """<a href="{0}" class="alert-link">""".format(url_ata)
+        saida += """<a href="{0}" class="alert-link">""".format(ata.get_url())
 
         # Adicionamos o nome da ata
         saida += """<b>{0}</b>""".format(ata)
