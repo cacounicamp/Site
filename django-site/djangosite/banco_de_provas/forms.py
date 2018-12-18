@@ -47,7 +47,7 @@ class FormAvaliacao(forms.Form):
         required=False,
         label='Período da avaliação',
         queryset=Periodo.objects.all(),
-        empty_label='Não encontrei o tipo que procuro ou não sei'
+        empty_label='Não encontrei o período que procuro ou não sei'
     )
     ano = forms.IntegerField(
         required=False,
