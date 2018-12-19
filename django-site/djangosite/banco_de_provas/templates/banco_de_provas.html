@@ -54,13 +54,14 @@ Banco de provas {% if busca %}- "{{busca}}"{% endif %} | CACo
             <div class="col">
 
               <table class="table shadow">
-                <caption>Avaliações encontradas para "{{busca}}".</caption>
+                <caption>Avaliações encontradas para "{{busca}}" em ordem cronológica, da mais recente à mais antiga.</caption>
                 <thead class="thead-dark">
                   <tr>
                     <th scope="col">Disciplina</th>
                     <th scope="col">Tipo de avaliação</th>
                     <th scope="col">Período e ano</th>
                     <th scope="col">Docente</th>
+                    <th scope="col">Resolução</th>
                     <th scope="col">Avaliação</th>
                   </tr>
                 </thead>
@@ -98,6 +99,15 @@ Banco de provas {% if busca %}- "{{busca}}"{% endif %} | CACo
                           {{avaliacao.docente}}
                         {% else %}
                           -
+                        {% endif %}
+                      </th>
+
+                      {# Se possui resolução #}
+                      <th>
+                        {% if avaliacao.possui_resolucao %}
+                          <h5><span class="badge badge-pill badge-success">Sim</span></h5>
+                        {% else %}
+                          <h5><span class="badge badge-pill badge-danger">Não</span></h5>
                         {% endif %}
                       </th>
 

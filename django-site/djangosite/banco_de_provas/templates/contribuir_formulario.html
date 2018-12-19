@@ -32,6 +32,19 @@ Contribuir com o banco de provas | CACo
   </div>
 </div>
 
+{# Colocamos as mensagens, se houver #}
+{% if messages %}
+{% for message in messages %}
+  <div class="row p-2">
+    <div class="col">
+        <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
+          <h6 class="m-2"><b>{{message}}</b></h6>
+        </div>
+    </div>
+  </div>
+{% endfor %}
+{% endif %}
+
 <div class="row pl-4 pr-4 pb-2 pt-1">
   <div class="col">
     <form method="post" enctype="multipart/form-data">

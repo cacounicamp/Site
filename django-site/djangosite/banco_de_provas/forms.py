@@ -29,16 +29,15 @@ class FormAvaliacao(forms.Form):
 
     # Tipo de avaliação: obrigatório
     tipo_avaliacao = forms.ModelChoiceField(
-        required=False,
+        required=True,
         label='Tipo de avaliação*',
-        queryset=TipoAvaliacao.objects.all(),
-        empty_label='Não encontrei o tipo que procuro',
+        queryset=TipoAvaliacao.objects.all()
     )
 
     # Quantificador da avaliação: não obrigatório
     quantificador = forms.IntegerField(
         required=False,
-        min_value=0,
+        min_value=1,
         label='Número da avaliação',
         help_text='Seguindo as respostas do item anterior, formaríamos: "Prova 1", "Exame", "Lista de exercícios 4", "Testinho 3". Esse número distingue P1 da P2 da P3.'
     )
@@ -48,13 +47,20 @@ class FormAvaliacao(forms.Form):
         required=False,
         label='Período da avaliação',
         queryset=Periodo.objects.all(),
-        empty_label='Não encontrei o tipo que procuro ou não sei'
+        empty_label='Não encontrei o período que procuro ou não sei'
     )
     ano = forms.IntegerField(
         required=False,
         min_value=1970,
         label='Ano da avaliação',
         help_text=exemplo_ano()
+    )
+
+    # Se a avaliação possui resolução
+    possui_resolucao = forms.BooleanField(
+        required=False,
+        label='Avaliação possui resolução*',
+        help_text='Deve dizer se o arquivo que está enviando possui resolução dos exercícios ou se é apenas os enunciados de questões (não possui resolução)'
     )
 
     #   Arquivo a ser enviado

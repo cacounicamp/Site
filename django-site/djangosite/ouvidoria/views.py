@@ -14,8 +14,6 @@ from .forms import FormContato
 from .models import FormularioContato
 
 
-EMAIL_ASSUNTO_BASE = """[CACo] [Ouvidoria] {assunto}"""
-
 EMAIL_MENSAGEM_BASE = """Olá, computeir*s,
 
 Recebemos uma mensagem através do site da ouvidoria do CACo.
@@ -52,8 +50,8 @@ def ContatoView(request):
                 # Enviamos um e-mail
                 try:
                     send_mail(
-                        subject=EMAIL_ASSUNTO_BASE.format(
-                            assunto=formulario.assunto
+                        subject=settings.EMAIL_ASSUNTO_BASE.format(
+                            assunto='[OUVIDORIA] ' + formulario.assunto
                         ),
                         message=EMAIL_MENSAGEM_BASE.format(
                             assunto=formulario.assunto,

@@ -194,6 +194,9 @@ EMAIL_CONTATO_DESTINATARIO = configuracao['EMAIL_CONTATO_DESTINATARIO']
 # Qual o e-mail que aparecerá na página de contato em caso de falha
 EMAIL_CONTATO_DISPLAY = configuracao['EMAIL_CONTATO_DISPLAY']
 
+# Definimos o formato do assunto do e-mail
+EMAIL_ASSUNTO_BASE = """[CACo] {assunto}"""
+
 
 #
 # PARAMETRIZAÇÃO DA EXIBIÇÃO DO SITE
