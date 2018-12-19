@@ -59,9 +59,8 @@ services:
             # django-site/djangosite/djangosite/adminstatic em /media e /static
             # respectivamente do container para ser servido pelo nginx (mais
             # rápido)
-            # Obs: adminstatic é resultado do comando de django `collectstatic`
             - ./django-site/djangosite/media:/media
-            - ./django-site/djangosite/djangosite/adminstatic:/static
+            - ./django-site/djangosite/static:/static
         depends_on:
             - django-caco
         links:
