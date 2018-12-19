@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.dispatch import receiver
 from django.utils.text import slugify
+from django.db.models.signals import post_delete
 
 
 class TipoAvaliacao(models.Model):
@@ -183,3 +185,8 @@ class Avaliacao(models.Model):
         # Ordenamos em ordem cronológica de semestre (do mais recente ao mais
         # antigo)
         ordering = ['-ano', '-periodo', '-quantificador_avaliacao', 'tipo_avaliacao', 'disciplina__id', 'docente']
+
+
+@receiver(post_delete, sender=Avaliacao)
+def submission_delete(sender, instance, **kwargs):
+    instance.arquivo.delete(False)
