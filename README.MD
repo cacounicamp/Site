@@ -401,38 +401,38 @@ opções e não exige muita escrita, o que auxilia no processo de aprovação de
 prova no site.
 
 A estrutura contém vários modelos:
-1. **`Periodo`**: define o período em que a avaliação foi aplicada, como "1º
+- **`Periodo`**: define o período em que a avaliação foi aplicada, como "1º
 semestre", "2º semestre";
-* É recomendável que fique com números em primeiro caractere para manter a
+  - É recomendável que fique com números em primeiro caractere para manter a
 ordem.
-2. **`TipoAvaliacao`**: define o tipo de avaliação, como "prova", "lista de
+- **`TipoAvaliacao`**: define o tipo de avaliação, como "prova", "lista de
 exercícios", "prova diurna", "prova vespertina";
-* É recomendável possuir uma resposta "não ser dizer ou não encontro opção" para
-que o formulário de colaboração funcione bem, mas **NÃO** devemos deixar a
+  - É recomendável possuir uma resposta "não ser dizer ou não encontro opção"
+para que o formulário de colaboração funcione bem, mas **NÃO** devemos deixar a
 avaliação submetida com essa opção visível no banco de provas (os membros do
 CACo devem encaixar a avaliação numa categoria que a representa).
-3. **`Disciplina`**: descreve apenas a existência de uma disciplina, não possui
+- **`Disciplina`**: descreve apenas a existência de uma disciplina, não possui
 código, nome. A descrição da disciplina é feita pela associação de uma instância
 de `Disciplina` com um código de disciplina, objeto descrito abaixo. Por
 exemplo, criamos a disciplina com identificador 32 (pode ser qualquer `id`),
 associamos a essa disciplina os códigos "MC302" e "MC322" e agora temos a mesma
 disciplina com 2 códigos válidos;
-* Se uma disciplina fica sem referência de nenhum código, ela é deletada
+  - Se uma disciplina fica sem referência de nenhum código, ela é deletada
 eventualmente;
-* Quando o próprio site cria uma disciplina (no caso em que o usuário digita um
-código no banco de provas que está vazio), é necessário aprovar a disciplina
+  - Quando o próprio site cria uma disciplina (no caso em que o usuário digita
+um código no banco de provas que está vazio), é necessário aprovar a disciplina
 para que ela apareça no banco. Isso é necessário para que o mantenedor do site
 confira se a disciplina não é alguma renomeada, mantendo as disciplinas "iguais"
 juntas.
-4. **`CodigoDisciplina`**: é apenas um código ligado a uma disciplina. É esse
+- **`CodigoDisciplina`**: é apenas um código ligado a uma disciplina. É esse
 objeto que será utilizado bara buscar as avaliações quando busca-se pelo código.
 O site irá procurar os códigos, que contém uma referência à `Disciplina`. Como
 as avaliações também referenciam `Disciplina`, encontraremos as provas fazendo
 essa associação.
-5. **`Avaliacao`**: guarda todas as informações de uma avaliação, como o objeto
+- **`Avaliacao`**: guarda todas as informações de uma avaliação, como o objeto
 `Disciplina`, `Periodo`, `TipoAvaliacao`;
-* Alguns itens são opcionais, porém os membros do CACo devem deixar a prova com
-o maior número de opções possíveis.
+  - Alguns itens são opcionais, porém os membros do CACo devem deixar a prova
+  com o maior número de opções possíveis.
 
 Utiliza ReCaptcha para evitar spam.
 
