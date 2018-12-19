@@ -61,6 +61,11 @@ services:
             # rápido)
             - ./django-site/djangosite/media:/media
             - ./django-site/djangosite/static:/static
+            # Mirrors de Manjaro e Arch Linux
+            - /var/www/manjaro:/var/www/manjaro
+            - /var/www/archlinux:/var/www/archlinux
+            # Manual d* Bix*
+            - /var/www/manual-dx-bixx:/manual-dx-bixx
         depends_on:
             - django-caco
         links:
