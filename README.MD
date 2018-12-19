@@ -386,11 +386,53 @@ Utiliza ReCaptcha para evitar spam.
 _App_ que controla o cadastro e exibição de provas de anos anteriores para
 auxiliar no estudo.
 
-Comparado à versão anterior do site, tentamos fazer algo dinâmico para ser
-facilmente arrumado (por exemplo, adicionar uma categoria de avaliação além de
-"prova" e "testinho", como "lista de exercícios" pode ser feito pela página de
-administração), mas rígido para tornar a busca, ordenação e visualizações mais
-fáceis.
+A versão anterior do site possuia um aplicativo que permitia entradas de texto
+para todas as opções do formulário. Então a homogeneidade era dependente dos
+membros do CACo que deveriam seguir as mesmas convenções, o que nem sempre
+acontecia. A nova versão é bem mais complexa, porém a visualização fica
+homogenea, bonita, é escalável e permite as disciplinas possuírem mais de um
+código (por exemplo, MC302 que foi renomeada para MC322 ou a reestruturação
+da árvore MCx58, que possui muitas siglas de assuntos parecidos no passado e que
+podem ser juntados).
+
+A parte ruim é que é um pouco confuso aos mantenedores, apesar de acreditar que
+a interface para quem quer colaborar ficou mais intuitiva pois inclui várias
+opções e não exige muita escrita, o que auxilia no processo de aprovação de uma
+prova no site.
+
+A estrutura contém vários modelos:
+1. **`Periodo`**: define o período em que a avaliação foi aplicada, como "1º
+semestre", "2º semestre";
+* É recomendável que fique com números em primeiro caractere para manter a
+ordem.
+2. **`TipoAvaliacao`**: define o tipo de avaliação, como "prova", "lista de
+exercícios", "prova diurna", "prova vespertina";
+* É recomendável possuir uma resposta "não ser dizer ou não encontro opção" para
+que o formulário de colaboração funcione bem, mas **NÃO** devemos deixar a
+avaliação submetida com essa opção visível no banco de provas (os membros do
+CACo devem encaixar a avaliação numa categoria que a representa).
+3. **`Disciplina`**: descreve apenas a existência de uma disciplina, não possui
+código, nome. A descrição da disciplina é feita pela associação de uma instância
+de `Disciplina` com um código de disciplina, objeto descrito abaixo. Por
+exemplo, criamos a disciplina com identificador 32 (pode ser qualquer `id`),
+associamos a essa disciplina os códigos "MC302" e "MC322" e agora temos a mesma
+disciplina com 2 códigos válidos;
+* Se uma disciplina fica sem referência de nenhum código, ela é deletada
+eventualmente;
+* Quando o próprio site cria uma disciplina (no caso em que o usuário digita um
+código no banco de provas que está vazio), é necessário aprovar a disciplina
+para que ela apareça no banco. Isso é necessário para que o mantenedor do site
+confira se a disciplina não é alguma renomeada, mantendo as disciplinas "iguais"
+juntas.
+4. **`CodigoDisciplina`**: é apenas um código ligado a uma disciplina. É esse
+objeto que será utilizado bara buscar as avaliações quando busca-se pelo código.
+O site irá procurar os códigos, que contém uma referência à `Disciplina`. Como
+as avaliações também referenciam `Disciplina`, encontraremos as provas fazendo
+essa associação.
+5. **`Avaliacao`**: guarda todas as informações de uma avaliação, como o objeto
+`Disciplina`, `Periodo`, `TipoAvaliacao`;
+* Alguns itens são opcionais, porém os membros do CACo devem deixar a prova com
+o maior número de opções possíveis.
 
 Utiliza ReCaptcha para evitar spam.
 
