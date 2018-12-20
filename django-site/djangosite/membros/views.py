@@ -27,7 +27,7 @@ Se você não requisitou esse vínculo ou não é estudante da computação ou n
 
 Atenciosamente,
 Centro acadêmico da computação
-""".encode()
+"""
 
 EMAIL_MENSAGEM_DESVINCULO = """Olá, {nome},
 
@@ -39,7 +39,7 @@ Se você não requisitou essa desassociação, ignore este e-mail, não clique n
 
 Atenciosamente,
 Centro acadêmico da computação
-""".encode()
+"""
 
 
 def MembrosView(request):

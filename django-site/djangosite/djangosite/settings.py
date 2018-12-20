@@ -195,7 +195,7 @@ EMAIL_CONTATO_DESTINATARIO = configuracao['EMAIL_CONTATO_DESTINATARIO']
 EMAIL_CONTATO_DISPLAY = configuracao['EMAIL_CONTATO_DISPLAY']
 
 # Definimos o formato do assunto do e-mail
-EMAIL_ASSUNTO_BASE = """[CACo] {assunto}""".encode()
+EMAIL_ASSUNTO_BASE = """[CACo] {assunto}"""
 
 
 #
