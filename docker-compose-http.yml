@@ -10,6 +10,7 @@ services:
         environment:
             - LANG=C.UTF-8
             - LC_ALL=C.UTF-8
+            - PYTHONIOENCODING=utf-8
         expose:
             # Mostraremos a porta 8080 entre containers (para o nginx)
             - "8080"

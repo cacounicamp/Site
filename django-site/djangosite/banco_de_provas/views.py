@@ -31,7 +31,7 @@ Página de administrador para a prova inserida: {url_avaliacao}
 
 Atenciosamente,
 Centro acadêmico da computação
-"""
+""".encode()
 
 
 def BancoDeProvasView(request):

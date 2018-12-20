@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 configuracao_path = os.path.join(BASE_DIR, 'config.json')
 if os.path.exists(configuracao_path):
-    with open(configuracao_path) as arquivo:
+    with open(configuracao_path, encoding='utf-8') as arquivo:
         configuracao = json.load(arquivo)
 else:
     raise ValueError('Arquivo de configuração "config.json" não existente!')
@@ -184,7 +184,7 @@ CAPTCHA_SECRET_KEY = configuracao['CAPTCHA_SECRET_KEY']
 EMAIL_HOST = configuracao['EMAIL_HOST']
 EMAIL_PORT = configuracao['EMAIL_PORT']
 EMAIL_HOST_USER = configuracao['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = configuracao['EMAIL_HOST_PASSWORD']
+EMAIL_HOST_PASSWORD = configuracao['EMAIL_HOST_PASSWORD'].encode()
 EMAIL_USE_TLS = configuracao['EMAIL_USE_TLS']
 EMAIL_USE_SSL = configuracao['EMAIL_USE_SSL']
 # Qual o e-mail que aparecerá como remetente
@@ -195,7 +195,7 @@ EMAIL_CONTATO_DESTINATARIO = configuracao['EMAIL_CONTATO_DESTINATARIO']
 EMAIL_CONTATO_DISPLAY = configuracao['EMAIL_CONTATO_DISPLAY']
 
 # Definimos o formato do assunto do e-mail
-EMAIL_ASSUNTO_BASE = """[CACo] {assunto}"""
+EMAIL_ASSUNTO_BASE = """[CACo] {assunto}""".encode()
 
 
 #
