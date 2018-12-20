@@ -3,3 +3,4 @@ FROM nginx:alpine
 
 # Cópia dos arquivos de configuração
 COPY http.conf /etc/nginx/nginx.conf
+COPY mime.types /etc/nginx/mime.types
