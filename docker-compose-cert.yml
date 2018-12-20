@@ -28,7 +28,7 @@ services:
     certbot_acquire:
         container_name: certbot_acquire
         image: certbot/certbot
-        command: certonly --dry-run --webroot --webroot-path /data/letsencrypt --email email@domain.com -d domain.com
+        command: certonly --webroot --webroot-path /data/letsencrypt --email caco@ic.unicamp.br --agree-tos -d www.caco.ic.unicamp.br -d caco.ic.unicamp.br
         environment:
             - LANG=C.UTF-8
             - LC_ALL=C.UTF-8

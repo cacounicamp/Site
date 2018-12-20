@@ -80,7 +80,7 @@ services:
         container_name: certbot_renew
         # Essa imagem permite usar certbot sem fechar o nginx
         image: deliverous/certbot
-        command: certonly --dry-run --webroot --webroot-path /data/letsencrypt --email email@domain.com -d domain.com
+        command: renew --webroot --webroot-path /data/letsencrypt --email caco@ic.unicamp.br --agree-tos -d www.caco.ic.unicamp.br -d caco.ic.unicamp.br
         depends_on:
             - servidor
         volumes:
