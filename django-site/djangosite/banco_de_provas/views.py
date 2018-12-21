@@ -202,7 +202,7 @@ def SubmeterProvaView(request):
                 ))
             ),
             from_email=settings.EMAIL_CONTATO_REMETENTE,
-            recipient_list=[settings.EMAIL_CONTATO_DESTINATARIO],
+            recipient_list=settings.EMAIL_CONTATO_DESTINATARIO,
             fail_silently=True
         )
 
