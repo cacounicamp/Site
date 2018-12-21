@@ -184,7 +184,7 @@ CAPTCHA_SECRET_KEY = configuracao['CAPTCHA_SECRET_KEY']
 EMAIL_HOST = configuracao['EMAIL_HOST']
 EMAIL_PORT = configuracao['EMAIL_PORT']
 EMAIL_HOST_USER = configuracao['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = configuracao['EMAIL_HOST_PASSWORD'].encode()
+EMAIL_HOST_PASSWORD = configuracao['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = configuracao['EMAIL_USE_TLS']
 EMAIL_USE_SSL = configuracao['EMAIL_USE_SSL']
 # Qual o e-mail que aparecerá como remetente
