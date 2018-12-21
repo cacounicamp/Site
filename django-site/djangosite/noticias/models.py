@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -14,7 +15,7 @@ class Noticia(models.Model):
     # Conteúdo da notícia
     conteudo = RichTextUploadingField(null=False, blank=False)
     # Data de criação
-    data_criacao = models.DateTimeField(null=False, auto_now_add=True)
+    data_criacao = models.DateTimeField(null=False, default=timezone.now)
 
     def __str__(self):
         return self.titulo
