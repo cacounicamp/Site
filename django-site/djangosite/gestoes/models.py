@@ -33,6 +33,7 @@ class Cargo(models.Model):
     class Meta:
         verbose_name = "cargo da gestão"
         verbose_name_plural = "cargos das gestões"
+        ordering = ['nome']
 
 
 # Para os cargos
@@ -60,3 +61,4 @@ class Membro(models.Model):
     class Meta:
         verbose_name = "membro da gestão"
         verbose_name_plural = "membros das gestões"
+        ordering = ['cargo__nome', 'nome']
