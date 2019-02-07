@@ -11,6 +11,7 @@ class EscondeAdmin(admin.ModelAdmin):
 
 class RepresentanteDiscenteAdmin(admin.ModelAdmin):
     list_display = ('ano_atuacao', 'comissao', 'nome')
+    search_fields = ('ano_atuacao', 'comissao__nome', 'comissao__instituicao__nome', 'nome')
 
 
 admin.site.register(Instituicao, EscondeAdmin)
