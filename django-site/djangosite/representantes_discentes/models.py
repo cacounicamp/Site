@@ -42,7 +42,7 @@ class RepresentanteDiscente(models.Model):
     titular = models.BooleanField(default=True, null=False, blank=False)
 
     # Ano de ingresso d* representante
-    ano_ingresso = models.PositiveIntegerField(null=False, blank=False)
+    ano_ingresso = models.PositiveIntegerField(null=True, blank=True)
     # Curso d* representante
     curso = models.CharField(max_length=settings.MAX_LENGTH_CURSOS, null=False, blank=False, choices=settings.CURSOS)
 
@@ -54,7 +54,7 @@ class RepresentanteDiscente(models.Model):
     )
 
     def __str__(self):
-        return '{rd.nome} ({rd.curso} {rd.ano_ingresso}): {titularidade} em {rd.ano_atuacao} de {rd.comissao}'.format(rd=self, titularidade='titular' if self.titular else 'suplente')
+        return '{rd.nome} ({rd.curso}{ano_ingresso}): {titularidade} em {rd.ano_atuacao} de {rd.comissao}'.format(rd=self, titularidade='titular' if self.titular else 'suplente', ano_ingresso=str(self.ano_ingresso) + ' ' if self.ano_ingresso else '')
 
     class Meta:
         verbose_name = "representante discente"

@@ -65,7 +65,11 @@ function goBack() {
                 </td>
                 <td>
                   {% for representante in representantes %}
-                    {{representante.curso}}, {{representante.ano_ingresso}}<br>
+                    {% if representante.ano_ingresso %}
+                      {{representante.curso}}, {{representante.ano_ingresso}}<br>
+                    {% else %}
+                      {{representante.curso}}<br>
+                    {% endif %}
                   {% endfor %}
                 </td>
                 <td>
