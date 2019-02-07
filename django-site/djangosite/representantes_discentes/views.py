@@ -1,17 +1,29 @@
 from django.shortcuts import render
 from django.conf import settings
 from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
 
 from util import util
 from .models import RepresentanteDiscente
+from paginas_estaticas.models import PaginaEstatica
 
 
 def RepresentantesDiscentesPagina(request, pagina=1):
+    try:
+        # Tentamos conseguir a página estática do banco de provas
+        pagina_estatica = PaginaEstatica.objects.get(endereco='representantes-discentes/')
+    except ObjectDoesNotExist:
+        pagina_estatica = None
+
+    context = {
+        'pagina': pagina_estatica
+    }
+
     # objects vai retornar um dicionário cuja chave é 'ano_atuacao'
     return util.pegar_pagina(
         # Por conta de .values(), receberemos um dicionário com uma chave 'ano_atuacao'
         request, RepresentanteDiscente.objects.values('ano_atuacao').distinct('ano_atuacao'), 'representantes_discentes_lista.html',
-        settings.REPRESENTANTES_DISCENTES_ANOS_POR_PAGINA, pagina
+        settings.REPRESENTANTES_DISCENTES_ANOS_POR_PAGINA, pagina, context
     )
 
 
