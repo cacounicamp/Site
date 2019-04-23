@@ -17,7 +17,9 @@ Gestões | CACo
 <div class="alert alert-success shadow-sm" role="alert">
   <div class="row">
     <div class="col">
-      <p><h4><a class="alert-link" href="{% url 'gestao/' gestao.ano_eleito gestao.nome|slugify %}">{{gestao}} <small>{{num_integrantes}} integrantes</small></a></h4></p>
+      <p>
+        <h4><a class="alert-link" href="{% url 'gestao/' gestao.ano_eleito gestao.nome|slugify %}">{{gestao}} <small>{{num_integrantes}} integrantes</small></a></h4>
+      </p>
     </div>
   </div>
 </div>
@@ -25,23 +27,23 @@ Gestões | CACo
 
 {# Próximas páginas/páginas anteriores #}
 {% if possui_mais_recente or possui_mais_antiga %}
-  <div class="row rounded border shadow-sm">
-    {% if possui_mais_antiga %}
-      <div class="col">
-        <div class="float-left">
-          <a class="btn btn-sm btn-link" href="{% url 'gestoes/pagina/' pagina_atual|add:1 %}" role="button">Gestões mais antigas</a>
-        </div>
-      </div>
-    {% endif %}
-
-    {% if possui_mais_recente %}
-      <div class="col">
-        <div class="float-right">
-          <a class="btn btn-sm btn-link" href="{% url 'gestoes/pagina/' pagina_atual|add:-1 %}" role="button">Gestões mais recentes</a>
-        </div>
-      </div>
-    {% endif %}
+<div class="row rounded border shadow-sm">
+  {% if possui_mais_antiga %}
+  <div class="col">
+    <div class="float-left">
+      <a class="btn btn-sm btn-link" href="{% url 'gestoes/pagina/' pagina_atual|add:1 %}" role="button">Gestões mais antigas</a>
+    </div>
   </div>
+  {% endif %}
+
+  {% if possui_mais_recente %}
+  <div class="col">
+    <div class="float-right">
+      <a class="btn btn-sm btn-link" href="{% url 'gestoes/pagina/' pagina_atual|add:-1 %}" role="button">Gestões mais recentes</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
 {% endif %}
 
 {% endblock %}

@@ -6,9 +6,9 @@ Representantes discentes de {{ano_atuacao}} | CACo
 
 {% block extrahead%}
 <script>
-function goBack() {
+  function goBack() {
     window.history.back()
-}
+  }
 </script>
 {% endblock%}
 
@@ -17,7 +17,9 @@ function goBack() {
 <div class="alert alert-info shadow-sm" role="alert">
   <div class="row">
     <div class="col">
-      <p><h1>Representantes discentes de {{ano_atuacao}}</h1></p>
+      <p>
+        <h1>Representantes discentes de {{ano_atuacao}}</h1>
+      </p>
     </div>
   </div>
 
@@ -60,25 +62,25 @@ function goBack() {
                 <th scope="row">{{cargo.nome}}</th>
                 <td>
                   {% for representante in representantes %}
-                    <li>{{representante.nome}}</li>
+                  <li>{{representante.nome}}</li>
                   {% endfor %}
                 </td>
                 <td>
                   {% for representante in representantes %}
-                    {% if representante.ano_ingresso %}
-                      {{representante.curso}}, {{representante.ano_ingresso}}<br>
-                    {% else %}
-                      {{representante.curso}}<br>
-                    {% endif %}
+                  {% if representante.ano_ingresso %}
+                  {{representante.curso}}, {{representante.ano_ingresso}}<br>
+                  {% else %}
+                  {{representante.curso}}<br>
+                  {% endif %}
                   {% endfor %}
                 </td>
                 <td>
                   {% for representante in representantes %}
-                    {% if representante.titular %}
-                    Titular
-                    {% else %}
-                    Suplente
-                    {% endif %}<br>
+                  {% if representante.titular %}
+                  Titular
+                  {% else %}
+                  Suplente
+                  {% endif %}<br>
                   {% endfor %}
                 </td>
               </tr>

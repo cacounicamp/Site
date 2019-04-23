@@ -8,27 +8,27 @@ Falha no contato! | CACo
 
 {# Colocamos o conteúdo da página estática se houver. Se não, colocamos a página padrão #}
 {% if pagina %}
-  {{pagina.conteudo|safe}}
+{{pagina.conteudo|safe}}
 {% else %}
 
-  {# Explicamos que houve uma falha #}
-  <div class="row">
-    <div class="col">
-      <div class="alert alert-danger shadow-sm rounded" role="alert">
-        <h2><b>Falha no contato!</b></h2>
-        <hr>
-        <p class="text-justify">Agradecemos o contato e pedimos desculpas pelo inconveniente!</p>
-      </div>
+{# Explicamos que houve uma falha #}
+<div class="row">
+  <div class="col">
+    <div class="alert alert-danger shadow-sm rounded" role="alert">
+      <h2><b>Falha no contato!</b></h2>
+      <hr>
+      <p class="text-justify">Agradecemos o contato e pedimos desculpas pelo inconveniente!</p>
     </div>
   </div>
+</div>
 
-  <div class="row p-3">
-    <div class="col">
-      <p class="text-justify">Olá, computeir*!</p>
-      <p class="text-justify">Sentimos muito em informar que nossa página de contato falhou. Se acredita que isso é um erro, pedimos que envie-nos um e-mail manualmente avisando que a página de contato está com problema e explique o ocorrido. O seu formulário de contato provavelmente foi salvo (a não ser que o erro tenha acontecido nesse processo). Talvez não seja necessário portanto reenviar a requisição de contato, basta nos avisar que houve um problema nesta página. :)</p>
-      <p class="text-justify">Nosso e-mail é <a href="mailto:{{email}}">{{email}}</a>, por favor, nos avise! ♥</p>
-    </div>
+<div class="row p-3">
+  <div class="col">
+    <p class="text-justify">Olá, computeir*!</p>
+    <p class="text-justify">Sentimos muito em informar que nossa página de contato falhou. Se acredita que isso é um erro, pedimos que envie-nos um e-mail manualmente avisando que a página de contato está com problema e explique o ocorrido. O seu formulário de contato provavelmente foi salvo (a não ser que o erro tenha acontecido nesse processo). Talvez não seja necessário portanto reenviar a requisição de contato, basta nos avisar que houve um problema nesta página. :)</p>
+    <p class="text-justify">Nosso e-mail é <a href="mailto:{{email}}">{{email}}</a>, por favor, nos avise! ♥</p>
   </div>
+</div>
 
 {% endif %}
 

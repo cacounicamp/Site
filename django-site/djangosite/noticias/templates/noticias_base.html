@@ -7,16 +7,18 @@
 
 {# Notícias #}
 {% for noticia in objetos %}
-  <div class="row">
-    <div class="col">
-      <div class="alert alert-secondary shadow-sm" role="alert">
-        <p><h4><a href="{% url 'noticia/' noticia.pk noticia.titulo|slugify %}">{{noticia.titulo}}</a></h4></p>
-        <hr>
-        <p><small>Em <b>{{noticia.data_criacao}}</b></small></p>
-        <p class="text-justify">{{noticia.resumo}}</p>
-      </div>
+<div class="row">
+  <div class="col">
+    <div class="alert alert-secondary shadow-sm" role="alert">
+      <p>
+        <h4><a href="{% url 'noticia/' noticia.pk noticia.titulo|slugify %}">{{noticia.titulo}}</a></h4>
+      </p>
+      <hr>
+      <p><small>Em <b>{{noticia.data_criacao}}</b></small></p>
+      <p class="text-justify">{{noticia.resumo}}</p>
     </div>
   </div>
+</div>
 {% endfor %}
 
 {% block paginas %}
