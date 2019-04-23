@@ -1,6 +1,7 @@
 # Guia rápido de configuração
 
-Guia executado e testado em [Arch Linux](https://wiki.archlinux.org/index.php/Arch_Linux).
+Guia executado e testado em
+[Arch Linux](https://wiki.archlinux.org/index.php/Arch_Linux).
 
 ## Para desenvolvimento e/ou configuração inicial de produção
 
@@ -22,7 +23,8 @@ equivalente a root, permita apenas usuários confiáveis):
 $ gpasswd -a USUÁRIO docker
 ```
 
-Reiniciamos o computador para atualizar permissões (por conta do grupo `docker`):
+Reiniciamos o computador para atualizar permissões (por conta do grupo
+`docker`):
 ```
 $ reboot
 ```
@@ -104,7 +106,8 @@ Entramos no projeto Django (a partir da pasta raiz do projeto Django):
 (django-site) $ cd djangosite/
 ```
 
-Criamos o arquivo `config.json` como diz [README.MD](README.MD):
+Criamos o arquivo `config.json` como diz
+[README.MD](README.MD#arquivo-de-configuração):
 ```
 (django-site) $ EDITOR_PREFERIDO config.json
 # Copiamos e colamos o modelo, configurando o necessário
