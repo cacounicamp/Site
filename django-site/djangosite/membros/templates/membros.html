@@ -18,13 +18,13 @@ Membros do centro acadêmico | CACo
 {# Colocamos as mensagens, se houver #}
 {% if messages %}
 {% for message in messages %}
-  <div class="row p-2">
-    <div class="col">
-        <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
-          <h6 class="m-2"><b>{{message}}</b></h6>
-        </div>
+<div class="row p-2">
+  <div class="col">
+    <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
+      <h6 class="m-2"><b>{{message}}</b></h6>
     </div>
   </div>
+</div>
 {% endfor %}
 {% endif %}
 
@@ -69,10 +69,10 @@ Membros do centro acadêmico | CACo
             </thead>
             <tbody>
               {% for membro in membros %}
-                <tr>
-                  <th scole="row">{{membro.nome}}</th>
-                  <th>{{membro.registro_academico}}</th>
-                </tr>
+              <tr>
+                <th scole="row">{{membro.nome}}</th>
+                <th>{{membro.registro_academico}}</th>
+              </tr>
               {% endfor %}
             </tbody>
           </table>

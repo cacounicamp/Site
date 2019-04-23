@@ -22,13 +22,13 @@
 {# Colocamos as mensagens, se houver #}
 {% if messages %}
 {% for message in messages %}
-  <div class="row p-2">
-    <div class="col">
-        <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
-          <h6 class="m-2"><b>{{message}}</b></h6>
-        </div>
+<div class="row p-2">
+  <div class="col">
+    <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
+      <h6 class="m-2"><b>{{message}}</b></h6>
     </div>
   </div>
+</div>
 {% endfor %}
 {% endif %}
 
@@ -56,11 +56,11 @@
       <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
 
       <script>
-      grecaptcha.ready(function() {
-        grecaptcha.execute('{{captcha_site_key}}', {action: 'social'}).then(function(token) {
-          document.getElementById('g-recaptcha-response').value=token;
+        grecaptcha.ready(function () {
+          grecaptcha.execute('{{captcha_site_key}}', { action: 'social' }).then(function (token) {
+            document.getElementById('g-recaptcha-response').value = token;
+          });
         });
-      });
       </script>
 
       <button type="submit" class="btn btn-primary">Enviar!</button>

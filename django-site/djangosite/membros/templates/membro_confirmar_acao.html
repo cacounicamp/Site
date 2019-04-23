@@ -1,0 +1,50 @@
+{% extends "layouts/base.html" %}
+
+{% block titulopagina %}
+{{pagina_titulo}} | CACo
+{% endblock %}
+
+{% block body %}
+
+{# Colocamos o conteúdo da página estática se houver #}
+{% if pagina %}
+<div class="row">
+    <div class="col">
+        {{pagina.conteudo|safe}}
+    </div>
+</div>
+{% endif %}
+
+{# Colocamos as mensagens, se houver #}
+{% if messages %}
+{% for message in messages %}
+<div class="row p-2">
+    <div class="col">
+        <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
+            <h6 class="m-2"><b>{{message}}</b></h6>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="row">
+    <div class="col">
+        <h4>{{formulario_titulo}}</h4>
+        <hr>
+    </div>
+</div>
+
+<div class="row pl-4 pr-4 pb-2 pt-1">
+    <div class="col">
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+            <table class="table table-borderless">
+                {{ form.as_table }}
+            </table>
+            <button type="submit" class="btn btn-primary">Enviar!</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

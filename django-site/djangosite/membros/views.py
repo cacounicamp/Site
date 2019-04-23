@@ -14,7 +14,7 @@ from paginas_estaticas.models import PaginaEstatica
 from util import util
 
 from .models import Membro
-from .forms import FormularioVinculo, FormularioDesvinculo
+from .forms import FormularioVinculo, FormularioDesvinculo, FormularioConfirmarAcao
 
 
 EMAIL_MENSAGEM_VINCULO = """Olá, {nome},
@@ -67,7 +67,7 @@ def MembroConfirmarAcaoView(request, token):
     except ObjectDoesNotExist:
         membro = None
 
-    # Conferimos se o token é ativo ainda
+    # Conferimos se o token é ativo ainda (independente do tipo da request)
     if (membro is None or not membro.possui_token_ativo()):
         # Deixamos um aviso de que o token venceu
         messages.add_message(
@@ -75,8 +75,29 @@ def MembroConfirmarAcaoView(request, token):
             'Token vencido!',
             extra_tags='danger'
         )
-    else:
-        # Temos um token não vencido, executamos a ação
+
+        # Redirecionamos à lista de membros
+        return redirect(reverse('membros/'))
+
+    elif request.method == 'POST':
+        # Temos um token não vencido, executamos a ação pois estamos em um POST
+        formulario = FormularioConfirmarAcao(request.POST)
+
+        # Impedimos ação se formulário não é válido
+        if (not formulario.is_valid() or formulario.cleaned_data['acao_confirmada'] is False):
+            # Adicionamos a mensagem
+            messages.add_message(
+                request, messages.WARNING,
+                'Ação não foi tomada pois não houve confirmação! O token foi cancelado.',
+                extra_tags='danger'
+            )
+
+            # Apagamos o token (isso salva o membro)
+            membro.apagar_token()
+
+            # Iremos direto à página de membros
+            return redirect(reverse('membros/'))
+
         if membro.token_acao == 'REG':
             # Confirmamos
             membro.data_confirmacao = timezone.now()
@@ -103,8 +124,32 @@ def MembroConfirmarAcaoView(request, token):
             extra_tags='success'
         )
 
-    # Redirecionamos à lista de membros
-    return redirect(reverse('membros/'))
+        # Redirecionamos à lista de membros se a ação foi executada
+        return redirect(reverse('membros/'))
+
+    else:
+        # Se temos um token válido e não é um post, temos que mostrar a página
+        # com um formulário de confirmação
+        formulario = FormularioConfirmarAcao()
+
+        try:
+            # Tentamos conseguir a página estática de membros para vincularem-se
+            pagina = PaginaEstatica.objects.get(endereco='membros/confirmar-token/')
+        except ObjectDoesNotExist:
+            pagina = None
+
+        if membro.token_acao == 'DEL':
+            titulo = 'Confirmar desvínculo'
+        else:
+            titulo = 'Confirmar vínculo'
+
+        context = {
+            'pagina_titulo': titulo,
+            'formulario_titulo': titulo,
+            'pagina': pagina,
+            'form': formulario
+        }
+        return render(request, 'membro_confirmar_acao.html', context=context)
 
 
 def MembroVincularView(request):

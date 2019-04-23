@@ -55,3 +55,8 @@ class FormularioDesvinculo(forms.Form):
 
     # Ano de ingresso do membro
     ano_ingresso = forms.DateField(required=True, label='Ano de ingresso*:', help_text=exemplo_ano(), input_formats=['%Y'])
+
+
+class FormularioConfirmarAcao(forms.Form):
+    # Se o usuário confirmou a ação desejada
+    acao_confirmada = forms.BooleanField(required=True, label='Confirmar ação', help_text='Se você leu, aceita o estatuto e deseja confirmar a ação do token enviado por e-mail.')
