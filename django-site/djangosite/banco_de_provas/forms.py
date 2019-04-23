@@ -8,7 +8,7 @@ from .models import TipoAvaliacao, Periodo
 
 def exemplo_ano():
     hoje = datetime.datetime.now()
-    return 'Por exemplo: "{ano}", "{ano_anterior}"'.format(ano=hoje.year, ano_anterior=(hoje.year - 2))
+    return 'Por exemplo: "{ano}", "{ano_anterior}".'.format(ano=hoje.year, ano_anterior=(hoje.year - 2))
 
 class FormAvaliacao(forms.Form):
     # Disciplina: obrigatória, iremos pesquisar o nome posteriormente
@@ -60,7 +60,7 @@ class FormAvaliacao(forms.Form):
     possui_resolucao = forms.BooleanField(
         required=False,
         label='Avaliação possui resolução*',
-        help_text='Deve dizer se o arquivo que está enviando possui resolução dos exercícios ou se é apenas os enunciados de questões (não possui resolução)'
+        help_text='Deve dizer se o arquivo que está enviando possui resolução dos exercícios ou se é apenas os enunciados de questões (não possui resolução).'
     )
 
     #   Arquivo a ser enviado
