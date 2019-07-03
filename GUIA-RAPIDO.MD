@@ -9,24 +9,13 @@ Guia executado e testado em
 
 Instalamos os pacotes necessários:
 ```
-$ pacman -S docker docker-compose python3 python-pipenv npm
+$ pacman -S python3 python-pipenv mariadb npm
 ```
 
-Ativamos o Docker na inicialização do computador:
+Ou, no Ubuntu:
 ```
-$ systemctl enable docker
-```
-
-Permitimos usuário possuir acesso ao docker (observação: esse grupo é
-equivalente a root, permita apenas usuários confiáveis):
-```
-$ gpasswd -a USUÁRIO docker
-```
-
-Reiniciamos o computador para atualizar permissões (por conta do grupo
-`docker`):
-```
-$ reboot
+$ apt install python3-pip mariadb-server
+$ pip3 install pipenv
 ```
 
 ### Bootstrap
@@ -63,20 +52,35 @@ Saímos dessa pasta (voltamos à raiz):
 $ cd ..
 ```
 
+### Configuração do banco de dados
+
+Para seguir, precisamos ativar o banco de dados. Em qualquer sistema, é
+necessário configurar para maior segurança. No Ubuntu, temos o script:
+```
+$ mysql_secure_installation
+# É recomendado apertar 'Y' (yes) para todas as configurações
+
+# Entramos agora para criar o database usado pelo site
+$ mysql -u root -p
+mysql > CREATE DATABASE nome_do_database;
+
+# Criamos um usuário local com permissão apenas para o banco de dados do site
+mysql > CREATE USER 'USUARIO'@'localhost' IDENTIFIED BY 'SENHA';
+mysql > GRANT ALL PRIVILEGES ON nome_do_database.* TO 'USUARIO'@'localhost';
+mysql > FLUSH PRIVILEGES;
+```
+
+Agora basta colocarmos essa configuração no nosso arquivo `config.json`, que
+faremos na próxima seção.
+
 ### Configuração do Django
 
 Configuramos agora o site utilizando um [_virtual
 environment_](https://docs.python.org/3/tutorial/venv.html) (instala pacotes de
-Python sem que interfira com o resto do sistema, seguindo o mesmo conceito de
-Docker, permitindo estabilidade) para depois utilizá-lo inteiramente em
-`docker`. Faremos isso através de `pipenv`, uma ferramenta que torna mais
-agradável trabalhar com _virtual environments_.
-
-Para configurar o ReCaptcha v3, [crie um aplicativo
-aqui](https://www.google.com/recaptcha/admin).
-
-Para configurar o e-mail, se utilizar o do IC, utilize [essas
-configurações](https://suporte.ic.unicamp.br/alunos/email).
+Python sem que interfira com o resto do sistema, permitindo estabilidade pois
+escolhemos quando queremos atualizar um sistema em produção independente dos
+pacotes do sistema operacional). Faremos isso através de `pipenv`, uma
+ferramenta que torna mais agradável trabalhar com _virtual environments_.
 
 Entramos na pasta raiz do projeto Django (a partir da pasta raiz do projeto):
 ```
@@ -96,33 +100,29 @@ $ pipenv shell
 (django-site) $
 ```
 
-Instalamos os pré requisitos de Python no _virtual environment_:
-```
-(django-site) $ pip install -r requirements-virtualenv.txt
-```
-
 Entramos no projeto Django (a partir da pasta raiz do projeto Django):
 ```
 (django-site) $ cd djangosite/
 ```
 
-Criamos o arquivo `config.json` como diz
+Editamos o arquivo `config.json` como diz
 [README.MD](README.MD#arquivo-de-configuração):
 ```
 (django-site) $ EDITOR_PREFERIDO config.json
 # Copiamos e colamos o modelo, configurando o necessário
 ```
 
-Abrimos outro terminal e, na pasta raiz, ativamos o banco de dados através do
-Docker:
-```
-$ docker-compose -f (arquivo docker-compose) up database
-```
-Ou, sem abrir outro terminal, inicializamos o banco de dados com um _daemon_
-(opção `-d`):
-```
-(django-site) $ docker-compose -f (arquivo docker-compose) up -d database
-```
+Para configurar o ReCaptcha v3, [crie um aplicativo
+aqui](https://www.google.com/recaptcha/admin).
+
+Para configurar o e-mail: se utilizar o do IC, utilize [essas
+configurações](https://suporte.ic.unicamp.br/alunos/email); caso contrário,
+procure as configurações do provedor de sua escolha.
+
+Para configurar o banco de dados, basta substituir os credenciais.
+
+Se houver qualquer dúvida, volte no endereço do README para ler mais atentamente
+o trecho de configuração.
 
 Voltando à pasta Django, preparamos a estrutura do banco de dados:
 ```
@@ -148,11 +148,10 @@ Executamos o servidor para desenvolvimento e testes no IP e porta que quisermos:
 No nosso navegador, acessamos o site com o final do endereço `/admin` para
 acessarmos a página de administrador e criar páginas, notícias, menu etc.
 
-Após concluído, fechamos o servidor e o banco de dados utilizando `Ctrl + C` (ou
-parando o _daemon_, usando  `docker-compose -f (arquivo docker-compose) down`.
-Para sair do _virtual environment_, utilize o comando `exit` (isso não fechará o
-terminal, pois o `pipenv` abre uma sessão ao ser ativado) ou utilize o atalho
-`Ctrl + D`.
+Após concluído, fechamos o servidor e o banco de dados utilizando `Ctrl + C`.
+Para sair do _virtual environment_, utilize o comando `exit` ou utilize o atalho
+`Ctrl + D` (isso não fechará o terminal, pois o `pipenv` abre uma sessão ao ser
+ativado).
 
 
 ## Para produção

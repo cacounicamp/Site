@@ -1,9 +1,0 @@
-# Alpine Linux é bem menor que as outras distribuições
-FROM nginx:alpine
-
-# Cópia dos arquivos de configuração
-COPY https.conf /etc/nginx/nginx.conf
-COPY mime.types /etc/nginx/mime.types
-
-# Cópia do certificado Diffie-Hellman parameter
-COPY ./certificados/dhparam.pem /certificados/dhparam.pem

@@ -101,16 +101,7 @@ WSGI_APPLICATION = 'djangosite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgresql',
-        'USER': 'postgresql',
-        'PASSWORD': 'postgresql',
-    }
-}
+DATABASES = configuracao['DATABASES']
 
 
 # Password validation
@@ -229,6 +220,7 @@ TEMPO_CONFIRMACAO_MEMBROS = timedelta(days=1)
 #
 # PARAMETRIZAÇÃO DO BANCO DE DADOS
 #
+# Após edição, é necessário executar os comandos "makemigrations" e "migrate"
 
 # MAX_LENGTH_* define o tamanho máximo em caracteres para cada item
 

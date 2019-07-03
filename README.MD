@@ -233,7 +233,18 @@ modelo:
     "EMAIL_CONTATO_DISPLAY": "caco@ic.unicamp.br",
     "EMAIL_CONTATO_DESTINATARIO": [
         "caco@ic.unicamp.br"
-    ]
+    ],
+
+    "DATABASES": {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "database_name",
+            "USER": "",
+            "PASSWORD": "",
+            "HOST": "localhost",
+            "PORT": "3306",
+        }
+    }
 }
 ```
 
@@ -249,6 +260,7 @@ O significado de cada opção constam nessa tabela:
 | `EMAIL_CONTATO_REMETENTE` | Define qual será o remetente do e-mail que será enviado à lista `EMAIL_CONTATO_DESTINATARIO` |
 | `EMAIL_CONTATO_DISPLAY` | Define qual e-mail (único) da gestão que aparecerá na página de contato em caso de falhas no site ou no ReCaptcha |
 | `EMAIL_*` | Configurações de e-mail para utilizarmos na página de contato principalmente |
+| `DATABASES` | Configuração para acessar o banco de dados, como (visto aqui)[https://docs.djangoproject.com/en/dev/ref/settings/#databases], recomendamos utilizar um _socket_: basta colocar o caminho até o arquivo em "`HOST`" |
 
 Para explicar melhor as diferentes configurações de `EMAIL_CONTATO_*`, vamos
 supor que alguém preencha o formulário de contato no site. As informações desse
