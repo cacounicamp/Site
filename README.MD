@@ -1,24 +1,24 @@
 # CACo-site
 
 Este é um repositório da segunda versão para o site do CACo. O motivo de existir
-uma segunda versão é, além de querer aprender a utilizar servidores web,
-framework Django e Docker, padronizar o site (diminuindo a quantidade de páginas
-jogadas, provas sem uniformização dos nomes), melhorar a qualidade do que já
-existe (permitir envio de imagens nas páginas sem precisar hospedar
-externamente, lista de membros que permite _reset_ fácil, avisando todos os
-membros devidamente) e atualizar as versões do que já era utilizado (utilizando
-os _rewrites_ de Bootstrap e de Django).
+uma segunda versão é, além de querer aprender a utilizar servidores web e a
+framework Django, padronizar o site (diminuindo a quantidade de páginas
+"jogadas", _features_ ainda não implementadas completamente), melhorar a
+qualidade do que já existe (permitir envio de imagens nas páginas sem precisar
+hospedar externamente, lista de membros que permite _reset_ fácil, avisando
+todos os membros devidamente) e atualizar as versões do que já era utilizado
+(utilizando os _rewrites_ de Bootstrap e de Django, que melhoraram muita coisa).
 
 Por questão de legibilidade, não me preocupei em utilizar gêneros neutros em
 variáveis dentro do código. Porém esse assunto é de extrema importância e DEVE
-ser levado em consideração enquanto o conteúdo do site é reescrito.
+ser levado em consideração enquanto o conteúdo facilmente visível ao público do
+site é reescrito.
 
 
 ## Guia rápido de instalação
 
-O guia rápido pode ser encontrado [aqui](GUIA-RAPIDO.MD) e utiliza [Arch
-Linux](https://wiki.archlinux.org/index.php/Arch_Linux) e seu sistema de
-pacotes.
+O guia rápido pode ser encontrado [aqui](GUIA-RAPIDO.MD), utilizando
+[Ubuntu](https://ubuntu.com) para configuração.
 
 No entanto, para **desenvolvimento** e **configuração**, é necessário entender
 toda a estrutura, descrita neste arquivo.
@@ -34,144 +34,34 @@ pedidos "dinâmicos" ao [Django](https://www.djangoproject.com/) através do
 [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) (nginx <-> uWSGI <->
 Django).
 
-O banco de dados utilizado é [postgresql](https://www.postgresql.org/) e se
-conectará ao Django (django <-> banco de dados).
+O banco de dados utilizado é [MariaDB](https://mariadb.org) e se conectará ao
+Django diretamente (django <-> banco de dados).
 
-Tudo é organizado utilizando [Docker](https://www.docker.com/) através de uma
-ferramenta `docker-compose`. Ela irá ler arquivos do formato
-[`compose file`](https://docs.docker.com/compose/compose-file/), construir
-as imagens e configurações dos _containers_ (é bem como o nome diz, é um espaço
-individual para a aplicação) para serem executados posteriormente.
+Antigamente utilizávamos Docker para organizar o servidor. Ele tem seus
+benefícios, mas, da maneira como ocorria a aplicação e manutenção do site no
+centro acadêmico, esses benefícios se perdiam e existia apenas a inconveniência
+de uma ferramenta a mais para manusear. Então, com essa reescrita, resolvi
+eliminar e tornar a manutenção mais fácil e automatizada (já que Docker
+dificulta, por exemplo, renovar os certificados).
 
-Ou seja, através do arquivo _compose_ do Docker, descrevemos todo o sistema:
-como cada _container_ (que guarda apenas uma aplicação) comunica-se com outros
-e com o mundo externo.
+### Estrutura do servidor HTTP(S)
 
-### Docker
+O site pode ser servido em 2 esquemas:
+* HTTP (sem a _layer_ de segurança),
+* HTTPS (segura, um pouco mais lenta).
 
-O Docker utiliza imagens de sistemas estáveis e pré-configurados para garantir
-que os seus programas executem em um ambiente previsível.
+Para HTTPS, usamos o serviço do [Let's Encrypt](https://letsencrypt.org/). Na
+primeira execução, é necessário pedir certificados e comprovar que temos
+controle do domínio (nginx irá servir um arquivo com um código que nos será dado
+através do [certbot](https://certbot.eff.org/), um programa que gerencia os
+certificados).
 
-Se o Docker for configurado corretamente (no Arch, por exemplo, usando
-`systemctl enable docker` para garantir que os serviços se iniciará com o
-sistema) e, no caso de servir HTTPS, se o certificado foi obtido com sucesso, o
-site deve se manter online sem qualquer interferência humana (requer um
-detalhezinho rs).
+Após a aquisição inicial dos certificados, o `certbot` deve ser executado
+periodicamente para renovar os certificados (Let's Encrypt nos dá certificados
+que expiram em 3 meses). O `certbot` já reinicia o nginx para servir os novos
+certificados, então um script que executa a cada hora é mais do que suficiente.
 
-No nosso projeto, há diferentes arquivos `docker-compose.yml`:
-* um para servir o site perpetuamente apenas HTTP (`docker-compose-http.yml`),
-* outro para aquisição única dos certificados HTTPS (`docker-compose-cert.yml`)
-e
-* outro para servir perpetuamente o site HTTPS (`docker-compose-https.yml`).
-
-Independente do que escolher, a configuração do Docker é a mesma.
-
-Para entender a estrutura dos _containers_, é necessário entender alguns
-conceitos:
-* _containers_ são imagens pré-configuradas para serem executadas em uma leve
-camada de abstração (ao contrário de _virtual machines_ que simulam o sistema
-operacional por inteiro, _containers_ utilizam o núcleo do sistema operacional
-já executado na máquina),
-* [Alpine](https://alpinelinux.org/) é uma distribuição Linux muito pequena e,
-justamente por isso, é comum no Docker. As imagens dos _containers_ ocupam pouco
-espaço após construídas. No entanto a distribuição não utiliza `libc`, uma
-biblioteca comum que é usada por muitos programas, como o próprio uWSGI (então
-uWSGI não pode estar em um _container_ cuja imagem-base é Alpine),
-* Se um _container_ requer uma configuração prévia para funcionar (por exemplo,
-instalação de pacotes Python, como o próprio Django), é necessário executar essa
-configuração usando um arquivo
-[`Dockerfile`](https://docs.docker.com/engine/reference/builder/) ao invés de
-uma imagem base "pura".
-
-A estrutura dos _containers_ de produção (não inclui o _container_ usado apenas
-uma vez para aquisição dos certificados HTTPS - que falaremos no futuro) é, em
-ordem crescente de "dependências":
-
-#### `database`:
-É baseado na imagem `postgres:alpine` em configuração padrão (definimos apenas
-algumas [variáveis de
-_environment_](https://wiki.archlinux.org/index.php/Environment_variables) para
-tornar o usuário e senha comuns aos do Django e para fazemos a pasta do banco de
-dados vir para a pasta raiz do projeto). A ligação entre o Django ao banco de
-dados é feita através de um [Unix
-socket](https://en.wikipedia.org/wiki/Unix_domain_socket) que é mais eficiente
-do que conexões TCP. Esse arquivo socket ficará na raiz do projeto também.
-
-A configuração do banco de dados para o servidor deve ser realizada manualmente
-através de um [_virtual
-environment_](https://docs.python.org/3/tutorial/venv.html) de Python (descrito
-no guia rápido), que possui benefícios parecidos com os de Docker, pois permite
-a instalação de pacotes localmente e controladamente, mantendo o sistema
-estável.
-
-#### `django-caco`:
-Possui um `Dockerfile` para configuração do ambiente (que é baseado em uma
-imagem do Python na distribuição debian), instalando Django, uWSGi e
-as dependências do site.
-
-Possui uma dependência (irá ligar apenas depois do _container_ `database`). A
-porta 8080 é exposta ao Docker para que nginx possa conversar com o Django. Não
-consegui ainda utilizar um Unix socket para isso infelizmente.
-
-#### `servidor`:
-É baseado na imagem `nginx:alpine`, mas possui um arquivo de configuração
-(`Dockerfile`). Possui acesso aos arquivos estáticos do site (`/media` e
-`/static` dentro do projeto Django). Depende de `django-caco` para inicializar e
-possui uma ligação ao _container_ (através da porta 8080). As portas 80 (HTTP) e
-443 (HTTPS) são abertas ao público (abertas ao computador, através do Docker).
-
-#### `certbot_renew` (apenas HTTPS):
-Executa apenas um comando e termina. Esse comando serve para renovar os
-certificados HTTPS. Esses certificados serão utilizados pelo nginx, mantendo o
-site encriptado e mais seguro. Caso não haja um _script_ que execute este
-_container_ periodicamente, reiniciar a máquina antes do vencimento (3 meses) do
-certificado do site já basta para renová-lo (já que esse _container_ executa
-junto com os outros a cada reinicialização).
-
-Após [instalar
-e configurar](https://wiki.archlinux.org/index.php/Docker#Installation) `docker`
-e `docker-compose`, para construirmos os _containers_ que necessitam de
-configuração/preparo prévio (como os de Django e nginx), precisamos estar no
-diretório que contém a configuração do `docker-compose` e executar:
-
-```
-§ ls
-(...) docker-compose.yml (...)
-§ docker-compose -f docker-compose.yml build
-```
-
-Para iniciar os _containers_, executamos:
-
-```
-§ docker-compose -f docker-compose.yml up
-```
-
-### Estrutura do servidor HTTPS
-
-Usamos o serviço do [Let's Encrypt](https://letsencrypt.org/). Na primeira
-execução, é necessário pedir certificados e comprovar que temos controle do
-domínio (nginx irá servir um arquivo com um código que nos será dado através do
-[certbot](https://certbot.eff.org/), um programa que gerencia os certificados).
-
-Como usamos Docker, não é ideal usar os pacotes `docker` e `docker-nginx` do
-Arch Linux, mas sim fazer um _container_ com alguma imagem `certbot` que seja
-compatível com o nosso _container_ nginx. De tal forma que o servidor inteiro
-permanece inalterado com relação aos certificados (todo o processo fica
-encapsulado no Docker).
-
-É por causa disso que há diversos `docker-compose.yml`, pois nginx está
-configurado para 3 situações:
-* servir HTTP,
-* servir a comprovação de domínio, primeira aquisição de certificados e
-* servir HTTPS após aquisição dos certificados.
-
-Após a aquisição inicial dos certificados, o _container_ `certbot_renew`
-(descrito em `docker-compose-https.yml`) deve ser executado periodicamente para
-renovar os certificados (Let's Encrypt nos dá certificados que expiram em 3
-meses). Como nginx possui acesso direto aos certificados, é possível atualizar
-os certificados sem precisar reiniciar todos os serviços. O "detalhezinho rs"
-escrito na seção Docker é esse: a única tarefa fora do Docker de que precisamos,
-é necessário reiniciar o servidor a cada alguns meses.
+Para HTTP, não precisamos de certificados, então basta configurar o nginx.
 
 ### Django
 
@@ -206,8 +96,9 @@ e simples, com uma visualização única para todas as gestões.
 Para segurança do site, guardamos informações e opções importantes em um arquivo
 de configurações `django-site/djangosite/config.json`.
 
-Note que é necessário configurar o ReCaptcha e um servidor de e-mail para a
-página de contato. Então preencha corretamente este arquivo seguindo este
+Note que é necessário configurar o
+[ReCaptcha](https://www.google.com/recaptcha/admin) e um servidor de e-mail para
+a página de contato. Então preencha corretamente este arquivo seguindo este
 modelo:
 
 ```javascript
@@ -242,7 +133,7 @@ modelo:
             "USER": "",
             "PASSWORD": "",
             "HOST": "localhost",
-            "PORT": "3306",
+            "PORT": "3306"
         }
     }
 }
@@ -260,7 +151,7 @@ O significado de cada opção constam nessa tabela:
 | `EMAIL_CONTATO_REMETENTE` | Define qual será o remetente do e-mail que será enviado à lista `EMAIL_CONTATO_DESTINATARIO` |
 | `EMAIL_CONTATO_DISPLAY` | Define qual e-mail (único) da gestão que aparecerá na página de contato em caso de falhas no site ou no ReCaptcha |
 | `EMAIL_*` | Configurações de e-mail para utilizarmos na página de contato principalmente |
-| `DATABASES` | Configuração para acessar o banco de dados, como [visto aqui](https://docs.djangoproject.com/en/dev/ref/settings/#databases), recomendamos utilizar um _socket_: basta colocar o caminho até o arquivo em "`HOST`" |
+| `DATABASES` | Configuração para acessar o banco de dados, como [visto aqui](https://docs.djangoproject.com/en/dev/ref/settings/#databases), recomendamos utilizar um _socket_: basta colocar o caminho até o _socket_ (`/var/run/mysqld/mysqld.sock`) em "`HOST`" |
 
 Para explicar melhor as diferentes configurações de `EMAIL_CONTATO_*`, vamos
 supor que alguém preencha o formulário de contato no site. As informações desse
@@ -286,10 +177,10 @@ interior e não possui endereço.
 
 Para a composição das páginas, utilizamos o editor
 [CKEditorWidget](https://github.com/django-ckeditor/django-ckeditor#widget),
-que já é instalado através do `requirements.txt` quando o `docker-compose` cria
-o _container_. No entanto, a presença desse editor (e da página de administração
-do Django) exigem a execução do comando `python manage.py collectstatic` antes
-de servir o site.
+que já é instalado através do `Pipfile` quando o _virtual environment_ é criado.
+No entanto, a presença desse editor (e da página de administração do Django)
+exigem a execução do comando `python manage.py collectstatic` antes de servir o
+site.
 
 Isso é preciso para que os arquivos do `CKEditor` (e a página de administração)
 possam ser utilizados pelo navegador em produção - já que em desenvolvimento o
@@ -476,7 +367,9 @@ responsivo.
 ## Referências
 
 Além das referências que usei que foram mencionadas pela descrição do sistema e
-documentação de serviços utilizados (Django, Docker), utilizei estes guias:
+documentação de serviços utilizados (Django, certbot, nginx), utilizei estes
+guias durante o desenvolvimento. Alguns contém Docker pois por alguns meses
+mantive o esquema utilizado no site anterior.
 
 [Antigo setup do site do CACo](https://github.com/cacounicamp/Site)
 

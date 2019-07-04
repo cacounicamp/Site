@@ -1,21 +1,19 @@
 # Guia rápido de configuração
 
 Guia executado e testado em
-[Arch Linux](https://wiki.archlinux.org/index.php/Arch_Linux).
+[Ubuntu Server 18.04.2 LTS](https://ubuntu.com/download/server).
 
 ## Para desenvolvimento e/ou configuração inicial de produção
 
 ### Programas necessários e configuração
 
-Instalamos os pacotes necessários:
+Atualizamos o sistema, instalamos os pacotes necessários e clonamos o repositório, em Ubuntu:
 ```
-$ pacman -S python3 python-pipenv mariadb npm
-```
-
-Ou, no Ubuntu:
-```
-$ apt install python3-pip mariadb-server
+$ apt update
+$ apt upgrade
+$ apt install git python3-pip mariadb-server npm nginx certbot python3-certbot-nginx libmysqlclient-dev
 $ pip3 install pipenv
+$ git clone https://github.com/rafaelsartori96/CACo-site.git
 ```
 
 ### Bootstrap
@@ -58,6 +56,7 @@ Para seguir, precisamos ativar o banco de dados. Em qualquer sistema, é
 necessário configurar para maior segurança. No Ubuntu, temos o script:
 ```
 $ mysql_secure_installation
+# Se não conseguir acesso, utilize o comando como usuário "root"
 # É recomendado apertar 'Y' (yes) para todas as configurações
 
 # Entramos agora para criar o database usado pelo site
@@ -109,14 +108,14 @@ Editamos o arquivo `config.json` como diz
 [README.MD](README.MD#arquivo-de-configuração):
 ```
 (django-site) $ EDITOR_PREFERIDO config.json
-# Copiamos e colamos o modelo, configurando o necessário
+# Configuramos o necessário
 ```
 
 Para configurar o ReCaptcha v3, [crie um aplicativo
 aqui](https://www.google.com/recaptcha/admin).
 
-Para configurar o e-mail: se utilizar o do IC, utilize [essas
-configurações](https://suporte.ic.unicamp.br/alunos/email); caso contrário,
+Para configurar o e-mail: se utilizar o do IC, utilize [as
+configurações SMTP daqui](https://suporte.ic.unicamp.br/alunos/email); caso contrário,
 procure as configurações do provedor de sua escolha.
 
 Para configurar o banco de dados, basta substituir os credenciais.
@@ -146,7 +145,9 @@ Executamos o servidor para desenvolvimento e testes no IP e porta que quisermos:
 ```
 
 No nosso navegador, acessamos o site com o final do endereço `/admin` para
-acessarmos a página de administrador e criar páginas, notícias, menu etc.
+acessarmos a página de administrador e criar páginas, notícias, menu etc. Para
+visualizar o site corretamente, é necessário criar pelo menos uma notícia ou uma
+página estática com endereço `/` (chamada de _root_ ou raiz).
 
 Após concluído, fechamos o servidor e o banco de dados utilizando `Ctrl + C`.
 Para sair do _virtual environment_, utilize o comando `exit` ou utilize o atalho
@@ -163,9 +164,10 @@ dados, criamos um _super user_ etc).
 ### Configurando HTTPS
 
 Na primeira execução, é necessário adquirir os certificados para habilitar o
-serviço HTTPS. Utilizamos o arquivo `docker-compose-cert.yml`, que irá servir o
-comprovante de controle de domínio para Let's Encrypt.
+serviço HTTPS. Utilizamos o `certbot` para fazer isso, ele irá automaticamente
+fazer as mudanças necessárias na configuração do `nginx`.
 
+#### TODO: rever daqui até o fim para remover Docker
 É necessário para o servidor HTTPS que utilizamos criar o arquivo `dhparam.pem`
 na pasta `nginx/certificados/`:
 ```
