@@ -7,7 +7,8 @@ Guia executado e testado em
 
 ### Programas necessários e configuração
 
-Atualizamos o sistema, instalamos os pacotes necessários e clonamos o repositório, em Ubuntu:
+Atualizamos o sistema, instalamos os pacotes necessários e clonamos o
+repositório, em Ubuntu:
 ```
 $ apt update
 $ apt upgrade
@@ -55,8 +56,8 @@ $ cd ..
 Para seguir, precisamos ativar o banco de dados. Em qualquer sistema, é
 necessário configurar para maior segurança. No Ubuntu, temos o script:
 ```
-$ mysql_secure_installation
 # Se não conseguir acesso, utilize o comando como usuário "root"
+$ mysql_secure_installation
 # É recomendado apertar 'Y' (yes) para todas as configurações
 
 # Entramos agora para criar o database usado pelo site
@@ -87,9 +88,11 @@ $ cd django-site/
 ```
 
 Criamos um _virtual environment_ instalando todos os pacotes do projeto
-(descritos nos arquivos `Pipfile` e `Pipfile.lock`):
+(descritos nos arquivos `Pipfile`, que contém os pacotes do projeto, e
+`Pipfile.lock`, que contém o estado atual dos pacotes do projeto):
 ```
-$ pipenv install
+# Para produção, é importante continuar as versões testadas
+$ pipenv install --keep-outdated
 ```
 
 Ativamos o _virtual environment_ através do `pipenv`:
@@ -115,8 +118,8 @@ Para configurar o ReCaptcha v3, [crie um aplicativo
 aqui](https://www.google.com/recaptcha/admin).
 
 Para configurar o e-mail: se utilizar o do IC, utilize [as
-configurações SMTP daqui](https://suporte.ic.unicamp.br/alunos/email); caso contrário,
-procure as configurações do provedor de sua escolha.
+configurações SMTP daqui](https://suporte.ic.unicamp.br/alunos/email); caso
+contrário, procure as configurações do provedor de sua escolha.
 
 Para configurar o banco de dados, basta substituir os credenciais.
 
@@ -202,4 +205,19 @@ $ docker ps
 Para parar o Docker, utilizamos:
 ```
 $ docker-compose -f (arquivo docker-compose) down
+```
+
+
+## Para manutenção
+
+### Django e _virtual environment_
+
+Para verificar o que está desatualizado no _virtual environment_ e atualizar, é
+necessário estar na pasta que contém o `Pipfile` e executar:
+
+```
+# Verificar desatualizado:
+$ pipenv update --outdated
+# Atualizar:
+$ pipenv update
 ```
