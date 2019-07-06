@@ -12,6 +12,7 @@ uwsgi = "*"
 requests = "*"
 pillow = "*"
 psycopg2-binary = "*"
+mysqlclient = "*"
 
 [requires]
 python_version = "3.6"
