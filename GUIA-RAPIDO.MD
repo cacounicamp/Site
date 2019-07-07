@@ -3,6 +3,7 @@
 Guia executado e testado em
 [Ubuntu Server 18.04.2 LTS](https://ubuntu.com/download/server).
 
+
 ## Para desenvolvimento e/ou configuração inicial de produção
 
 ### Programas necessários e configuração
@@ -142,6 +143,11 @@ Criamos um super usuário (administrador do site):
 (django-site) $ python manage.py createsuperuser
 ```
 
+Copiamos arquivos estáticos para serem servidos:
+```
+(django-site) $ python manage.py collectstatic
+```
+
 Executamos o servidor para desenvolvimento e testes no IP e porta que quisermos:
 ```
 (django-site) $ python manage.py runserver ip:porta
@@ -164,47 +170,57 @@ Após executar os mesmos passos para desenvolvimento (preparar o _workspace_ é
 bem parecido com preparar o website para produção, pois inicializamos o banco de
 dados, criamos um _super user_ etc).
 
+### Configurando uwsgi (Django)
+
+Para iniciar o servidor utilizando uwsgi (para ser passado pelo nginx),
+utilizamos no _virtual environment_:
+
+```
+(django-site) $ uwsgi --ini uwsgi.ini
+(uwsgi criará o socket ou servirá TCP para o nginx que ainda será configurado)
+```
+
+Depois dos testes com nginx, temos que configurar o uwsgi para abrir
+automaticamente com um serviço.
+
+
+### Configurando nginx
+
+Precisamos copiar e configurar o perfil que queremos para nginx, substituindo a
+configuração padrão (em `/etc/nginx/nginx.conf`).
+
+```
+$ cd nginx/
+$ cp http.conf /etc/nginx/nginx.conf
+$ EDITOR_PREFERIDO /etc/nginx/nginx.conf
+(precisamos alterar os caminhos de alguns itens)
+```
+
+É necessário configurar `nginx.conf` para o caminho do _socket_ configurado em
+`uwsgi` e para o caminho das pastas `static/` e `media/`. Então podemos utilizar
+o editor para substituir o texto `/caminho/para/projeto/django` pelo caminho
+real do projeto em todo o arquivo.
+
+Conferimos se está tudo certo e recarregamos a configuração:
+```
+$ nginx -t
+(verificar se há erros no arquivo de configuração)
+$ nginx -s reload
+
+# Com Django aberto, testamos o site e, se necessário, verificamos o log:
+$ cat /var/log/nginx/acess.log | less
+$ cat /var/log/nginx/error.log | less
+```
+
 ### Configurando HTTPS
 
 Na primeira execução, é necessário adquirir os certificados para habilitar o
 serviço HTTPS. Utilizamos o `certbot` para fazer isso, ele irá automaticamente
 fazer as mudanças necessárias na configuração do `nginx`.
 
-#### TODO: rever daqui até o fim para remover Docker
-É necessário para o servidor HTTPS que utilizamos criar o arquivo `dhparam.pem`
-na pasta `nginx/certificados/`:
+Para configurar o `dhparam` que utilizanos com nginx, precisamos executar:
 ```
-§ openssl dhparam -out certificados/dhparam.pem 2048
-```
-
-Criamos as imagens do Docker para a aquisição do primeiro certificado:
-```
-§ docker-compose -f docker-compose-cert.yml build
-§ docker-compose -f docker-compose-cert.yml up
-... Aguardamos a verificação ...
-(Ctrl + C para parar)
-```
-
-Finalmente, criamos as imagens para o servidor HTTPS:
-```
-§ docker-compose -f docker-compose-https.yml build
-```
-
-### Inicializando o servidor
-
-Podemos executar o Docker para produção com um _daemon_:
-```
-$ docker-compose -f (arquivo docker-compose) up -d
-```
-
-Podemos ver quais os _containers_ ativos no Docker através do comando:
-```
-$ docker ps
-```
-
-Para parar o Docker, utilizamos:
-```
-$ docker-compose -f (arquivo docker-compose) down
+$ openssl dhparam -out /etc/nginx/dhparam.pem 2048
 ```
 
 
@@ -221,3 +237,31 @@ $ pipenv update --outdated
 # Atualizar:
 $ pipenv update
 ```
+
+### Bootstrap
+
+Para verificar o que está desatualizado no _package_ e atualizar, é necessário
+estar na pasta que contém o `package.json` e executar:
+
+```
+$ npm outdated
+# "Wanted" é a versão compatível descrita pelo package.json
+```
+
+Para atualizar para _Latest_ é necessário instalar o pacote `npm-check-updates`
+e executar:
+```
+# Para instalar o pacote:
+$ npm install -g npm-check-updates
+
+# Para atualizar:
+$ ncu -u
+(irá te informar as alterações)
+$ npm install
+(irá atualizar)
+
+# Teste as novas versões compilando o projeto e corrija incompatibilidades se houver
+$ npm run build
+```
+
+
