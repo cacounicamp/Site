@@ -80,8 +80,20 @@ Configuramos agora o site utilizando um [_virtual
 environment_](https://docs.python.org/3/tutorial/venv.html) (instala pacotes de
 Python sem que interfira com o resto do sistema, permitindo estabilidade pois
 escolhemos quando queremos atualizar um sistema em produção independente dos
-pacotes do sistema operacional). Faremos isso através de `pipenv`, uma
+pacotes do sistema operacional). Faremos isso através de pipenv, uma
 ferramenta que torna mais agradável trabalhar com _virtual environments_.
+
+Para utilizarmos depois o _virtual environment_ em produção, temos que instalar
+o pipenv no local do projeto. Então precisamos definir a
+_environment variable_ de configuração do pipenv, basta colocar em
+`~/.bashrc` a linha:
+```
+export PIPENV_VENV_IN_PROJECT=1
+```
+e depois recarregar a configuração do bash:
+```
+$ source ~/.bashrc
+```
 
 Entramos na pasta raiz do projeto Django (a partir da pasta raiz do projeto):
 ```
@@ -96,7 +108,7 @@ Criamos um _virtual environment_ instalando todos os pacotes do projeto
 $ pipenv install --keep-outdated
 ```
 
-Ativamos o _virtual environment_ através do `pipenv`:
+Ativamos o _virtual environment_ através do pipenv:
 ```
 $ pipenv shell
 # Note que à esquerda aparece o nome do virtual environment
@@ -160,7 +172,7 @@ página estática com endereço `/` (chamada de _root_ ou raiz).
 
 Após concluído, fechamos o servidor e o banco de dados utilizando `Ctrl + C`.
 Para sair do _virtual environment_, utilize o comando `exit` ou utilize o atalho
-`Ctrl + D` (isso não fechará o terminal, pois o `pipenv` abre uma sessão ao ser
+`Ctrl + D` (isso não fechará o terminal, pois o pipenv abre uma sessão ao ser
 ativado).
 
 
@@ -181,7 +193,31 @@ utilizamos no _virtual environment_:
 ```
 
 Depois dos testes com nginx, temos que configurar o uwsgi para abrir
-automaticamente com um serviço.
+automaticamente com um serviço, que está descrito em `uwsgi.service`. Nesse
+arquivo, precisamos atualizar os caminhos até o projeto e nome de usuário,
+depois copiar e ativar o serviço utilizando systemd. Para isso, fazemos:
+```
+$ EDITOR_PREFERIDO uwsgi.service
+(alteramos o caminho para a raiz do projeto)
+
+# Copiamos o serviço para a pasta de serviços
+$ cp uwsgi.service /etc/systemd/system/
+
+# Recarregamos o systemctl
+$ systemctl daemon-reload
+
+# Iniciamos o serviço e testamos
+$ systemctl start uwsgi.service
+```
+
+Após conferir o _status_ utilizando o comando `systemctl status uwsgi.service` e
+verificar também se tudo está funcionando (após configurar nginx e testar
+utilizando o navegador), podemos ativar o serviço para executar em _boot_.
+```
+$ systemctl enable uwsgi.service
+```
+
+**Observação:** teste também `systemctl stop uwsgi.service`.
 
 
 ### Configurando nginx
@@ -197,7 +233,7 @@ $ EDITOR_PREFERIDO /etc/nginx/nginx.conf
 ```
 
 É necessário configurar `nginx.conf` para o caminho do _socket_ configurado em
-`uwsgi` e para o caminho das pastas `static/` e `media/`. Então podemos utilizar
+uwsgi e para o caminho das pastas `static/` e `media/`. Então podemos utilizar
 o editor para substituir o texto `/caminho/para/projeto/django` pelo caminho
 real do projeto em todo o arquivo.
 
@@ -215,10 +251,10 @@ $ cat /var/log/nginx/error.log | less
 ### Configurando HTTPS
 
 Na primeira execução, é necessário adquirir os certificados para habilitar o
-serviço HTTPS. Utilizamos o `certbot` para fazer isso, ele irá automaticamente
-fazer as mudanças necessárias na configuração do `nginx`.
+serviço HTTPS. Utilizamos o certbot para fazer isso, ele irá automaticamente
+fazer as mudanças necessárias na configuração do nginx.
 
-Para configurar o `dhparam` que utilizanos com nginx, precisamos executar:
+Para configurar o `dhparam.pem` que utilizanos com nginx, precisamos executar:
 ```
 $ openssl dhparam -out /etc/nginx/dhparam.pem 2048
 ```
