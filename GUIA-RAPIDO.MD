@@ -13,7 +13,7 @@ repositório, em Ubuntu:
 ```
 $ apt update
 $ apt upgrade
-$ apt install git python3-pip mariadb-server npm nginx certbot python3-certbot-nginx libmysqlclient-dev
+$ apt install git python3-pip postgresql postgresql-contrib npm nginx certbot python3-certbot-nginx
 $ pip3 install pipenv
 $ git clone https://github.com/rafaelsartori96/CACo-site.git
 ```
@@ -54,21 +54,42 @@ $ cd ..
 
 ### Configuração do banco de dados
 
-Para seguir, precisamos ativar o banco de dados. Em qualquer sistema, é
-necessário configurar para maior segurança. No Ubuntu, temos o script:
+Para seguir, precisamos ativar o banco de dados. Por padrão, já não será
+possível conectar aos usuários remotamente, então nisso estamos seguros.
+Precisamos alterar a senha padrão e criar um usuário para ser utilizado com
+Django.
+
+Para fazer isso, precisamos entrar como usuário `postgres`:
 ```
-# Se não conseguir acesso, utilize o comando como usuário "root"
-$ mysql_secure_installation
-# É recomendado apertar 'Y' (yes) para todas as configurações
+$ sudo su - posgres
+# Agora, como usuário postgres, entramos no cliente
+$ psql
+postgres=#
+```
 
-# Entramos agora para criar o database usado pelo site
-$ mysql -u root -p
-mysql > CREATE DATABASE nome_do_database;
+Agora criamos um novo usuário e um banco de dados para o site:
+```
+postgres=# CREATE USER usuario WITH PASSWORD 'SENHA';
+postgres=# CREATE DATABASE nome_banco_dados OWNER usuario;
+```
 
-# Criamos um usuário local com permissão apenas para o banco de dados do site
-mysql > CREATE USER 'USUARIO'@'localhost' IDENTIFIED BY 'SENHA';
-mysql > GRANT ALL PRIVILEGES ON nome_do_database.* TO 'USUARIO'@'localhost';
-mysql > FLUSH PRIVILEGES;
+Temos que adicionar também permissão para nos conectar com senha (o padrão é
+_peer_, ou seja, um usuário shell de mesmo nome) quando utilizamos _socket_.
+Alteramos a configuração de acesso de PostgreSQL no arquivo
+`/etc/postgresql/(versão)/main/pg_hba.conf`:
+```
+$ EDITOR_PREFERIDO /etc/postgresql/(versão)/main/pg_hba.conf
+# alteramos a coluna final "peer" na linha que inicia com "local" para "md5"
+
+# Após alterar, reiniciamos o serviço
+$ systemctl restart postgresql
+```
+
+Após configurarmos isso, podemos acessar o banco de dados utilizando o _socket_
+e nossa senha:
+```
+$ psql nome_banco_dados -U usuario -W
+(pedirá a senha)
 ```
 
 Agora basta colocarmos essa configuração no nosso arquivo `config.json`, que
@@ -299,5 +320,3 @@ $ npm install
 # Teste as novas versões compilando o projeto e corrija incompatibilidades se houver
 $ npm run build
 ```
-
-

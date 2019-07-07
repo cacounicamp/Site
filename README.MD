@@ -34,8 +34,10 @@ pedidos "dinâmicos" ao [Django](https://www.djangoproject.com/) através do
 [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) (nginx <-> uWSGI <->
 Django).
 
-O banco de dados utilizado é [MariaDB](https://mariadb.org) e se conectará ao
-Django diretamente (django <-> banco de dados).
+O banco de dados utilizado é [PostgreSQL](https://www.postgresql.org/) e se
+conectará ao Django diretamente (django <-> banco de dados). Para isso,
+utilizamos o pacote psycopg2-binary de Python, pois Django não oferece um
+conector para PostgreSQL por padrão.
 
 Antigamente utilizávamos Docker para organizar o servidor. Ele tem seus
 benefícios, mas, da maneira como ocorria a aplicação e manutenção do site no
@@ -128,12 +130,12 @@ modelo:
 
     "DATABASES": {
         "default": {
-            "ENGINE": "django.db.backends.mysql",
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
             "NAME": "database_name",
             "USER": "",
             "PASSWORD": "",
             "HOST": "localhost",
-            "PORT": "3306"
+            "PORT": "5432"
         }
     }
 }
@@ -151,7 +153,7 @@ O significado de cada opção constam nessa tabela:
 | `EMAIL_CONTATO_REMETENTE` | Define qual será o remetente do e-mail que será enviado à lista `EMAIL_CONTATO_DESTINATARIO` |
 | `EMAIL_CONTATO_DISPLAY` | Define qual e-mail (único) da gestão que aparecerá na página de contato em caso de falhas no site ou no ReCaptcha |
 | `EMAIL_*` | Configurações de e-mail para utilizarmos na página de contato principalmente |
-| `DATABASES` | Configuração para acessar o banco de dados, como [visto aqui](https://docs.djangoproject.com/en/dev/ref/settings/#databases), recomendamos utilizar um _socket_: basta colocar o caminho até o _socket_ (`/var/run/mysqld/mysqld.sock`) em "`HOST`" |
+| `DATABASES` | Configuração para acessar o banco de dados, como [visto aqui](https://docs.djangoproject.com/en/dev/ref/settings/#databases), recomendamos utilizar um _socket_: basta colocar o caminho até o _socket_ (padrão em PostgreSQL é `/var/run/postgresql/`) em "`HOST`" |
 
 Para explicar melhor as diferentes configurações de `EMAIL_CONTATO_*`, vamos
 supor que alguém preencha o formulário de contato no site. As informações desse
