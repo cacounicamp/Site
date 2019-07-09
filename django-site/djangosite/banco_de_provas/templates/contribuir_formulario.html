@@ -110,13 +110,9 @@ Contribuir com o banco de provas | CACo
 
       <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
 
-      <script>
-        grecaptcha.ready(function () {
-          grecaptcha.execute('{{captcha_site_key}}', { action: 'social' }).then(function (token) {
-            document.getElementById('g-recaptcha-response').value = token;
-          });
-        });
-      </script>
+      {# Esse arquivo é criado em djangosite/settings.py (configuração do projeto Django) #}
+      {% load static %}
+      <script src="{% static 'banco_de_prova-contribuir.js' %}"></script>
 
       <button type="submit" class="btn btn-primary">Enviar!</button>
     </form>

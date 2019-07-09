@@ -262,3 +262,20 @@ for sigla, _ in CURSOS:
     tamanho_sigla = len(sigla)
     if tamanho_sigla >= MAX_LENGTH_CURSOS:
         MAX_LENGTH_CURSOS = tamanho_sigla + 1
+
+
+# Precisamos produzir o Javascript estático para contribuição no banco de provas
+# Isso é necessário pois CSP não permite de forma segura inline
+contribuir_js_conteudo = """
+grecaptcha.ready(function () {{
+  grecaptcha.execute('{site_key}', {{ action: 'social' }}).then(function (token) {{
+    document.getElementById('g-recaptcha-response').value = token;
+  }});
+}});
+""".format(site_key=CAPTCHA_SITE_KEY)
+# Procuramos o local que será servido
+contribuir_js_path = os.path.join(STATIC_ROOT, 'banco_de_prova-contribuir.js')
+# Abrimos o arquivo e escrevemos o conteúdo
+with open(contribuir_js_path, 'w') as contribuir_js_arq:
+    contribuir_js_arq.write(contribuir_js_conteudo)
+
