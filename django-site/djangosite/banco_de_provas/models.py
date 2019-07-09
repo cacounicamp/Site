@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
@@ -162,7 +164,10 @@ def determinar_nome_arquivo(instance, filename):
     else:
         extensao = '.extensao_desconhecida'
 
-    return settings.PROVAS_PATH + slugify('-'.join(atributos)) + extensao
+    # Criamos um trecho aleatório
+    aleatorio = str(uuid.uuid4())
+
+    return settings.PROVAS_PATH + slugify('-'.join(atributos)) + aleatorio + extensao
 
 
 class Avaliacao(models.Model):
