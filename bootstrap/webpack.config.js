@@ -1,59 +1,43 @@
-const autoprefixer = require('autoprefixer');
-const path = require("path");
+const path = require('path');
 
-module.exports = [{
-  entry: ['./app.scss', './app.js'],
-  output: {
-    path: path.resolve(__dirname, "build"),
-    filename: 'bundle.js',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: 'bundle.css',
-            },
-          },
-          { loader: 'extract-loader' },
-          { loader: 'css-loader' },
-          {
-            // Para não precisarmos de prefixos
-            loader: 'postcss-loader',
-            options: {
-               plugins: () => [autoprefixer()]
+module.exports = {
+    entry: './src/app.js',
+    mode: 'production',
+    target: "web",
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'build')
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(scss)$/,
+                use: [
+                    {
+                        // Adiciona tag <style> de CSS
+                        loader: 'style-loader'
+                    },
+                    {
+                        // Para carregar CSS diretamente
+                        loader: 'css-loader'
+                    },
+                    {
+                        // Webpack processará CSS também
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: function () {
+                                return [
+                                    require('autoprefixer')
+                                ];
+                            }
+                        }
+                    },
+                    {
+                        // Carrega SASS (scss) para CSS
+                        loader: 'sass-loader'
+                    }
+                ]
             }
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              // Incluímos os pacotes instalados pelo npm
-              includePaths: ['./node_modules']
-            }
-          },
-        ],
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['env'],
-        },
-      }
-    ],
-  },
-  // Configurações tiradas de https://webpack.js.org/configuration/
-  target: "web",
-  performance: {
-    hints: "warning",
-    maxAssetSize: 200000, // bytes
-    maxEntrypointSize: 400000, // bytes
-    assetFilter: function(assetFilename) {
-      // Function predicate that provides asset filenames
-      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
+        ]
     }
-  },
-}];
+};

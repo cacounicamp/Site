@@ -1,34 +1,30 @@
 {
   "name": "caco-site",
   "version": "0.0.1",
-  "description": "Design do site do centro acadêmico da computação",
-  "main": "index.js",
+  "description": "Modificações em Bootstrap para se adequar ao site do Centro Acadêmico da Computação da Unicamp",
+  "main": "src/app.js",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server --mode=development",
-    "build": "webpack -p"
+    "build": "webpack"
   },
   "author": "rafaelsartori96 <rafael.sartori96@gmail.com>",
   "license": "UNLICENSED",
   "devDependencies": {
     "autoprefixer": "^9.6.1",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.0.6",
-    "babel-preset-env": "^1.7.0",
     "css-loader": "^3.0.0",
-    "extract-loader": "^3.1.0",
+    "exports-loader": "^0.7.0",
     "file-loader": "^4.0.0",
     "node-sass": "^4.12.0",
     "postcss-loader": "^3.0.0",
+    "precss": "^4.0.0",
     "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
     "webpack": "^4.35.2",
-    "webpack-cli": "^3.3.5",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-cli": "^3.3.5"
   },
   "dependencies": {
     "bootstrap": "^4.3.1",
     "jquery": "^3.4.1",
-    "popper.js": "^1.15.0",
-    "tar": "^4.4.10"
+    "popper.js": "^1.15.0"
   }
 }
