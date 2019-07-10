@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.dispatch import receiver
 from django.utils.text import slugify
-from django.db.models.signals import post_delete
+from django.db.models.signals import post_delete, pre_save
 
 
 class TipoAvaliacao(models.Model):
@@ -157,6 +157,9 @@ def determinar_nome_arquivo(instance, filename):
     if instance.ano is not None:
         atributos.append(str(instance.ano))
 
+    # Criamos um trecho aleatório
+    atributos.append(str(uuid.uuid4()))
+
     # Pegamos a extensão do nome do arquivo
     if len(filename) > 0:
         split = filename.split('.')
@@ -164,10 +167,7 @@ def determinar_nome_arquivo(instance, filename):
     else:
         extensao = '.extensao_desconhecida'
 
-    # Criamos um trecho aleatório
-    aleatorio = str(uuid.uuid4())
-
-    return settings.PROVAS_PATH + slugify('-'.join(atributos)) + aleatorio + extensao
+    return settings.PROVAS_PATH + slugify('-'.join(atributos)) + extensao
 
 
 class Avaliacao(models.Model):
@@ -235,5 +235,25 @@ class Avaliacao(models.Model):
 
 
 @receiver(post_delete, sender=Avaliacao)
-def submission_delete(sender, instance, **kwargs):
+def receiver_avaliacao_deletada(sender, instance, **kwargs):
+    # Apagamos o arquivo
     instance.arquivo.delete(False)
+
+# Fonte: https://djangosnippets.org/snippets/10638/
+@receiver(pre_save, sender=Avaliacao)
+def receiver_avaliacao_alterada(sender, instance, **kwargs):
+    # Conferimos se existe no banco de dados
+    if not instance.pk:
+        return
+
+    # Pegamos o antigo arquivo
+    try:
+        antigo_arquivo = sender.objects.get(pk=instance.pk).arquivo
+    except sender.DoesNotExist:
+        return
+
+    # Pegamos o novo arquivo
+    novo_arquivo = instance.arquivo
+    # Conferimos se o arquivo é diferente
+    if antigo_arquivo != novo_arquivo:
+        antigo_arquivo.delete(False)
