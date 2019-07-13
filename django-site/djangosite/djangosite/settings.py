@@ -274,7 +274,7 @@ grecaptcha.ready(function () {{
 }});
 """.format(site_key=CAPTCHA_SITE_KEY)
 # Procuramos o local que será servido
-contribuir_js_path = os.path.join(STATIC_ROOT, 'banco_de_prova-contribuir.js')
+contribuir_js_path = os.path.join(STATIC_ROOT, 'chave_recaptcha.js')
 # Abrimos o arquivo e escrevemos o conteúdo
 with open(contribuir_js_path, 'w') as contribuir_js_arq:
     contribuir_js_arq.write(contribuir_js_conteudo)
