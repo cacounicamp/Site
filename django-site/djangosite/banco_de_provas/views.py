@@ -16,18 +16,39 @@ from .forms import FormAvaliacao
 
 EMAIL_MENSAGEM_AVALIACOES_ADICIONADA = """Olá,
 
-Uma avaliação foi adicionada ao banco de provas do site. É necessário revisar todas as informações, fazer as alterações necessárias e tornar a avaliação visível para ela aparecer aos usuários do site.
+Uma avaliação foi adicionada ao banco de provas do site. É necessário:
+* revisar todas as informações;
+* fazer as alterações necessárias;
+* tornar a avaliação visível para ela aparecer aos usuários do site.
 
-O site tenta determinar a disciplina baseado no código. Se o código não foi registrado no passado, o site cria uma nova disciplina e associa o código preenchido no formulário a ela.
-Vamos supor que no banco de provas haja apenas provas de MC302 e alguém acaba de adicionar a prova de MC322 (novo código da disciplina). O site criará a disciplina MC322, mas você deve apagar essa disciplina e associar a prova à disciplina MC302. Depois disso, adicionar um novo código à disciplina MC302, o código "MC322".
-É um pouco confuso. Mas o que vocês devem fazer é apenas manter as disciplinas iguais juntas e permitir a criação de novas se não há nenhuma disciplina equivalente.
+Informações da prova:
+{info_prova}
+
+Endereço para o arquivo NÃO APROVADO:
+\t{url_arquivo}
+
+Para alterar a situação da prova, entre no site de administração da prova no endereço a seguir:
+\t{url_avaliacao}
+
+
+Se não souber o que fazer com relação a "Disciplina" e "Código de disciplina", há um pequeno guia abaixo.
+
+Para revisar a disciplina, você precisa entender o funcionamento do site. O site tenta determinar a disciplina baseado no código enviado no formulário de contribuição:
+* se o código não foi registrado no passado, o site cria uma nova disciplina e associa o código preenchido no formulário a ela;
+* se o código foi registrado no passado, o site apenas inclui a disciplina correspondente à prova.
+
+Ou seja, há alguns casos:
+* se digitaram errado, você precisa apagar a disciplina criada e atualizar a prova;
+* se o código é um novo código para uma disciplina que foi RENOMEADA, você precisa apagar a disciplina criada pelo site e adicionar o código novo à disciplina do código antigo;
+* se a prova é inédita, basta aprovar a disciplina;
+* a prova está numa disciplina já existente e nada precisa ser feito sobre isso.
+
+É um pouco confuso. Mas isso permite que você pesquise "MC322" e encontre provas de "MC302" (antigo nome da disciplina "Programação Orientada a Objetos").
 
 Dito isso, os cuidados principais são:
-* Conferir se o sistema associou a prova à uma disciplina já existente ou se criou uma nova disciplina. Em ambos os casos, conferir se está corretamente configurado;
-* Conferir as informações do formulário, como docente, semestre e ano;
-* Aprovar a prova se o arquivo condiz com o que ela é.
-
-Página de administrador para a prova inserida: {url_avaliacao}
+* Conferir se o sistema associou a prova à disciplina correta;
+* Conferir as informações do formulário, como tipo da prova, docente, semestre e ano;
+* Aprovar a prova se o arquivo condiz com o que a descrição diz.
 
 Atenciosamente,
 Centro acadêmico da computação
@@ -190,6 +211,35 @@ def SubmeterProvaView(request):
         )
         avaliacao.save()
 
+        # Produzimos um resumo para o e-mail
+        if docente is None or len(docente) == 0:
+            nome_docente = 'desconhecido'
+        else:
+            nome_docente = docente
+
+        if quantificador is None:
+            nome_quantificador = ''
+        else:
+            nome_quantificador = str(quantificador)
+
+        if (periodo is None and ano is None):
+            nome_periodo = 'desconhecido'
+        elif (periodo is None and ano is not None):
+            nome_periodo = 'semestre desconhecido de ' + str(ano)
+        elif (periodo is not None and ano is None):
+            nome_periodo = periodo.nome + ' de ano desconhecido'
+        else:
+            nome_periodo = periodo.nome + ' de ' + str(ano)
+
+        informacoes = [
+            '\tDisciplina: ' + codigo_string.upper(),
+            '\tDocente: ' + nome_docente,
+            '\tTipo: ' + tipo_avaliacao.nome + ' ' + nome_quantificador,
+            '\tPeríodo: ' + nome_periodo,
+            '\tPossui resolução? ' + ('Sim' if possui_resolucao else 'Não'),
+        ]
+        informacao_prova = '\n'.join(informacoes)
+
         # Agora mandamos um e-mail
         send_mail(
             subject=settings.EMAIL_ASSUNTO_BASE.format(
@@ -199,7 +249,9 @@ def SubmeterProvaView(request):
                 url_avaliacao=request.build_absolute_uri(reverse(
                     'admin:banco_de_provas_avaliacao_change',
                     args=[avaliacao.id]
-                ))
+                )),
+                url_arquivo=request.build_absolute_uri(avaliacao.arquivo.url),
+                info_prova=informacao_prova
             ),
             from_email=settings.EMAIL_CONTATO_REMETENTE,
             recipient_list=settings.EMAIL_CONTATO_DESTINATARIO,
