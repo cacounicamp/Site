@@ -157,8 +157,8 @@ def SubmeterProvaView(request):
 
         # Obtemos as informações limpas do formulário
         # Observação: os tipos são mantidos, Django é excelente <3
-        codigo_string = form.cleaned_data['codigo_disciplina']
-        docente = form.cleaned_data['docente']
+        codigo_string = form.cleaned_data['codigo_disciplina'].lower()
+        docente = form.cleaned_data['docente'].lower()
         # Tipo de avaliação deve possuir uma opção chave para os formulários
         # como "Não sei dizer ou não encontrei o tipo que procuro"
         tipo_avaliacao = form.cleaned_data['tipo_avaliacao']
@@ -192,8 +192,7 @@ def SubmeterProvaView(request):
             codigo_disciplina = CodigoDisciplina(
                 disciplina=disciplina,
                 nome_atualizado=True,
-                codigo=codigo_string.lower(),
-
+                codigo=codigo_string.lower()
             )
             codigo_disciplina.save()
 
