@@ -114,3 +114,40 @@ class Command(BaseCommand):
         # Agora inserimos as atas
         print('Inserindo {} avaliações.'.format(len(avaliacoes_inserir)))
         Avaliacao.objects.bulk_create(avaliacoes_inserir)
+
+
+"""
+Código para exportar as provas no site antigo
+----
+Adicionei ele em models.py para que possa exportar facilmente na inicialização.
+
+    # Para imprimir banco de dados do banco de provas para o novo site
+    import json
+
+    banco_de_provas = []
+    # Para toda prova aprovada...
+    for prova in Prova.objects.filter(aprovado=True):
+        # Criamos o dicionário
+        prova_dict =  {}
+
+        # Adicionamos as informações ao dicionário
+        prova_dict['codigo_disciplina'] = prova.materia
+        prova_dict['docente'] = prova.professor
+        prova_dict['tipo_avaliacao'] = prova.tipo
+        prova_dict['periodo'] = prova.semestre
+        prova_dict['arquivo'] = prova.file.path
+
+        # Adicionamos a prova
+        banco_de_provas.append(prova_dict)
+
+    # Escrevemos no arquivo JSON
+    with open('banco_de_provas.json', 'w') as arquivo:
+        json.dump(banco_de_provas, arquivo, indent=4)
+
+
+Código para determinar os tipos de prova e período que terei que manipular
+----
+Como no site antigo as entradas eram livres, há muitas variações, então precisei
+de um código para abrir e verificar as diferentes entradas. Fiz isso no comando
+analisar_import, que está descrito nesse aplicativo em "analisar_import.py".
+"""
