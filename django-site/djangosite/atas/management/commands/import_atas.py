@@ -22,12 +22,14 @@ class Command(BaseCommand):
             for ata in atas:
                 # Tentamos definir a data de criação da ata
                 try:
+                    # [::-1] inverte a string, o replace substitui apenas UM
+                    # dois pontos, que será o último, na parte da timezone.
+                    # Dessa forma, conseguimos utilizar "%z" corretamente.
                     data_criacao = datetime.strptime(
-                        ata['data_criacao'],
+                        ata['data_criacao'][::-1].replace(':', '', 1)[::-1],
                         '%Y-%m-%d %H:%M:%S.%f%z'
                     )
                 except ValueError:
-
                     data_criacao = datetime.strptime(
                         ata['data_criacao'],
                         '%Y-%m-%d %H:%M:%S%z'
