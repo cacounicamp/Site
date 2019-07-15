@@ -212,3 +212,12 @@ class Command(BaseCommand):
         ]
         # Testamos os tipos
         testar_lista('tipos', lista_tipos, padroes)
+
+
+        # Compilamos expressões regulares para os tipos
+        padroes = [
+            # disciplinas válidas
+            re.compile('[A-Za-z]{1,2}\d{3}'),
+        ]
+        # Testamos os tipos
+        testar_lista('códigos', lista_codigos, padroes)
