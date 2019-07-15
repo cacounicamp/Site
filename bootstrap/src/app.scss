@@ -6,7 +6,20 @@
  */
 
 
+/* Bootstrap */
+
+@import "~bootstrap/scss/bootstrap";
+
+
 /* Customizações */
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #9affaeba;
+}
+
+.navbar-dark .navbar-brand {
+    color: #9affae; // #aae8b6;
+}
 
 .navbar-color {
     background-color: #17843c; // #0b8031; // #12280d;
@@ -23,8 +36,3 @@
 .bg-light-color {
     background-color: #f6f6f6; // #daffd3; // #f2f2f2;
 }
-
-
-/* Bootstrap */
-
-@import "~bootstrap/scss/bootstrap";
