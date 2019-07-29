@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from django.db.utils import ProgrammingError
+from django.db.utils import ProgrammingError, OperationalError
 
 from . import views
 from .models import PaginaEstatica
@@ -11,6 +11,13 @@ urlpatterns = [
 # Função prepara todas as URLs de páginas estáticas
 def recarregar_urls():
     try:
+        # Conferimos se o banco de dados existe
+        try:
+            PaginaEstatica.objects.all().exists()
+        except OperationalError:
+            # Não existe banco de dados
+            return
+
         urlpatterns.clear()
         # Para cada página dinãmica...
         for pagina in PaginaEstatica.objects.all():
