@@ -2,6 +2,7 @@ import datetime
 
 from django import forms
 from django.conf import settings
+from django.core.validators import RegexValidator
 
 from .models import TipoAvaliacao, Periodo
 
@@ -14,7 +15,13 @@ class FormAvaliacao(forms.Form):
     # Disciplina: obrigatória, iremos pesquisar o nome posteriormente
     # Exemplo mínimo: "F328", exemplo máximo: "MA311"
     codigo_disciplina = forms.CharField(
-        required=True, min_length=4, max_length=5,
+        required=True,
+        validators=[
+            RegexValidator(
+                r'([A-Za-z]{1}[ ]?[0-9]{3})|([A-Za-z]{2}[0-9]{3})',
+                'Código não respeita formato padrão de código de disciplinas.'
+            )
+        ],
         label='Código da disciplina*',
         help_text='Apenas letras e números, sem traços ou espaços. Por exemplo: "f328", "ma311", "MC404".',
     )
@@ -72,3 +79,8 @@ class FormAvaliacao(forms.Form):
         label='Arquivo da avaliação*',
         help_text='Prefira o formato PDF! Há ferramentas que convertem fotos em PDF ou ainda vários PDF em um único PDF.'
     )
+
+
+    def clean_codigo_disciplina(self):
+        codigo_disciplina = self.cleaned_data['codigo_disciplina']
+        return codigo_disciplina.replace(' ', '')

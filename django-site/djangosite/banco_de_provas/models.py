@@ -5,6 +5,7 @@ from django.conf import settings
 from django.dispatch import receiver
 from django.utils.text import slugify
 from django.db.models.signals import post_delete, pre_save
+from django.core.validators import RegexValidator
 
 
 class TipoAvaliacao(models.Model):
@@ -121,6 +122,12 @@ class CodigoDisciplina(models.Model):
         # duplicata. Por exemplo, temos "MC302". Se alterarmos o nome para
         # "MC322", ele irá inserir um código com "MC322" e manter "MC302"
         primary_key=True,
+        validators=[
+            RegexValidator(
+                r'([A-Za-z]{1}[0-9]{3})|([A-Za-z]{2}[0-9]{3})',
+                'Código não respeita formato padrão de código de disciplinas.'
+            )
+        ],
         max_length=settings.MAX_LENGTH_CODIGO_DISCIPLINA,
         help_text='Por exemplo, "MC202", "F328"',
         null=False, blank=False
