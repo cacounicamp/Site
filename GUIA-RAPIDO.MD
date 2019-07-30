@@ -162,8 +162,7 @@ o trecho de configuração.
 
 Voltando à pasta Django, preparamos a estrutura do banco de dados:
 ```
-(django-site) $ python manage.py makemigrations atas banco_de_provas gestoes noticias membros ouvidoria paginas_estaticas representantes_discentes
-# Observação: conferir lista atualizada de aplicativos Django
+(django-site) $ python manage.py makemigrations
 ```
 
 Colocamos a estrutura no banco de dados:
