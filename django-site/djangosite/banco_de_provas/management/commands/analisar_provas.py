@@ -3,17 +3,30 @@ from django.core.management.base import BaseCommand
 import re
 import json
 
+from .models import *
+
 
 class Command(BaseCommand):
     help = 'Analisa as entradas de provas dadas pelo arquivo JSON do site ' \
     ' antigo'
 
     #
+    # Argumentos
+    #
+    def add_arguments(self, parser):
+        parser.add_argument(
+            'arquivo',
+            help='Arquivo .JSON do banco de dados do site antigo'
+        )
+
+    #
     # Controlador do comando
     #
     def handle(self, *args, **options):
+        nome_arquivo = options['arquivo']
+
         # Abrimos o arquivo de importação
-        with open('provas.json', encoding='utf-8') as arquivo:
+        with open(nome_arquivo, encoding='utf-8') as arquivo:
             provas_json = json.load(arquivo)
 
 
@@ -102,6 +115,19 @@ class Command(BaseCommand):
         ]
         # Testamos os períodos
         testar_lista('períodos', lista_periodos, padroes)
+
+
+        # Compilamos expressões regulares para os códigos
+        padroes = [
+            # disciplinas válidas
+            re.compile('[A-Za-z]{1,2}\d{3}'),
+
+            # disciplinas válidas com espaço
+            re.compile('[A-Za-z]{1} \d{3}'),
+        ]
+        # Testamos os códigos
+        testar_lista('códigos', lista_codigos, padroes)
+
 
         # Compilamos expressões regulares para os tipos
         padroes = [
@@ -214,10 +240,17 @@ class Command(BaseCommand):
         testar_lista('tipos', lista_tipos, padroes)
 
 
-        # Compilamos expressões regulares para os tipos
-        padroes = [
-            # disciplinas válidas
-            re.compile('[A-Za-z]{1,2}\d{3}'),
-        ]
-        # Testamos os tipos
-        testar_lista('códigos', lista_codigos, padroes)
+        # Determinamos as características da prova
+        for prova in provas_json:
+
+            # Pegamos todas as informações
+            codigo_string = form.cleaned_data['codigo_disciplina'].lower()
+            docente = form.cleaned_data['docente'].lower()
+            # Tipo de avaliação deve possuir uma opção chave para os formulários
+            # como "Não sei dizer ou não encontrei o tipo que procuro"
+            tipo_avaliacao = form.cleaned_data['tipo_avaliacao']
+            quantificador = form.cleaned_data['quantificador']
+            periodo = form.cleaned_data['periodo']
+            ano = form.cleaned_data['ano']
+            possui_resolucao = form.cleaned_data['possui_resolucao']
+            arquivo = form.cleaned_data['arquivo']
