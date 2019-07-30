@@ -145,9 +145,11 @@ STATIC_URL = '/static/'
 # Para o comando 'collectstatic'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+STATIC_DEBUG_ROOT = os.path.join(BASE_DIR, "djangosite/static/")
+
 # Arquivos estáticos a serem servidos
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "djangosite/static/"),
+    STATIC_DEBUG_ROOT,
 ]
 
 # Configurações do CKEditor
@@ -274,11 +276,11 @@ grecaptcha.ready(function () {{
 }});
 """.format(site_key=CAPTCHA_SITE_KEY)
 # Procuramos o local que será servido
-contribuir_js_path = os.path.join(STATIC_ROOT, 'chave_recaptcha.js')
+contribuir_js_path = os.path.join(STATIC_DEBUG_ROOT, 'chave_recaptcha.js')
 # Temos certeza que STATIC_ROOT existe
-if not os.path.exists(STATIC_ROOT):
-    os.mkdir(STATIC_ROOT)
-    print('Diretório de STATIC_ROOT ("{0}") foi criado'.format(STATIC_ROOT))
+if not os.path.exists(STATIC_DEBUG_ROOT):
+    os.mkdir(STATIC_DEBUG_ROOT)
+    print('Diretório de STATIC_DEBUG_ROOT ("{0}") foi criado'.format(STATIC_DEBUG_ROOT))
 # Abrimos o arquivo e escrevemos o conteúdo
 with open(contribuir_js_path, 'w') as contribuir_js_arq:
     contribuir_js_arq.write(contribuir_js_conteudo)
