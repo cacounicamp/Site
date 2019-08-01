@@ -50,7 +50,7 @@ Dito isso, os cuidados principais são:
 * Conferir as informações do formulário, como tipo da prova, docente, semestre e ano;
 * Aprovar a prova se o arquivo condiz com o que a descrição diz.
 
-Atenciosamente,
+Tenham um excelente dia,
 Centro acadêmico da computação
 """
 
