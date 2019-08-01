@@ -187,6 +187,12 @@ class Avaliacao(models.Model):
     docente = models.CharField(
         max_length=settings.MAX_LENGTH_DOCENTE,
         help_text='Tente tornar o mais próximo do e-mail ou "código" do docente. Por exemplo, Sara Diaz Cardell do IMECC possui e-mail/site com "sdcardell", então usamos "sdcardell".',
+        validators = [
+            RegexValidator(
+                r'[a-z0-9_]*',
+                'Utilize apenas caracteres alfanuméricos e underline.'
+            )
+        ],
         null=True, blank=True
     )
 

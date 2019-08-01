@@ -30,6 +30,12 @@ class FormAvaliacao(forms.Form):
     docente = forms.CharField(
         required=False,
         max_length=settings.MAX_LENGTH_DOCENTE,
+        validators = [
+            RegexValidator(
+                r'[A-Za-z0-9_]*',
+                'Utilize apenas caracteres alfanuméricos e underline.'
+            )
+        ],
         label='"Código" d* docente que fez a prova',
         help_text='Tente preencher com o nome no e-mail ou site d* docente. Por exemplo: Sara Diaz Cardell do IMECC possui e-mail e site com o código "sdcardell". Se não conhecer ou identificar, coloque apenas o sobrenome.',
     )
@@ -86,7 +92,12 @@ class FormAvaliacao(forms.Form):
         return codigo_disciplina.replace(' ', '')
 
 
-    # Colocamos uma ordem mais natural    
+    def clean_docente(self):
+        docente = self.cleaned_data['docente']
+        return docente.lower()
+
+
+    # Colocamos uma ordem mais natural
     field_order = [
         'codigo_disciplina',
         'tipo_avaliacao',
