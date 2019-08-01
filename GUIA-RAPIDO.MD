@@ -13,7 +13,7 @@ repositório, em Ubuntu:
 ```
 $ apt update
 $ apt upgrade
-$ apt install git python3-pip postgresql postgresql-contrib npm nginx certbot python3-certbot-nginx
+$ apt install git python3-pip postgresql postgresql-contrib npm nginx certbot python3-certbot-nginx libmysqlclient-dev
 $ pip3 install pipenv
 $ git clone https://github.com/rafaelsartori96/CACo-site.git
 ```
@@ -61,7 +61,7 @@ Django.
 
 Para fazer isso, precisamos entrar como usuário `postgres`:
 ```
-$ sudo su - posgres
+$ sudo su - postgres
 # Agora, como usuário postgres, entramos no cliente
 $ psql
 postgres=#
@@ -94,6 +94,25 @@ $ psql nome_banco_dados -U usuario -W
 
 Agora basta colocarmos essa configuração no nosso arquivo `config.json`, que
 faremos na próxima seção.
+
+#### Trabalho com _dump_ do banco de dados
+
+Para executar os comandos, é necessário substituir usuário, banco de dados e
+caminho até o arquivo de _dump_. Há um grande problema com troca de usuários
+e banco de dados quando restauramos um _dump_, então tome cuidado! Estou
+colocando o comando aqui pois precisei alterar o usuário do antigo banco de
+dados utilizado em Docker.
+
+Para executar um _dump_:
+```
+pg_dump -U (usuário) (banco de dados) -F t --no-owner > (arquivo de dump, formato TAR)
+```
+
+Para restaurar o banco de dados:
+```
+pg_restore --no-owner --role (usuário) -d (banco de dados) -c -U (usuário) (arquivo de dump)
+```
+
 
 ### Configuração do Django
 
