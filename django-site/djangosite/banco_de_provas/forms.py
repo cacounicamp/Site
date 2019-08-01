@@ -46,7 +46,7 @@ class FormAvaliacao(forms.Form):
         required=False,
         min_value=1,
         label='Número da avaliação',
-        help_text='Seguindo as respostas do item anterior, formaríamos: "Prova 1", "Exame", "Lista de exercícios 4", "Testinho 3". Esse número distingue P1 da P2 da P3.'
+        help_text='Seguindo as respostas do item anterior, formaríamos: "Prova 1", "Exame", "Lista de exercícios 4", "Testinho 3". Esse número distingue P1 da P2, da P3.'
     )
 
     # Período e ano da avaliação
@@ -84,3 +84,16 @@ class FormAvaliacao(forms.Form):
     def clean_codigo_disciplina(self):
         codigo_disciplina = self.cleaned_data['codigo_disciplina']
         return codigo_disciplina.replace(' ', '')
+
+
+    # Colocamos uma ordem mais natural    
+    field_order = [
+        'codigo_disciplina',
+        'tipo_avaliacao',
+        'quantificador',
+        'possui_resolucao',
+        'periodo',
+        'ano',
+        'docente',
+        'arquivo'
+    ]
