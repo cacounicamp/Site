@@ -24,10 +24,9 @@
     <nav class="shadow-lg navbar navbar-color navbar-expand-lg navbar-dark">
       <div class="media">
 
-        <img src="{% static "favicon.ico" %}" width="30" class="align-self-center mr-2" alt="">
-
         <div class="media-body">
-          <a class="navbar-brand font-weight-bold" href="/">
+          <a class="navbar-brand font-weight-bold d-flex align-items-center" href="/">
+            <img src="{% static "favicon.svg" %}" width="30" class="align-self-center mr-2">
             Centro acadêmico da computação
           </a>
         </div>
@@ -87,7 +86,7 @@
 
         <div class="col-sm p-3">
           <center>
-            <h5><small>{% now "Y" as ano %}{% if ano == "2018" %}2018{% else %}2018-{{ano}}{% endif %} <strong>Centro
+            <h5><small>{% now "Y" as ano %}{% if ano == "2018" %}2018{% else %}2018-{{ano}}{% endif %} &mdash; <strong>Centro
                   acadêmico da computação</strong> - CACo,<br>
                 cac<span style="display:none"></span>o@ic.unicamp.br<br></small></h5>
             <small class="font-weight-light"><a href="http://github.com/rafaelsartori96/CACo-site">Código fonte no GitHub</a></small>
