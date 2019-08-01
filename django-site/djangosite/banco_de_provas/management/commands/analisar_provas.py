@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 import re
 import json
 
-from .models import *
+from banco_de_provas.models import *
 
 
 class Command(BaseCommand):
@@ -29,228 +29,416 @@ class Command(BaseCommand):
         with open(nome_arquivo, encoding='utf-8') as arquivo:
             provas_json = json.load(arquivo)
 
-
-        # Função para imprimir com aspas
-        def imprimir_lista(lista):
-            for item in lista:
-                print(item.join(['"', '"']))
-
-
-        # Agora verificamos quais entradas existem
-
-        lista_periodos = set()
-        lista_tipos = set()
-        lista_codigos = set()
-        # Para todas as provas...
-        for prova in provas_json:
-            lista_periodos.add(prova['periodo'])
-            lista_tipos.add(prova['tipo_avaliacao'])
-            lista_codigos.add(prova['codigo_disciplina'])
-
-        # Imprimimos o que obtemos
-
-        print('Lista de períodos:')
-        imprimir_lista(lista_periodos)
-        print('\n\n\n')
-
-        print('Lista de tipos de avaliação:')
-        imprimir_lista(lista_tipos)
-        print('\n\n\n')
-
-        print('Lista de códigos de disciplinas:')
-        imprimir_lista(lista_codigos)
-        print('\n\n\n')
-
-
-        # Analisaremos os períodos agora, separando ano de período
-
-        # Função para conferir o padrão na lista
-        def conferir_padrao(exp_reg, lista):
-            itens_matched = set()
-            itens_unmatched = set()
-            # Para cada item na lista...
-            for item in lista:
-                # Testamos com a expressão regular
-                resultado = exp_reg.match(item)
-
-                # Adicionamos às listas de resultado
-                if resultado is None:
-                    itens_unmatched.add(item)
-                else:
-                    itens_matched.add(item)
-
-            return (itens_matched, itens_unmatched)
-
-
-        # Função para teste dos padrões na lista completa
-        def testar_lista(nome, lista, padroes):
-            restante = lista
-
-            # Processamos agora os padrões
-            for padrao in padroes:
-                (matched, unmatched) = conferir_padrao(padrao, restante)
-                print('Matched de {0} com "{1}":'.format(nome, padrao.pattern))
-                imprimir_lista(matched)
-                print('\n\n')
-                restante = restante - matched
-
-            # Imprimimos o resto
-            print('Unmatched de {0}:'.format(nome))
-            imprimir_lista(restante)
-            print('\n\n')
-
-
-        # Testamos os padrões para as listas
-
-        # Compilamos expressões regulares para os períodos
-        padroes = [
-            # ano semestre
-            re.compile('(\d{4})\D{1,3}(\d)'),
-            # semestre ano
-            re.compile('(\d)\D{1,3}(\d{4})'),
-            # ano férias
-            re.compile('(\d{4})fer'),
-            # ano apenas (sem semestre)
-            re.compile('(\d{4})')
-        ]
-        # Testamos os períodos
-        testar_lista('períodos', lista_periodos, padroes)
-
-
-        # Compilamos expressões regulares para os códigos
-        padroes = [
-            # disciplinas válidas
-            re.compile('[A-Za-z]{1,2}\d{3}'),
-
-            # disciplinas válidas com espaço
-            re.compile('[A-Za-z]{1} \d{3}'),
-        ]
-        # Testamos os códigos
-        testar_lista('códigos', lista_codigos, padroes)
-
-
         # Compilamos expressões regulares para os tipos
         padroes = [
-            # prova diurna com resolução
-            re.compile('(p|P)(\d).*(d|D).*(res)'),
-            re.compile('(p|P)(\d).*(d|D).*(sol)'),
-            re.compile('(p|P)(\d).*(d|D).*(gab)'),
-            re.compile('(p|P)(\d).*(res).*(d|D)'),
-            re.compile('(p|P)(\d).*(sol).*(d|D)'),
-            re.compile('(p|P)(\d).*(gab).*(d|D)'),
-            # prova noturna com resolução
-            re.compile('(p|P)(\d).*(n|N).*(res)'),
-            re.compile('(p|P)(\d).*(n|N).*(sol)'),
-            re.compile('(p|P)(\d).*(n|N).*(gab)'),
-            re.compile('(p|P)(\d).*(res).*(n|N)'),
-            re.compile('(p|P)(\d).*(sol).*(n|N)'),
-            re.compile('(p|P)(\d).*(gab).*(n|N)'),
-            # prova com resolução
-            re.compile('(p|P)(\d).*(res)'),
-            re.compile('(p|P)(\d).*(sol)'),
-            re.compile('(p|P)(\d).*(gab)'),
-            re.compile('(res).*(p|P)(\d)'),
-
-            # prova diurna sem resolução
-            re.compile('(p|P)(\d).*(d|D)'),
-            # prova noturna sem resolução
-            re.compile('(p|P)(\d).*(n|N)'),
-            # prova substitutiva sem resolução
-            re.compile('(p|P)(\d).*sub'),
-            # prova do semestre todo
-            re.compile('(p|P)1.*p2.*ex'),
-            # prova sem resolução
-            re.compile('(p|P)(\d)'),
-            # prova sem resolução sem quantificador
-            re.compile('(p|P)'),
-
-            # prova substitutiva com resolução (nome implícito)
-            re.compile('(sub).*(res)'),
-            re.compile('(2c).*(res)'),
-            # prova substitutiva (nome implícito)
-            re.compile('(sub).*'),
-            re.compile('(2c).*'),
-
-            # lista com resolução
-            re.compile('(l|L).*(\d).*(res)'),
-            re.compile('(l|L).*(\d).*(gab)'),
-            re.compile('(l|L).*(\d).*(sol)'),
-            # lista com resolução sem quantificador
-            re.compile('(l|L).*(res)'),
-            re.compile('(l|L).*(gab)'),
-            re.compile('(l|L).*(sol)'),
-
-            # lista sem resolução
-            re.compile('(l|L).*(\d)'),
-            # lista sem resolução sem quantificador
-            re.compile('(l|L).*'),
-
-            # exercício capítulo X com resolução
-            re.compile('(ex).*(cap).*(\d).*(res)'),
-            re.compile('(ex).*(cap).*(\d).*(gab)'),
-            re.compile('(ex).*(cap).*(\d).*(sol)'),
-            # exercício com resolução
-            re.compile('(ex).*(\d).*(res)'),
-            re.compile('(ex).*(\d).*(gab)'),
-            re.compile('(ex).*(\d).*(sol)'),
-            # exercício capítulo X sem resolução
-            re.compile('(ex).*(cap).*(\d)'),
-            # exercício sem resolução
-            re.compile('(ex).*(\d)'),
-            re.compile('(exe).*'),
-
-            # exame diurno sem resolução
-            re.compile('(exa).*(d|D)'),
-            # exame noturno sem resolução
-            re.compile('(exa).*(n|N)'),
-            # exame com resolução
-            re.compile('(exa).*(res)'),
-            re.compile('(exa).*(sol)'),
-            re.compile('(exa).*(gab)'),
-            # exame com resolução (nome ambíguo)
-            re.compile('(ex).*(res)'),
-            re.compile('(ex).*(gab)'),
-            re.compile('(ex).*(sol)'),
-            # exame sem resolução
-            re.compile('(exa).*'),
-            re.compile('(Exa).*'),
-            # exame sem resolução (nome ambíguo)
-            re.compile('(ex).*'),
-
-            # teste com resolução
-            re.compile('(t|T).*(\d).*(res)'),
-            re.compile('(t|T).*(\d).*(sol)'),
-            re.compile('(t|T).*(\d).*(gab)'),
-            re.compile('(quiz).*(\d).*(res)'),
-            re.compile('(quiz).*(\d).*(sol)'),
-            re.compile('(quiz).*(\d).*(gab)'),
-            # teste sem resolução
-            re.compile('(t|T).*(\d)'),
-
-            # atividade com resolução
-            re.compile('(at).*(\d).*(res)'),
-            re.compile('(at).*(\d).*(re)'), # nome esquisito
-            # atividade sem resolução
-            re.compile('(at).*(\d)'),
-
-            # anotações de aula
-            re.compile('(anot).*'),
         ]
         # Testamos os tipos
-        testar_lista('tipos', lista_tipos, padroes)
+        #testar_lista('tipos', lista_tipos, padroes)
 
+
+        # Registramos as expressões regulares
+        # Para análise do código da disciplina
+        re_codigo_disc = re.compile('[A-Za-z]{1,2}\d{3}') # cód. disc.
+        # Para análise do período
+        re_periodo_ano_sem = re.compile('(\d{4})\D{1,3}(\d)') # ano semestre
+        re_periodo_sem_ano = re.compile('(\d)\D{1,3}(\d{4})') # semestre ano
+        re_periodo_ano_fer = re.compile('(\d{4})fer') # ano em per. de férias
+        re_periodo_ano = re.compile('(\d{4})') # ano com semestre desc.
+        periodo_1sem = Periodo.objects.get(nome='1º semestre')
+        periodo_2sem = Periodo.objects.get(nome='2º semestre')
+        periodo_fer = Periodo.objects.get(nome='Férias de verão')
+        # Para análise do tipo de prova
+        # Teremos listas de tuplas: lista de exp. reg., objeto de TipoAvaliacao e se possui res.
+        re_tipos = [
+            (
+                [
+                    # prova diurna com resolução
+                    re.compile('(p|P)(\d).*(d|D).*(res)'),
+                    re.compile('(p|P)(\d).*(d|D).*(sol)'),
+                    re.compile('(p|P)(\d).*(d|D).*(gab)'),
+                    re.compile('(p|P)(\d).*(res).*(d|D)'),
+                    re.compile('(p|P)(\d).*(sol).*(d|D)'),
+                    re.compile('(p|P)(\d).*(gab).*(d|D)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova diurna'),
+                2,
+                True
+            ),
+            (
+                [
+                    # prova diurna sem resolução
+                    re.compile('(p|P)(\d).*(d|D)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova diurna'),
+                2,
+                False
+            ),
+            (
+                [
+                    # prova noturna com resolução
+                    re.compile('(p|P)(\d).*(n|N).*(res)'),
+                    re.compile('(p|P)(\d).*(n|N).*(sol)'),
+                    re.compile('(p|P)(\d).*(n|N).*(gab)'),
+                    re.compile('(p|P)(\d).*(res).*(n|N)'),
+                    re.compile('(p|P)(\d).*(sol).*(n|N)'),
+                    re.compile('(p|P)(\d).*(gab).*(n|N)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova noturna'),
+                2,
+                True
+            ),
+            (
+                [
+                    # prova noturna sem resolução
+                    re.compile('(p|P)(\d).*(n|N)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova noturna'),
+                2,
+                False
+            ),
+            (
+                [
+                    # prova com resolução
+                    re.compile('(p|P)(\d).*(res)'),
+                    re.compile('(p|P)(\d).*(sol)'),
+                    re.compile('(p|P)(\d).*(gab)'),
+                    re.compile('(res).*(p|P)(\d)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova'),
+                2,
+                True
+            ),
+            (
+                [
+                    # prova sem resolução
+                    re.compile('(p|P)(\d)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova'),
+                2,
+                False
+            ),
+            (
+                [
+                    # prova sem resolução sem quantificador
+                    re.compile('(p|P)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova'),
+                None,
+                False
+            ),
+            (
+                [
+                    # prova substitutiva com resolução (nome implícito)
+                    re.compile('(sub).*(res)'),
+                    re.compile('(2c).*(res)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova substitutiva'),
+                None,
+                True
+            ),
+            (
+                [
+                    # prova substitutiva sem resolução
+                    re.compile('(p|P)(\d).*sub'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova substitutiva'),
+                2,
+                False
+            ),
+            (
+                [
+                    # prova substitutiva (nome implícito)
+                    re.compile('(sub).*'),
+                    re.compile('(2c).*'),
+                ],
+                TipoAvaliacao.objects.get(nome='Prova substitutiva'),
+                None,
+                False
+            ),
+            (
+                [
+                    # prova do semestre todo
+                    re.compile('(p|P)1.*p2.*ex'),
+                ],
+                TipoAvaliacao.objects.get(nome='Compilado de avaliações'),
+                None,
+                False
+            ),
+            (
+                [
+                    # lista com resolução
+                    re.compile('(l|L).*(\d).*(res)'),
+                    re.compile('(l|L).*(\d).*(gab)'),
+                    re.compile('(l|L).*(\d).*(sol)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Lista de exercícios'),
+                2,
+                True
+            ),
+            (
+                [
+                    # lista com resolução sem quantificador
+                    re.compile('(l|L).*(res)'),
+                    re.compile('(l|L).*(gab)'),
+                    re.compile('(l|L).*(sol)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Lista de exercícios'),
+                None,
+                True
+            ),
+            (
+                [
+                    # lista sem resolução
+                    re.compile('(l|L).*(\d)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Lista de exercícios'),
+                2,
+                False
+            ),
+            (
+                [
+                    # lista sem resolução sem quantificador
+                    re.compile('(l|L).*'),
+                ],
+                TipoAvaliacao.objects.get(nome='Lista de exercícios'),
+                None,
+                False
+            ),
+            (
+                [
+                    # exercício capítulo X com resolução
+                    re.compile('(ex).*(cap).*(\d).*(res)'),
+                    re.compile('(ex).*(cap).*(\d).*(gab)'),
+                    re.compile('(ex).*(cap).*(\d).*(sol)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Exercícios do capítulo'),
+                3,
+                True
+            ),
+            (
+                [
+                    # exercício capítulo X sem resolução
+                    re.compile('(ex).*(cap).*(\d)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Exercícios do capítulo'),
+                3,
+                False
+            ),
+            (
+                [
+                    # exercício com resolução
+                    re.compile('(ex).*(\d).*(res)'),
+                    re.compile('(ex).*(\d).*(gab)'),
+                    re.compile('(ex).*(\d).*(sol)'),
+                    # atividade com resolução
+                    re.compile('(at).*(\d).*(res)'),
+                    re.compile('(at).*(\d).*(re)'), # nome esquisito
+                ],
+                TipoAvaliacao.objects.get(nome='Exercício de avaliação'),
+                2,
+                True
+            ),
+            (
+                [
+                    # exercício sem resolução
+                    re.compile('(ex).*(\d)'),
+                    # atividade sem resolução
+                    re.compile('(at).*(\d)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Exercício de avaliação'),
+                2,
+                False
+            ),
+            (
+                [
+                    # exercício sem resolução e sem quantificador
+                    re.compile('(exe).*'),
+                ],
+                TipoAvaliacao.objects.get(nome='Exercício de avaliação'),
+                None,
+                False
+            ),
+            (
+                [
+                    # exame com resolução
+                    re.compile('(exa).*(res)'),
+                    re.compile('(exa).*(sol)'),
+                    re.compile('(exa).*(gab)'),
+                    # exame com resolução (nome ambíguo)
+                    re.compile('(ex).*(res)'),
+                    re.compile('(ex).*(gab)'),
+                    re.compile('(ex).*(sol)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Exame'),
+                None,
+                True
+            ),
+            (
+                [
+                    # exame sem resolução
+                    re.compile('(exa).*'),
+                    re.compile('(Exa).*'),
+                    # exame sem resolução (nome ambíguo)
+                    re.compile('(ex).*'),
+                    # exame diurno sem resolução
+                    re.compile('(exa).*(d|D)'),
+                    # exame noturno sem resolução
+                    re.compile('(exa).*(n|N)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Exame'),
+                None,
+                False
+            ),
+            (
+                [
+                    # teste com resolução
+                    re.compile('(t|T).*(\d).*(res)'),
+                    re.compile('(t|T).*(\d).*(sol)'),
+                    re.compile('(t|T).*(\d).*(gab)'),
+                    re.compile('(quiz).*(\d).*(res)'),
+                    re.compile('(quiz).*(\d).*(sol)'),
+                    re.compile('(quiz).*(\d).*(gab)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Testinho'),
+                2,
+                True
+            ),
+            (
+                [
+                    # teste sem resolução
+                    re.compile('(t|T).*(\d)'),
+                ],
+                TipoAvaliacao.objects.get(nome='Testinho'),
+                2,
+                False
+            ),
+            (
+                [
+                    # anotações de aula
+                    re.compile('(anot).*'),
+                ],
+                TipoAvaliacao.objects.get(nome='Anotações de aula'),
+                None,
+                False
+            ),
+        ]
+
+        """Função para avaliar se a string é permitida por alguma das várias expressões regulares."""
+        def valida_expressao(lista_expressoes, string):
+            # Conferimos se a string valida alguma expressão regular
+            for expressao in lista_expressoes:
+                match = expressao.match(string)
+                # Se validou essa expressão, retornamos True
+                if match is not None:
+                    return (True, match)
+            # Se não validou nenhuma, retornamos
+            return (False, None)
+
+        # Lista de provas que não passaram nos testes
+        provas_falhadas = []
 
         # Determinamos as características da prova
         for prova in provas_json:
 
-            # Pegamos todas as informações
-            codigo_string = form.cleaned_data['codigo_disciplina'].lower()
-            docente = form.cleaned_data['docente'].lower()
-            # Tipo de avaliação deve possuir uma opção chave para os formulários
-            # como "Não sei dizer ou não encontrei o tipo que procuro"
-            tipo_avaliacao = form.cleaned_data['tipo_avaliacao']
-            quantificador = form.cleaned_data['quantificador']
-            periodo = form.cleaned_data['periodo']
-            ano = form.cleaned_data['ano']
-            possui_resolucao = form.cleaned_data['possui_resolucao']
-            arquivo = form.cleaned_data['arquivo']
+            # Obtemos o código da disciplina
+            codigo_string = prova['codigo_disciplina'].lower().replace(' ', '')
+            # Conferimos se o código é válido
+            if re_codigo_disc.match(codigo_string) is None:
+                provas_falhadas.append(prova)
+                continue
+
+            # Obtemos o período de aplicação da prova
+            # OBS: .match().group(0) é a match inteira (trecho todo)
+            periodo_string = prova['periodo']
+            ano = None
+            periodo = None
+            # Tentamos com "ano semestre"
+            match_periodo = re_periodo_ano_sem.match(periodo_string)
+            if match_periodo is not None:
+                # Pegamos o primeiro ou segundo semestre
+                if int(match_periodo.group(2)) == 1:
+                    periodo = periodo_1sem
+                elif int(match_periodo.group(2)) == 2:
+                    periodo = periodo_2sem
+                elif int(match_periodo.group(2)) == 3: # caso especial para prova da marina de ME210
+                    periodo = periodo_2sem
+                else:
+                    provas_falhadas.append(prova)
+                    continue
+                # Pegamos o ano
+                ano = int(match_periodo.group(1))
+            # Tentamos com "semestre ano"
+            match_periodo = re_periodo_sem_ano.match(periodo_string)
+            if match_periodo is not None:
+                # Pegamos o primeiro ou segundo semestre
+                if int(match_periodo.group(1)) == 1:
+                    periodo = periodo_1sem
+                elif int(match_periodo.group(1)) == 2:
+                    periodo = periodo_2sem
+                else:
+                    provas_falhadas.append(prova)
+                    continue
+                # Pegamos o ano
+                ano = int(match_periodo.group(2))
+            # Tentamos com "ano férias"
+            match_periodo = re_periodo_ano_fer.match(periodo_string)
+            if match_periodo is not None:
+                # Pegamos o período de férias
+                periodo = periodo_fer
+                # Pegamos o ano
+                ano = int(match_periodo.group(1))
+            # Tentamos com "ano"
+            match_periodo = re_periodo_ano.match(periodo_string)
+            if match_periodo is not None:
+                # Pegamos o ano
+                ano = int(match_periodo.group(1))
+            # Conferimos range do ano caso existir (018 não vale)
+            if (ano is not None and ano not in range(1960, 2020)):
+                provas_falhadas.append(prova)
+                continue
+
+            # Obtemos o tipo de avaliação
+            tipo_avaliacao = None
+            quantificador = None
+            possui_resolucao = None
+            # Procuramos o tipo que se encaixa
+            for (exp_regs, tipo, indice_quantif, resolucao) in re_tipos:
+                match = None
+                # Procuramos em todas as expressões regulares
+                for exp_reg in exp_regs:
+                    match = exp_reg.match(prova['tipo_avaliacao'])
+                    if match is not None:
+                        break
+                    else:
+                        match = None
+                # Se encontramos algum, definimos parâmetros e paramos
+                if match is not None:
+                    tipo_avaliacao = tipo
+                    possui_resolucao = resolucao
+                    if indice_quantif is not None:
+                        quantificador = match.group(indice_quantif)
+                    break
+            # Conferimos se foi possível definir o tipo da prova
+            if tipo_avaliacao is None:
+                provas_falhadas.append(prova)
+                continue
+
+            # Obtemos o nome do docente
+            docente = prova['docente'].lower().replace(' ', '_').replace('-', '_')
+            if len(docente) == 0:
+                docente = None
+
+            # Obtemos o nome do arquivo
+            arquivo = prova['arquivo']
+
+            print('Docente:', '"{0}" -> "{1}"'.format(prova['docente'], docente if docente is not None else ''))
+            print('Códico disciplina:', '"{0}" -> "{1}"'.format(prova['codigo_disciplina'], codigo_string))
+            print('Período:', '"{0}" -> {1} - {2}'.format(prova['periodo'], ano, periodo))
+            print('Tipo:', '"{0}" -> {1} {2}, {3}'.format(prova['tipo_avaliacao'], tipo_avaliacao, quantificador, 'possui res.' if possui_resolucao else 'não possui res.'))
+            print('Arquivo:', arquivo)
+            print()
+
+        print()
+        print(len(provas_falhadas), 'provas falhadas:')
+        for prova in provas_falhadas:
+            print('\t', prova['arquivo'])
