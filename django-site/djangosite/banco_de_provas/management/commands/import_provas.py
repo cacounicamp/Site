@@ -1,6 +1,8 @@
-import uuid
 import re
+import os
+import uuid
 import json
+import shutil
 
 from banco_de_provas.models import *
 from django.core.management.base import BaseCommand
@@ -20,12 +22,17 @@ class Command(BaseCommand):
             'arquivo',
             help='Arquivo .JSON do banco de dados do site antigo'
         )
+        parser.add_argument(
+            'old_media_root',
+            help='Caminho até a pasta que contém "banco_de_prova/" do site antigo'
+        )
 
     #
     # Controlador do comando
     #
     def handle(self, *args, **options):
         nome_arquivo = options['arquivo']
+        old_media_root = options['old_media_root']
 
         # Abrimos o arquivo de importação
         with open(nome_arquivo, encoding='utf-8') as arquivo:
@@ -496,6 +503,8 @@ class Command(BaseCommand):
             else:
                 extensao_str = '.extensao_desconhecida'
             arquivo = settings.PROVAS_PATH + slugify('-'.join(atributos)) + extensao_str
+            # Copiamos o arquivo para o novo caminho
+            shutil.copy(os.path.join(old_media_root, prova['arquivo']), os.path.join(settings.MEDIA_ROOT, arquivo))
 
             # Agora inserimos a avaliação
             avaliacao = Avaliacao(
