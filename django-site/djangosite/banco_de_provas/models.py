@@ -94,7 +94,7 @@ class Disciplina(models.Model):
         disciplinas.delete()
 
         if settings.DEBUG:
-            print('Possívelmente excluímos algumas disciplinas não referenciadas.')
+            print('Possívelmente excluímos algumas disciplinas não referenciadas por códigos (disciplinas órfãs).')
 
         super().save(*args, **kwargs) # continuamos o save normal
 
@@ -139,7 +139,7 @@ class CodigoDisciplina(models.Model):
     class Meta:
         verbose_name = "código da disciplina"
         verbose_name_plural = "códigos de disciplinas"
-        ordering = ['disciplina__id', 'codigo']
+        ordering = ['codigo', 'disciplina__id']
 
 
 # Nome do arquivo da avaliação a ser salva

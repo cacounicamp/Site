@@ -47,6 +47,7 @@ class Membro(models.Model):
         return self.data_confirmacao is not None
 
     def membros_confirmados():
+        # Busca todos os membos cuja data de confirmação não é nula
         return Membro.objects.filter(data_confirmacao__isnull=False)
 
     def possui_token_ativo(self):

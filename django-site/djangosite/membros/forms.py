@@ -60,3 +60,7 @@ class FormularioDesvinculo(forms.Form):
 class FormularioConfirmarAcao(forms.Form):
     # Se o usuário confirmou a ação desejada
     acao_confirmada = forms.BooleanField(required=True, label='Confirmar ação', help_text='Se você leu, aceita o estatuto e deseja confirmar a ação do token enviado por e-mail.')
+
+
+class FormularioAdminResetar(forms.Form):
+    resetar = forms.BooleanField(required=True, label='Resetar lista', help_text='Se você quer mesmo resetar a lista de membros do centro acadêmico, marque essa caixa.')

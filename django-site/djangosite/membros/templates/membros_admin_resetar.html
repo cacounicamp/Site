@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<hr>
+<div>
+    <p>
+        Lembrem-se de que fazemos isso apenas para eliminar membros que não estão mais interessados em participar politicamente na computação.
+    </p>
+    <p>
+        Não devemos fazer esse reset (apesar de podermos) perto de assembleias e eleições, pois torna mais difícil sermos respeitados e termos nossas ações reconhecidas.
+    </p>
+</div>
+
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <button type="submit">Submeter</button>
+    </form>
+</div>
+{% endblock %}
