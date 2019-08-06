@@ -6,15 +6,6 @@
 
 {% block body %}
 
-{# Colocamos o conteúdo da página estática se houver #}
-{% if pagina %}
-<div class="row">
-    <div class="col">
-        {{pagina.conteudo|safe}}
-    </div>
-</div>
-{% endif %}
-
 {# Colocamos as mensagens, se houver #}
 {% if messages %}
 {% for message in messages %}
@@ -26,6 +17,15 @@
     </div>
 </div>
 {% endfor %}
+{% endif %}
+
+{# Colocamos o conteúdo da página estática se houver #}
+{% if pagina %}
+<div class="row">
+    <div class="col">
+        {{pagina.conteudo|safe}}
+    </div>
+</div>
 {% endif %}
 
 <div class="row">
