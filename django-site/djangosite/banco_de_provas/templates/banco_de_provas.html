@@ -54,72 +54,74 @@ Banco de provas {% if busca %}- "{{busca}}"{% endif %} | CACo
         <div class="row">
           <div class="col">
 
-            <table class="table shadow">
-              <caption>Avaliações encontradas para "{{busca}}" em ordem cronológica, da mais recente à mais antiga.</caption>
-              <thead class="thead-dark">
-                <tr>
-                  <th scope="col">Disciplina</th>
-                  <th scope="col">Tipo de avaliação</th>
-                  <th scope="col">Período e ano</th>
-                  <th scope="col">Docente</th>
-                  <th scope="col">Resolução</th>
-                  <th scope="col">Avaliação</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for avaliacao in avaliacoes %}
-                <tr>
+            <div class="table-responsive p-2">
+              <table class="table shadow">
+                <caption>Avaliações encontradas para "{{busca}}" em ordem cronológica, da mais recente à mais antiga.</caption>
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Disciplina</th>
+                    <th scope="col">Tipo de avaliação</th>
+                    <th scope="col">Período e ano</th>
+                    <th scope="col">Docente</th>
+                    <th scope="col">Resolução</th>
+                    <th scope="col">Avaliação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for avaliacao in avaliacoes %}
+                  <tr>
 
-                  {# NOME DISCIPLINA #}
-                  <th scole="row">{{avaliacao.disciplina.display|upper}}</th>
+                    {# NOME DISCIPLINA #}
+                    <th scole="row">{{avaliacao.disciplina.display|upper}}</th>
 
-                  {# TIPO DE AVALIAÇÃO #}
-                  <th>
-                    {{avaliacao.tipo_avaliacao}}
-                    {% if avaliacao.quantificador_avaliacao %}
-                    {{avaliacao.quantificador_avaliacao}}
-                    {% endif %}
-                  </th>
+                    {# TIPO DE AVALIAÇÃO #}
+                    <th>
+                      {{avaliacao.tipo_avaliacao}}
+                      {% if avaliacao.quantificador_avaliacao %}
+                      {{avaliacao.quantificador_avaliacao}}
+                      {% endif %}
+                    </th>
 
-                  {# PERÍODO E ANO #}
-                  <th>
-                    {% if avaliacao.periodo and avaliacao.ano %}
-                    {{avaliacao.periodo}} de {{avaliacao.ano}}
-                    {% elif avaliacao.periodo %}
-                    {{avaliacao.periodo}}
-                    {% elif avaliacao.ano %}
-                    {{avaliacao.ano}}
-                    {% else %}
-                    -
-                    {% endif %}
-                  </th>
+                    {# PERÍODO E ANO #}
+                    <th>
+                      {% if avaliacao.periodo and avaliacao.ano %}
+                      {{avaliacao.periodo}} de {{avaliacao.ano}}
+                      {% elif avaliacao.periodo %}
+                      {{avaliacao.periodo}}
+                      {% elif avaliacao.ano %}
+                      {{avaliacao.ano}}
+                      {% else %}
+                      -
+                      {% endif %}
+                    </th>
 
-                  {# Docente #}
-                  <th>
-                    {% if avaliacao.docente %}
-                    {{avaliacao.docente}}
-                    {% else %}
-                    -
-                    {% endif %}
-                  </th>
+                    {# Docente #}
+                    <th>
+                      {% if avaliacao.docente %}
+                      {{avaliacao.docente}}
+                      {% else %}
+                      -
+                      {% endif %}
+                    </th>
 
-                  {# Se possui resolução #}
-                  <th>
-                    {% if avaliacao.possui_resolucao %}
-                    <h5><span class="badge badge-pill badge-success">Sim</span></h5>
-                    {% else %}
-                    <h5><span class="badge badge-pill badge-danger">Não</span></h5>
-                    {% endif %}
-                  </th>
+                    {# Se possui resolução #}
+                    <th>
+                      {% if avaliacao.possui_resolucao %}
+                      <h5><span class="badge badge-pill badge-success">Sim</span></h5>
+                      {% else %}
+                      <h5><span class="badge badge-pill badge-danger">Não</span></h5>
+                      {% endif %}
+                    </th>
 
-                  <th>
-                    <a href="{{avaliacao.arquivo.url}}" target="_blank">Visualizar</a>
-                  </th>
+                    <th>
+                      <a href="{{avaliacao.arquivo.url}}" target="_blank">Visualizar</a>
+                    </th>
 
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
 
           </div>
         </div>

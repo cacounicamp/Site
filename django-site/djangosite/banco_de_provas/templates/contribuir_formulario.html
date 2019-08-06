@@ -73,40 +73,42 @@ Contribuir com o banco de provas | CACo
       {% endfor %}
       {% endif %}
 
-      <table class="table table-borderless">
-        <tbody>
-          {% for campo in form %}
-          <tr>
-            <td class="row">
-              <label for="{{campo.id_for_label}}">
+      <div class="table-responsive p-2">
+        <table class="table table-borderless">
+          <tbody>
+            {% for campo in form %}
+            <tr>
+              <td class="row">
+                <label for="{{campo.id_for_label}}">
 
-                {% if campo|field_obrigatorio %}
-                <b>
-                  {% endif %}
-                  {{campo.label}}
                   {% if campo|field_obrigatorio %}
-                </b>
-                {% endif %}
+                  <b>
+                    {% endif %}
+                    {{campo.label}}
+                    {% if campo|field_obrigatorio %}
+                  </b>
+                  {% endif %}
 
-                {% if campo.errors|length > 0 %}
-                <br>
-                {% for erro in campo.errors %}
-                <span class="badge badge-danger">{{erro}}</span><br>
-                {% endfor %}
-                {% endif %}
+                  {% if campo.errors|length > 0 %}
+                  <br>
+                  {% for erro in campo.errors %}
+                  <span class="badge badge-danger">{{erro}}</span><br>
+                  {% endfor %}
+                  {% endif %}
 
-              </label>
-            </td>
+                </label>
+              </td>
 
-            <td>
-              {{campo}}<br>
-              <p class="text-justify"><i><small>{{campo.help_text}}</small></i></p>
-            </td>
-          </tr>
+              <td>
+                {{campo}}<br>
+                <p class="text-justify"><i><small>{{campo.help_text}}</small></i></p>
+              </td>
+            </tr>
 
-          {% endfor %}
-        </tbody>
-      </table>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
       <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
 

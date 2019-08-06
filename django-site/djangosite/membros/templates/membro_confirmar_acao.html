@@ -39,9 +39,11 @@
     <div class="col">
         <form method="post" autocomplete="off">
             {% csrf_token %}
-            <table class="table table-borderless">
-                {{ form.as_table }}
-            </table>
+            <div class="table-responsive p-2">
+                <table class="table table-borderless">
+                    {{ form.as_table }}
+                </table>
+            </div>
             <button type="submit" class="btn btn-primary">Enviar!</button>
         </form>
     </div>
