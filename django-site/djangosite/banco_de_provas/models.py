@@ -214,7 +214,7 @@ class Avaliacao(models.Model):
     possui_resolucao = models.BooleanField(default=False, null=False, blank=False)
 
     # Arquivo associado à avaliação
-    arquivo = models.FileField(upload_to=determinar_nome_arquivo)
+    arquivo = models.FileField(max_length=settings.MAX_LENGTH_NOME_ARQUIVO, upload_to=determinar_nome_arquivo)
 
     # Se a avaliação está visível a tod*s
     visivel = models.BooleanField(default=False, null=False, blank=False)

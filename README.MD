@@ -191,16 +191,29 @@ próprio Django ineficientemente serve os arquivos.
 As páginas estáticas possuem o modelo `PaginaEstatica`, que é simplesmente uma
 página com conteúdo de texto e imagens, editável através do `CKEditor`,
 associado a um endereço que será servido se a opção `URL acessível` for `True`.
-Essa opção é para podermos fazer páginas que **não** são servidas mas são
-contidas em outras páginas (por exemplo, para customizar a página
-`contato/sucesso/` que aparece ao enviar um formulário de contato com sucesso,
-assim não temos que editar diretamente o HTML e de maneira que as pessoas não
-possam acessar o site `/contato/sucesso/`).
+Essa opção é para podermos fazer páginas que **não** são servidas em si mas são
+contidas em outras páginas. São elas:
+
+| Endereço | Qual a intenção da página (do meu ponto de vista) |
+|----------|---------------------------|
+| `atas/` | Explicar como funcionam as reuniões, assembleias e suas atas. |
+| `banco-de-provas/` | Falar um pouco de como isso auxilia os estudos e depende da boa vontade de todos. |
+| `banco-de-provas/contribuir/` | Explicar brevemente como preencher, talvez com uma imagem. |
+| `membros/vincular-se/` | Falar do por quê se vincular ao centro acadêmico. |
+| `membros/confirmar-token/` | Falar das consequências de se vincular, precisamos incentivar a presença das pessoas. |
+| `contato/` | Falar de como nos contatar, colocar referências para Facebook, dizer qual nosso e-mail e referênciar também a página de como participar. |
+| `contato/falha/` | Dizer para enviar um e-mail manualmente, nos avisar do erro e tentar outra rede social. **Essa customização substituirá a página padrão.** |
+| `contato/sucesso/` | Agradecer a mensagem, dizer que se não respondermos em algum tempo nos lembrar ou tentar outra rede social. **Essa customização substituirá a página padrão.** |
+| `representantes-discentes/` | Explicar como funciona a representação discente na Unicamp e o que o centro acadêmico faz sobre isso. |
+
+A intenção de cada página estática que complementa os programas é justamente
+explicar e incentivar participação. A minha visão em "intenção da página" pode
+não refletir a visão de alguma futura gestão e isso é ok. :)
 
 ###### Observação:
 
 Após a criação de uma página, é necessário reiniciar o servidor para que o novo
-endereço seja servido corretamente.
+endereço seja servido corretamente. (Essa informação pode estar desatualizada.)
 
 ##### `ouvidoria`
 

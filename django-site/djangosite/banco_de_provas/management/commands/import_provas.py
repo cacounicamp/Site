@@ -355,8 +355,8 @@ class Command(BaseCommand):
 
         # Lista de provas que não passaram nos testes
         provas_falhadas = []
-        # Lista de provas para inserir através de bulk_insert
-        aval_bulk_insert = []
+        # Lista de provas que inserimos
+        aval_inseridas = []
 
         # Determinamos as características da prova
         for prova in provas_json:
@@ -365,6 +365,10 @@ class Command(BaseCommand):
             codigo_string = prova['codigo_disciplina'].lower().replace(' ', '')
             # Conferimos se o código é válido
             if re_codigo_disc.match(codigo_string) is None:
+                provas_falhadas.append(prova)
+                continue
+            # Conferimos se o código cabe no banco de dados
+            if len(codigo_string) > settings.MAX_LENGTH_CODIGO_DISCIPLINA:
                 provas_falhadas.append(prova)
                 continue
 
@@ -452,6 +456,10 @@ class Command(BaseCommand):
                 # Para possivelmente identificar caractere inválido
                 print('Docente inválido: "{0}"'.format(docente))
                 docente = None
+            # Conferimos se o nome cabe no banco de dados
+            if (docente is not None and len(docente) > settings.MAX_LENGTH_DOCENTE):
+                provas_falhadas.append(prova)
+                continue
 
             # Salvamos o código da disciplina
             try:
@@ -497,14 +505,16 @@ class Command(BaseCommand):
             # Criamos um trecho aleatório
             atributos.append(str(uuid.uuid4()))
             # Pegamos a extensão do nome do arquivo
-            if len(prova['arquivo']) > 0:
-                split = prova['arquivo'].split('.')
+            split = prova['arquivo'].split('.')
+            if len(split) > 1:
                 extensao_str = '.' + split[len(split) - 1].replace(' ', '')
             else:
                 extensao_str = '.extensao_desconhecida'
             arquivo = settings.PROVAS_PATH + slugify('-'.join(atributos)) + extensao_str
-            # Copiamos o arquivo para o novo caminho
-            shutil.copy(os.path.join(old_media_root, prova['arquivo']), os.path.join(settings.MEDIA_ROOT, arquivo))
+            # Conferimos se o nome do arquivo cabe no banco de dados
+            if len(arquivo) > settings.MAX_LENGTH_NOME_ARQUIVO:
+                provas_falhadas.append(prova)
+                continue
 
             # Agora inserimos a avaliação
             avaliacao = Avaliacao(
@@ -518,14 +528,16 @@ class Command(BaseCommand):
                 arquivo=arquivo,
                 visivel=True
             )
-            aval_bulk_insert.append(avaliacao)
+            aval_inseridas.append(avaliacao)
 
             print('Docente:', '"{0}" -> "{1}"'.format(prova['docente'], docente if docente is not None else ''))
             print('Códico disciplina:', '"{0}" -> "{1}"'.format(prova['codigo_disciplina'], codigo_string))
             print('Período:', '"{0}" -> {1} - {2}'.format(prova['periodo'], ano, periodo))
             print('Tipo:', '"{0}" -> {1} {2}, {3}'.format(prova['tipo_avaliacao'], tipo_avaliacao, quantificador, 'possui res.' if possui_resolucao else 'não possui res.'))
             print('Arquivo:', '"{0}" -> "{1}"'.format(prova['arquivo'], arquivo))
-            #avaliacao.save()
+            avaliacao.save()
+            # Copiamos o arquivo para o novo caminho
+            shutil.copy(os.path.join(old_media_root, prova['arquivo']), os.path.join(settings.MEDIA_ROOT, arquivo))
             print()
 
         print()
@@ -534,6 +546,4 @@ class Command(BaseCommand):
             print('\t', prova['arquivo'])
         print()
 
-        print('Salvando', len(aval_bulk_insert), 'provas...')
-        Avaliacao.objects.bulk_create(aval_bulk_insert)
-        print('Pronto!')
+        print('Salvamos', len(aval_inseridas), 'provas')
