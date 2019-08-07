@@ -8,7 +8,7 @@
 
 {% block extrahead%}
 {% load static %}
-<script src="{% static "goback.js" %}" async></script>
+<script src="{% static "goback.js" %}"></script>
 {% endblock%}
 
 {% block body %}
@@ -37,7 +37,7 @@
         <small>Em <b>{{ata.data_criacao}}</b></small>
       </div>
       <div class="float-right">
-        <button title="Volta a página anterior" class="btn btn-sm btn-link" onClick="goBack()">Retornar às atas</button>
+        <button id="goback_button" title="Volta a página anterior" class="btn btn-sm btn-link">Retornar às atas</button>
       </div>
     </div>
   </div>
