@@ -5,11 +5,7 @@
 {% endblock %}
 
 {% block extrahead%}
-<script>
-  function goBack() {
-    window.history.back()
-  }
-</script>
+<script src="{% static "goback.js" %}" async></script>
 {% endblock%}
 
 {% block body %}
