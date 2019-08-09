@@ -168,6 +168,8 @@ MEDIA_URL = '/media/'
 CKEDITOR_UPLOAD_PATH = 'uploaded/'
 # Para onde as provas serão enviadas (dentro de MEDIA_ROOT)
 PROVAS_PATH = 'provas/'
+# Permissões dos arquivos enviados amigáveis ao nginx (para serem servidos)
+FILE_UPLOAD_PERMISSIONS = 0o644
 
 # Dados para captcha (página de contatos e membros)
 CAPTCHA_SITE_KEY = configuracao['CAPTCHA_SITE_KEY']
