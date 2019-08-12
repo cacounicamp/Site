@@ -1,26 +1,27 @@
 {
-  "name": "caco-site",
+  "name": "bootstrap-caco",
   "version": "0.0.1",
-  "description": "Modificações em Bootstrap para se adequar ao site do Centro Acadêmico da Computação da Unicamp",
-  "main": "src/app.js",
-  "private": true,
+  "description": "Projeto de customização de Bootstrap para o site do centro acadêmico da computação na Unicamp",
+  "main": "webpack.config.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "start": "webpack-dev-server --hot --inline"
   },
-  "author": "rafaelsartori96 <rafael.sartori96@gmail.com>",
-  "license": "UNLICENSED",
+  "author": "rafaelsartori96",
+  "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^9.6.1",
-    "css-loader": "^3.0.0",
-    "exports-loader": "^0.7.0",
-    "file-loader": "^4.0.0",
+    "css-loader": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
-    "precss": "^4.0.0",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
-    "webpack": "^4.35.2",
-    "webpack-cli": "^3.3.5"
+    "sass-loader": "^7.2.0",
+    "style-loader": "^1.0.0",
+    "terser-webpack-plugin": "^1.4.1",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
     "bootstrap": "^4.3.1",

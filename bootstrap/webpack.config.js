@@ -1,30 +1,43 @@
-const path = require('path');
+const path = require("path");
+
+// Para extrair CSS
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// Para minimizar output
+const TerserJSPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-    entry: './src/app.js',
-    mode: 'production',
-    target: "web",
+    entry: "./src/main.js",
+
+    mode: 'development',
+
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'build')
+        filename: "[name].js",
+        path: path.join(__dirname, "./build"),
     },
+
+    // optimization: {
+    //     minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+    // },
+
     module: {
         rules: [
             {
-                test: /\.(scss)$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
                     {
-                        // Adiciona tag <style> de CSS
-                        loader: 'style-loader'
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            hmr: process.env.NODE_ENV === 'development',
+                            reloadAll: process.env.NODE_ENV === 'development',
+                        },
                     },
+                    'css-loader',
+                    'sass-loader',
                     {
-                        // Para carregar CSS diretamente
-                        loader: 'css-loader'
-                    },
-                    {
-                        // Webpack processará CSS também
                         loader: 'postcss-loader',
                         options: {
+                            // pode ser exportado para postcss.config.js
                             plugins: function () {
                                 return [
                                     require('autoprefixer')
@@ -32,12 +45,17 @@ module.exports = {
                             }
                         }
                     },
-                    {
-                        // Carrega SASS (scss) para CSS
-                        loader: 'sass-loader'
-                    }
-                ]
-            }
-        ]
-    }
+                ],
+            },
+        ],
+      
+    },
+
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            ignoreOrder: false
+        }),
+    ],
+
 };
