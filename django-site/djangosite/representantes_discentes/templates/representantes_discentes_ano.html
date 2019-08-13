@@ -35,64 +35,60 @@ Representantes discentes de {{ano_atuacao}} | CACo
 <div class="row">
   <div class="col">
 
-    <div class="container">
+    {% for unidade, cargos_representantes in unidade_cargos_representantes.items %}
 
-      {% for unidade, cargos_representantes in unidade_cargos_representantes.items %}
+    <div class="row p-1">
+      <div class="col">
 
-      <div class="row p-3">
-        <div class="col">
+        <h4>{{unidade}}</h4>
 
-          <h4>{{unidade}}</h4>
-
-          <div class="table-responsive p-2">
-            <table class="table table-striped shadow">
-              <thead class="thead-dark">
-                <tr>
-                  <th scope="col"></th>
-                  <th scope="col">Representante discente</th>
-                  <th scope="col">Curso, ano de ingresso</th>
-                  <th scope="col">Exercício</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for cargo, representantes in cargos_representantes.items %}
-                <tr>
-                  <th scope="row">{{cargo.nome}}</th>
-                  <td>
-                    {% for representante in representantes %}
-                    <li>{{representante.nome}}</li>
-                    {% endfor %}
-                  </td>
-                  <td>
-                    {% for representante in representantes %}
-                    {% if representante.ano_ingresso %}
-                    {{representante.curso}}, {{representante.ano_ingresso}}<br>
-                    {% else %}
-                    {{representante.curso}}<br>
-                    {% endif %}
-                    {% endfor %}
-                  </td>
-                  <td>
-                    {% for representante in representantes %}
-                    {% if representante.titular %}
-                    Titular
-                    {% else %}
-                    Suplente
-                    {% endif %}<br>
-                    {% endfor %}
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-
+        <div class="table-responsive p-1">
+          <table class="table table-striped shadow">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Representante discente</th>
+                <th scope="col">Curso, ano de ingresso</th>
+                <th scope="col">Exercício</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cargo, representantes in cargos_representantes.items %}
+              <tr>
+                <th scope="row">{{cargo.nome}}</th>
+                <td>
+                  {% for representante in representantes %}
+                  <li>{{representante.nome}}</li>
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for representante in representantes %}
+                  {% if representante.ano_ingresso %}
+                  {{representante.curso}}, {{representante.ano_ingresso}}<br>
+                  {% else %}
+                  {{representante.curso}}<br>
+                  {% endif %}
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for representante in representantes %}
+                  {% if representante.titular %}
+                  Titular
+                  {% else %}
+                  Suplente
+                  {% endif %}<br>
+                  {% endfor %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
+
       </div>
-
-      {% endfor %}
-
     </div>
+
+    {% endfor %}
 
   </div>
 </div>

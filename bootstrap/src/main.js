@@ -1,8 +1,11 @@
-// Para JS
-import 'bootstrap';
+// Importamos Javascript de Bootstrap
 
-// Para CSS
+// Completo:
+// import 'bootstrap';
+// Parcial:
+import 'bootstrap/js/dist/collapse'
+import 'bootstrap/js/dist/dropdown'
+
+
+// Importamos nossas classes CSS para serem exportadas
 import './_main.scss';
-
-
-console.log('CACo custom javascript');

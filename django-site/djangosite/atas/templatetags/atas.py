@@ -50,15 +50,15 @@ def ultimas_atas():
     # Construímos a saída
     saida = """"""
     # Iniciamos uma linha
-    saida += """<div class="row">"""
-    # Iniciamos um container
-    saida += """<div class="container">"""
+    saida += """<div class="row">\n"""
+    # Iniciamos uma coluna
+    saida += """<div class="col">\n"""
 
     # Fazemos uma caixa em volta de tudo
-    saida += """<div class="alert alert-secondary rounded shadow-sm">"""
+    saida += """<div class="alert alert-secondary rounded shadow-sm">\n"""
     # Fazemos um header
-    saida += """<center><h5>Últimas atas</h5></center>"""
-    saida += """<hr>"""
+    saida += """<h5 class="text-center">Últimas atas</h5>\n"""
+    saida += """<hr>\n"""
     # Adicionamos apenas algumas atas
     num_atas = 0
 
@@ -67,37 +67,37 @@ def ultimas_atas():
         num_atas += 1
 
         # Abrimos a linha
-        saida += """<div class="row">"""
+        saida += """<div class="row">\n"""
         # Abrimos a coluna
-        saida += """<div class="col">"""
+        saida += """<div class="col">\n"""
         # Abrimos o alerta
-        saida += """<div class="alert alert-{0} shadow-sm" role="alert">""".format(cor_alert_ata(ata))
+        saida += """<div class="alert alert-{0} shadow-sm" role="alert">\n""".format(cor_alert_ata(ata))
         # Iniciamos o link
-        saida += """<a href="{0}" class="alert-link">""".format(ata.get_url())
+        saida += """<a href="{0}" class="alert-link">\n""".format(ata.get_url())
 
         # Adicionamos o nome da ata
-        saida += """<b>{0}</b>""".format(ata)
+        saida += """<b>{0}</b>\n""".format(ata)
 
         # Fechamos o link
-        saida += """</a>"""
+        saida += """</a>\n"""
         # Fechamos o alerta
-        saida += """</div>"""
+        saida += """</div>\n"""
         # Fechamos a coluna
-        saida += """</div>"""
+        saida += """</div>\n"""
         # Fechamos a linha
-        saida += """</div>"""
+        saida += """</div>\n"""
 
         # Paramos se já adicionamos atas suficientes
         if num_atas >= settings.ATAS_BARRA_LATERAL:
             break
 
     # Terminamos a caixa
-    saida += """</div>"""
+    saida += """</div>\n"""
 
-    # Terminamos o container
-    saida += """</div>"""
+    # Terminamos a coluna
+    saida += """</div>\n"""
     # Terminamos a linha
-    saida += """</div>"""
+    saida += """</div>\n"""
 
     # Imprimimos
     return saida

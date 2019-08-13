@@ -13,44 +13,38 @@ Representantes discentes | CACo
   </div>
 </div>
 
-<div class="row p-3">
+<div class="row">
   <div class="col">
 
     {% if pagina %}
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          {{pagina.conteudo|safe}}
-        </div>
+    <div class="row">
+      <div class="col">
+        {{pagina.conteudo|safe}}
       </div>
     </div>
     {% endif %}
 
-    <div class="container">
+    {# Por conta do .values() na QuerySet, temos que fazer essa arte #}
+    {% for dicionarios in objetos %}
+    {% with ano=dicionarios.ano_atuacao%}
 
-      {# Por conta do .values() na QuerySet, temos que fazer essa arte #}
-      {% for dicionarios in objetos %}
-      {% with ano=dicionarios.ano_atuacao%}
-
-      <div class="row p-2">
-        <div class="col">
-          <div class="alert alert-info rounded shadow-sm p-2" role="alert">
-            <h4 class="p-2 m-2"><a class="alert-link" href="{% url 'representantes-discentes/ano/' ano  %}">Representantes discentes de {{ano}}</a></h4>
-          </div>
+    <div class="row p-1">
+      <div class="col">
+        <div class="alert alert-info rounded shadow-sm p-1" role="alert">
+          <h4 class="p-1 m-2"><a class="alert-link" href="{% url 'representantes-discentes/ano/' ano  %}">Representantes discentes de {{ano}}</a></h4>
         </div>
       </div>
-
-      {% endwith %}
-      {% endfor %}
-
     </div>
+
+    {% endwith %}
+    {% endfor %}
 
   </div>
 </div>
 
 {# Próximas páginas/páginas anteriores #}
 {% if possui_mais_recente or possui_mais_antiga %}
-<div class="row rounded border shadow-sm">
+<div class="row rounded border shadow-sm mr-1 ml-1">
   {% if possui_mais_antiga %}
   <div class="col">
     <div class="float-left">

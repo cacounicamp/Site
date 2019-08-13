@@ -29,12 +29,12 @@ Contato | CACo
   </div>
 </div>
 
-<div class="row p-3">
+<div class="row">
   <div class="col-auto">
     <form method="post" autocomplete="off">
       {% csrf_token %}
 
-      <div class="table-responsive p-2">
+      <div class="table-responsive p-1">
         <table class="table table-borderless">
           {{ form.as_table }}
         </table>

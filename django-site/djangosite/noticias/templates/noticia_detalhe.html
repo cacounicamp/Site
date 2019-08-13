@@ -25,22 +25,20 @@
   </div>
 </div>
 
-<div class="container">
-  <div class="row rounded border shadow-sm">
-    <div class="col">
-      <div class="float-left">
-        <small>Notícia criada em <b>{{noticia.data_criacao}}</b></small>
-      </div>
-      <div class="float-right">
-        <button id="goback_button" title="Volta a página anterior" class="btn btn-sm btn-link">Retornar às notícias</button>
-      </div>
+<div class="row rounded border shadow-sm ml-1 mr-1">
+  <div class="col">
+    <div class="float-left">
+      <small>Notícia criada em <b>{{noticia.data_criacao}}</b></small>
+    </div>
+    <div class="float-right">
+      <button id="goback_button" title="Volta a página anterior" class="btn btn-sm btn-link">Retornar às notícias</button>
     </div>
   </div>
+</div>
 
-  <div class="row p-4">
-    <div class="col">
-      {{noticia.conteudo|safe}}
-    </div>
+<div class="row m-1 p-2">
+  <div class="col">
+    {{noticia.conteudo|safe}}
   </div>
 </div>
 

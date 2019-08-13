@@ -9,16 +9,16 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = {
     entry: "./src/main.js",
 
-    mode: 'development',
+    mode: 'production',
 
     output: {
         filename: "[name].js",
         path: path.join(__dirname, "./build"),
     },
 
-    // optimization: {
-    //     minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
-    // },
+    optimization: {
+        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+    },
 
     module: {
         rules: [
