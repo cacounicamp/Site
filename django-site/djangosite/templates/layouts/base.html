@@ -29,7 +29,7 @@
             Centro acadêmico da computação
           </a>
         </div>
-        
+
       </div>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          {% with url_pagina=request.resolver_match.url_name %}
+          {% with url_pagina=request.path %}
           {% load barra_navegacao %}
           {% autoescape off %}{% imprime_barra_navegacao url_pagina %}{% endautoescape %}
           {% endwith %}
@@ -88,17 +88,17 @@
         <div class="col-auto">
 
           <h6 class="text-center">
-              {% now "Y" as ano %}{% if ano == "2018" %}2018{% else %}2018-{{ano}}{% endif %} &mdash; <strong>Centro acadêmico da computação</strong> - CACo,<br>
+            {% now "Y" as ano %}{% if ano == "2018" %}2018{% else %}2018-{{ano}}{% endif %} &mdash; <strong>Centro acadêmico da computação</strong> - CACo,<br>
             cac<span style="display:none"></span>o@ic.unicamp.br<br>
             <small>
-                <a href="http://github.com/rafaelsartori96/CACo-site">Código fonte no GitHub</a>
+              <a href="http://github.com/rafaelsartori96/CACo-site">Código fonte no GitHub</a>
             </small>
           </h6>
 
         </div>
       </div>
     </div>
-      
+
   </footer>
 
 </body>

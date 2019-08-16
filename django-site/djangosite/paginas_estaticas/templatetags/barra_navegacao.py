@@ -10,10 +10,6 @@ register = template.Library()
 @register.simple_tag
 def imprime_barra_navegacao(url):
     resultado = ""
-    try:
-        url = reverse(url)
-    except NoReverseMatch:
-        url = ''
     itens = ItemMenu.objects.get_itens()
 
     for menu, lista_dropdowns in itens.items():
@@ -34,8 +30,8 @@ def imprime_barra_navegacao(url):
                         if dropdown.endereco is not None:
                             resultado += """<a class="dropdown-item" href="{1}">{0}</a>""".format(dropdown.nome, dropdown.endereco)
                         else:
-                            url_reverso = reverse(dropdown.pagina.endereco)
-                            resultado += """<a class="dropdown-item {2}" href="{1}">{0}</a>""".format(dropdown.nome, url_reverso, '' if url_reverso != url else 'active')
+                            endereco = dropdown.pagina.endereco
+                            resultado += """<a class="dropdown-item {2}" href="{1}">{0}</a>""".format(dropdown.nome, endereco, '' if endereco != url else 'active')
 
                 # Terminamos o dropdown
                 resultado += \
@@ -55,10 +51,11 @@ def imprime_barra_navegacao(url):
                       <a class="nav-link {2}" href="{1}">{0}</a>
                     </li>""".format(menu.nome, menu.endereco, '' if menu.endereco != url else 'active')
             else:
-                url_reverso = reverse(menu.pagina.endereco)
+                endereco = menu.pagina.endereco
+                print('endereço =', endereco, 'url =', url)
                 resultado += \
                     """<li class="nav-item">
                       <a class="nav-link {2}" href="{1}">{0}</a>
-                    </li>""".format(menu.nome, url_reverso, '' if url_reverso != url else 'active')
+                    </li>""".format(menu.nome, endereco, '' if endereco != url else 'active')
 
     return resultado
