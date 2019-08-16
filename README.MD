@@ -212,8 +212,11 @@ não refletir a visão de alguma futura gestão e isso é ok. :)
 
 ###### Observação:
 
-Após a criação de uma página, é necessário reiniciar o servidor para que o novo
-endereço seja servido corretamente. (Essa informação pode estar desatualizada.)
+As páginas são encontradas apenas após tentar todas as URLs do site através de
+Django. Ou seja, ao encontramos uma resposta de erro 404 que irá ao usuário,
+avaliamos se ela poderia ser substituída por uma página válida. Isso é uma
+solução estranha, mas é a melhor maneira de servir páginas estáticas de forma
+dinâmica e sem causar problemas com as __urlpatterns__ de Django.
 
 ##### `ouvidoria`
 

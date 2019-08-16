@@ -28,7 +28,6 @@ urlpatterns = [
     path('404/', handle404),
     path('500/', handle500),
     path('', include('ouvidoria.urls')),
-    path('', include('paginas_estaticas.urls')),
     path('', include('noticias.urls')), # Notícias possuirá a raiz do site
     path('', include('atas.urls')),
     path('', include('gestoes.urls')),

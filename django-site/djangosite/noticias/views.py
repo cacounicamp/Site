@@ -3,10 +3,11 @@ from django.urls import reverse
 from django.conf import settings
 from django.http import Http404
 from django.utils.text import slugify
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from util import util
 from .models import Noticia
+from paginas_estaticas.models import PaginaEstatica
 
 
 def NoticiaDetalheView(request, identificador, titulo=None):
@@ -45,4 +46,11 @@ def NoticiasView(request, pagina=1):
 # Caso especial para a primeira página do site: menos notícias, aparecem por
 # completo
 def NoticiasRaizView(request, pagina=1):
-    return util.pegar_pagina(request, filtrar_noticias_visiveis(), 'noticias_raiz.html', settings.NOTICIAS_POR_PAGINA_RAIZ, pagina)
+    try:
+        # Tentamos pegar a página estática com endereço '/' que esteja ativa
+        pagina = PaginaEstatica.objects.get(endereco='/', url_ativa=True)
+        # se encontramos, servimos
+        return render(request, 'padrao.html', context={'pagina': pagina})
+    except (ObjectDoesNotExist, MultipleObjectsReturned) as e:
+        # se não encontramos, servimos a primeira página de notícias
+        return util.pegar_pagina(request, filtrar_noticias_visiveis(), 'noticias_raiz.html', settings.NOTICIAS_POR_PAGINA_RAIZ, pagina)

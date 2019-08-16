@@ -5,11 +5,23 @@ from django.contrib import admin
 from django.utils.translation import gettext
 
 from .models import *
-# Para recarregarmos as urls quando um novo site for adicionado
-from . import urls
 # Para editor de content da página
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
+
+def append_slash():
+    return settings.APPEND_SLASH and \
+    'django.middleware.common.CommonMiddleware' in settings.MIDDLEWARE
+
+def help_text():
+    exemplos = ['/sobre/contato', '/this-is_sparta']
+    # Colocamos trailing slash
+    if append_slash():
+        exemplos = ['{0}/'.format(exemplo) for exemplo in exemplos]
+    # Colocamos aspas
+    exemplos = ['"{0}"'.format(exemplo) for exemplo in exemplos]
+    # Fazemos o texto final
+    return 'Exemplo: {0}'.format(', '.join(exemplos))
 
 # Colocamos o editor no formulário de administrador
 # Cópia de https://github.com/django/django/blob/master/django/contrib/flatpages/forms.py
@@ -18,10 +30,11 @@ class FormPaginaEstatica(forms.ModelForm):
     endereco = forms.RegexField(
         label="URL",
         max_length=200,
-        regex=r'^(\/)|([_\-\w][_\-\/\w]*\/)$',
-        help_text="Exemplo: 'sobre/contato/', '/', 'this-is_sparta/'.",
+        regex=r'(\/)|(\/[\/_\-\w]*\/)' if append_slash() \
+                else r'(\/)|(\/[\/_\-\w]*[_\-\w])',
+        help_text=help_text,
         error_messages={
-            "invalid": "Pode conter apenas letras, números, underlines e traços. Não deve iniciar com barra, mas deve possuir uma no fim.",
+            "invalid": "Pode conter apenas letras, números, underlines e traços. Deve possuir barra inicial.",
         },
     )
 
@@ -36,10 +49,7 @@ class FormPaginaEstatica(forms.ModelForm):
         endereco = self.cleaned_data['endereco']
 
         # Conferimos se a '/' final é obrigatória
-        if (settings.APPEND_SLASH and
-                'django.middleware.common.CommonMiddleware' in settings.MIDDLEWARE and
-                not endereco.endswith('/')):
-
+        if (append_slash() and not endereco.endswith('/')):
             # Se for e ela não está no endereço, retornamos erro
             raise forms.ValidationError(
                 gettext("URL is missing a trailing slash."),
@@ -66,11 +76,6 @@ class AdminPaginaEstatica(admin.ModelAdmin):
     list_display = ('endereco', 'titulo', 'url_ativa')
     search_fields = ('endereco', 'titulo', 'url_ativa')
     fields = ('endereco', 'titulo', 'url_ativa', 'conteudo')
-
-    # Quando salvamos um modelo, recarregamos as URLs
-    def save_model(self, request, obj, form, change):
-        super(AdminPaginaEstatica, self).save_model(request, obj, form, change)
-        urls.recarregar_urls()
 
 
 # Registramos nossos modelos

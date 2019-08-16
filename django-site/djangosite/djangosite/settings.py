@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
 
     # Nossos aplicativos
-    'paginas_estaticas',
+    'paginas_estaticas', # requer nosso middleware
     'ouvidoria',
     'noticias',
     'atas',
@@ -73,6 +73,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # Nossos middleware
+    'middleware.FallbackViewMiddleware.FallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'djangosite.urls'
@@ -287,4 +290,3 @@ if not os.path.exists(STATIC_DEBUG_ROOT):
 # Abrimos o arquivo e escrevemos o conteúdo
 with open(contribuir_js_path, 'w') as contribuir_js_arq:
     contribuir_js_arq.write(contribuir_js_conteudo)
-
