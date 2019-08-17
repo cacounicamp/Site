@@ -52,3 +52,19 @@ def pegar_pagina(request, objects, pagina_html, itens_por_pagina, pagina_atual, 
     context['objetos'] = objetos
 
     return render(request, pagina_html, context=context)
+
+
+def pagseguro_api_url(api_request):
+    return '{0}{1}?email={2}&token={3}'.format(
+        settings.PAGSEGURO_API_URL,
+        api_request,
+        settings.PAGSEGURO_EMAIL,
+        settings.PAGSEGURO_TOKEN
+    )
+
+
+def pagseguro_url(api_request):
+    return '{0}{1}'.format(
+        settings.PAGSEGURO_URL,
+        api_request
+    )

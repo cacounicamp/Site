@@ -107,7 +107,7 @@ modelo:
 {
     "SECRET_KEY": "",
 
-    "DEBUG": true,
+    "DEBUG": false,
     "ALLOWED_HOSTS": [
         "*"
     ],
@@ -127,6 +127,11 @@ modelo:
     "EMAIL_CONTATO_DESTINATARIO": [
         "caco@ic.unicamp.br"
     ],
+
+    "PAGSEGURO_API_URL": "https://ws.pagseguro.uol.com.br/",
+    "PAGSEGURO_URL": "https://pagseguro.uol.com.br/",
+    "PAGSEGURO_EMAIL": "",
+    "PAGSEGURO_TOKEN": "",
 
     "DATABASES": {
         "default": {
@@ -153,6 +158,8 @@ O significado de cada opção constam nessa tabela:
 | `EMAIL_CONTATO_REMETENTE` | Define qual será o remetente do e-mail que será enviado à lista `EMAIL_CONTATO_DESTINATARIO` |
 | `EMAIL_CONTATO_DISPLAY` | Define qual e-mail (único) da gestão que aparecerá na página de contato em caso de falhas no site ou no ReCaptcha |
 | `EMAIL_*` | Configurações de e-mail para utilizarmos na página de contato principalmente |
+| `PAGSEGURO*_URL` | [URL da API e do PagSeguro](https://dev.pagseguro.uol.com.br/reference#ambiente-de-testes), podemos mudar facilmente para o _sandbox_ (teste) ou real |
+| `PAGSEGURO_*` | Credenciais do PagSeguro para fazer compras utilizando sua API |
 | `DATABASES` | Configuração para acessar o banco de dados, como [visto aqui](https://docs.djangoproject.com/en/dev/ref/settings/#databases), recomendamos utilizar um _socket_: basta colocar o caminho até o _socket_ (padrão em PostgreSQL é `/var/run/postgresql/`) em "`HOST`" |
 
 Para explicar melhor as diferentes configurações de `EMAIL_CONTATO_*`, vamos
@@ -205,6 +212,7 @@ contidas em outras páginas. São elas:
 | `/contato/falha/` | Dizer para enviar um e-mail manualmente, nos avisar do erro e tentar outra rede social. **Essa customização substituirá a página padrão.** |
 | `/contato/sucesso/` | Agradecer a mensagem, dizer que se não respondermos em algum tempo nos lembrar ou tentar outra rede social. **Essa customização substituirá a página padrão.** |
 | `/representantes-discentes/` | Explicar como funciona a representação discente na Unicamp e o que o centro acadêmico faz sobre isso. |
+| `/laricaco/` | Explicar como funciona a compra online no sistema do LariCACo. |
 
 A intenção de cada página estática que complementa os programas é justamente
 explicar e incentivar participação. A minha visão em "intenção da página" pode
@@ -217,6 +225,18 @@ Django. Ou seja, ao encontramos uma resposta de erro 404 que irá ao usuário,
 avaliamos se ela poderia ser substituída por uma página válida. Isso é uma
 solução estranha, mas é a melhor maneira de servir páginas estáticas de forma
 dinâmica e sem causar problemas com as __urlpatterns__ de Django.
+
+##### `laricaco`
+
+_App_ que controla compras que serão feitas através do site do PagSeguro para
+contabilizar crédito no serviço oferecido pelo centro acadêmico. A referência da
+API pode ser encontrada [aqui](https://dev.pagseguro.uol.com.br/reference).
+
+Abrimos um formulário ao usuário que possui apenas um atributo: quanto quer de
+crédito, num limite configurável em `settings.py`. Ao receber a resposta,
+adicionamos as taxas necessárias (arredondadas para cima, pois o PagSeguro
+arredonda nosso ganho para baixo) e enviamos ao usuário o link para finalizar
+a compra no site deles (não no nosso).
 
 ##### `ouvidoria`
 

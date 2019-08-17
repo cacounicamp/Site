@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'representantes_discentes',
     'membros',
     'banco_de_provas',
+    'laricaco',
 ]
 
 MIDDLEWARE = [
@@ -195,6 +196,19 @@ EMAIL_CONTATO_DISPLAY = configuracao['EMAIL_CONTATO_DISPLAY']
 # Definimos o formato do assunto do e-mail
 EMAIL_ASSUNTO_BASE = """[CACo] {assunto}"""
 
+# Configurações do PagSeguro (para aplicativo 'laricaco')
+PAGSEGURO_URL = configuracao['PAGSEGURO_URL']
+if not PAGSEGURO_URL.endswith('/'):
+    PAGSEGURO_URL = '{0}/'.format(PAGSEGURO_URL)
+    print('Confira a configuração da URL do PagSeguro! Deve possuir "/" final. Corrigi para:', PAGSEGURO_URL)
+PAGSEGURO_API_URL = configuracao['PAGSEGURO_API_URL']
+if not PAGSEGURO_API_URL.endswith('/'):
+    PAGSEGURO_API_URL = '{0}/'.format(PAGSEGURO_API_URL)
+    print('Confira a configuração da URL da API do PagSeguro! Deve possuir "/" final. Corrigi para:', PAGSEGURO_API_URL)
+# Credenciais para API -> utilizados em util.util
+PAGSEGURO_EMAIL = configuracao['PAGSEGURO_EMAIL']
+PAGSEGURO_TOKEN = configuracao['PAGSEGURO_TOKEN']
+
 
 #
 # PARAMETRIZAÇÃO DA EXIBIÇÃO DO SITE
@@ -212,6 +226,12 @@ ATAS_ASSEMBLEIA_POR_PAGINA = 7
 
 # Gestões por página no site
 GESTOES_POR_PAGINA = 10
+
+# Valor máximo no LariCACo permitido por compra
+LARICACO_MAX_VALOR = 75             # limite superior mais que razoável
+LARICACO_MIN_VALOR = 1              # limite inferior do PagSeguro a vista
+LARICACO_TAXA_PORCENTAGEM = 0.037   # não em %, em decimal, arredonde pra cima
+LARICACO_TAXA_CONSTANTE = 0.40
 
 # Anos de representantes discentes no site
 REPRESENTANTES_DISCENTES_ANOS_POR_PAGINA = 10

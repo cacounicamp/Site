@@ -1,0 +1,61 @@
+{% extends "layouts/base.html" %}
+
+{% block titulopagina %}
+LariCACo | CACo
+{% endblock %}
+
+{% block extrahead %}
+<script src='https://www.google.com/recaptcha/api.js?render={{captcha_site_key}}'></script>
+{% endblock %}
+
+{% block body %}
+
+{# Colocamos as mensagens, se houver #}
+{% if messages %}
+{% for message in messages %}
+<div class="row p-2">
+    <div class="col">
+        <div class="shadow-sm rounded alert {% if message.extra_tags %} alert-{{message.extra_tags}}{% endif %}">
+            <h6 class="m-2"><b>{{message}}</b></h6>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+{# Colocamos o conteúdo da página estática se houver #}
+{% if pagina %}
+{{pagina.conteudo|safe}}
+{% endif %}
+
+{# Colocamos o formulário do LariCACo #}
+<div class="row">
+    <div class="col">
+        <h2>Quanto irá creditar?</h2>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-auto">
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+
+            <div class="table-responsive p-1">
+                <table class="table table-borderless">
+                    {{ form.as_table }}
+                </table>
+            </div>
+
+            <input name="g-recaptcha-response" id="g-recaptcha-response" type="hidden">
+
+            {# Esse arquivo é criado em djangosite/settings.py (configuração do projeto Django) #}
+            {% load static %}
+            <script src="{% static 'chave_recaptcha.js' %}"></script>
+
+            <button type="submit" class="btn btn-primary">Concluir com PagSeguro</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
