@@ -230,7 +230,7 @@ GESTOES_POR_PAGINA = 10
 # Valor máximo no LariCACo permitido por compra
 LARICACO_MAX_VALOR = 75             # limite superior mais que razoável
 LARICACO_MIN_VALOR = 1              # limite inferior do PagSeguro a vista
-LARICACO_TAXA_PORCENTAGEM = 0.041   # não em %, em decimal, arredonde pra cima
+LARICACO_TAXA_PORCENTAGEM = 0.057   # não em %, em decimal, arredonde pra cima
 LARICACO_TAXA_CONSTANTE = 0.40
 
 # Anos de representantes discentes no site
