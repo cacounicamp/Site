@@ -52,7 +52,6 @@ def imprime_barra_navegacao(url):
                     </li>""".format(menu.nome, menu.endereco, '' if menu.endereco != url else 'active')
             else:
                 endereco = menu.pagina.endereco
-                print('endereço =', endereco, 'url =', url)
                 resultado += \
                     """<li class="nav-item">
                       <a class="nav-link {2}" href="{1}">{0}</a>
