@@ -58,7 +58,7 @@ Centro acadêmico da computação
 def BancoDeProvasView(request):
     try:
         # Tentamos conseguir a página estática do banco de provas
-        pagina = PaginaEstatica.objects.get(endereco='banco-de-provas/')
+        pagina = PaginaEstatica.objects.get(endereco='/banco-de-provas/')
     except ObjectDoesNotExist:
         pagina = None
 
@@ -104,7 +104,7 @@ def SubmeterProvaView(request):
 
     try:
         # Tentamos conseguir a página estática para contribuições
-        pagina = PaginaEstatica.objects.get(endereco='banco-de-provas/contribuir/')
+        pagina = PaginaEstatica.objects.get(endereco='/banco-de-provas/contribuir/')
     except ObjectDoesNotExist:
         pagina = None
 

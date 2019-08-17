@@ -45,7 +45,7 @@ Centro acadêmico da computação
 def MembrosView(request):
     try:
         # Tentamos conseguir a página estática de membros para vincularem-se
-        pagina = PaginaEstatica.objects.get(endereco='membros/vincular-se/')
+        pagina = PaginaEstatica.objects.get(endereco='/membros/vincular-se/')
     except ObjectDoesNotExist:
         pagina = None
 
@@ -134,7 +134,7 @@ def MembroConfirmarAcaoView(request, token):
 
         try:
             # Tentamos conseguir a página estática de membros para vincularem-se
-            pagina = PaginaEstatica.objects.get(endereco='membros/confirmar-token/')
+            pagina = PaginaEstatica.objects.get(endereco='/membros/confirmar-token/')
         except ObjectDoesNotExist:
             pagina = None
 
@@ -185,7 +185,7 @@ def MembroVincularView(request):
 
             try:
                 # Tentamos conseguir a página estática de membros para vincularem-se
-                pagina = PaginaEstatica.objects.get(endereco='membros/vincular-se/')
+                pagina = PaginaEstatica.objects.get(endereco='/membros/vincular-se/')
             except ObjectDoesNotExist:
                 pagina = None
 
@@ -314,7 +314,7 @@ def MembroVincularView(request):
 
         try:
             # Tentamos conseguir a página estática de membros para vincularem-se
-            pagina = PaginaEstatica.objects.get(endereco='membros/vincular-se/')
+            pagina = PaginaEstatica.objects.get(endereco='/membros/vincular-se/')
         except ObjectDoesNotExist:
             pagina = None
 
@@ -444,7 +444,7 @@ def MembroDesvincularView(request):
         try:
             # Tentamos conseguir a página estática de membros para vincularem-se
             pagina = PaginaEstatica.objects.get(
-                endereco='membros/desvincular-se/'
+                endereco='/membros/desvincular-se/'
             )
         except ObjectDoesNotExist:
             pagina = None

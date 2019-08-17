@@ -196,15 +196,15 @@ contidas em outras páginas. São elas:
 
 | Endereço | Qual a intenção da página (do meu ponto de vista) |
 |----------|---------------------------|
-| `atas/` | Explicar como funcionam as reuniões, assembleias e suas atas. |
-| `banco-de-provas/` | Falar um pouco de como isso auxilia os estudos e depende da boa vontade de todos. |
-| `banco-de-provas/contribuir/` | Explicar brevemente como preencher, talvez com uma imagem. |
-| `membros/vincular-se/` | Falar do por quê se vincular ao centro acadêmico. |
-| `membros/confirmar-token/` | Falar das consequências de se vincular, precisamos incentivar a presença das pessoas. |
-| `contato/` | Falar de como nos contatar, colocar referências para Facebook, dizer qual nosso e-mail e referênciar também a página de como participar. |
-| `contato/falha/` | Dizer para enviar um e-mail manualmente, nos avisar do erro e tentar outra rede social. **Essa customização substituirá a página padrão.** |
-| `contato/sucesso/` | Agradecer a mensagem, dizer que se não respondermos em algum tempo nos lembrar ou tentar outra rede social. **Essa customização substituirá a página padrão.** |
-| `representantes-discentes/` | Explicar como funciona a representação discente na Unicamp e o que o centro acadêmico faz sobre isso. |
+| `/atas/` | Explicar como funcionam as reuniões, assembleias e suas atas. |
+| `/banco-de-provas/` | Falar um pouco de como isso auxilia os estudos e depende da boa vontade de todos. |
+| `/banco-de-provas/contribuir/` | Explicar brevemente como preencher, talvez com uma imagem. |
+| `/membros/vincular-se/` | Falar do por quê se vincular ao centro acadêmico. |
+| `/membros/confirmar-token/` | Falar das consequências de se vincular, precisamos incentivar a presença das pessoas. |
+| `/contato/` | Falar de como nos contatar, colocar referências para Facebook, dizer qual nosso e-mail e referênciar também a página de como participar. |
+| `/contato/falha/` | Dizer para enviar um e-mail manualmente, nos avisar do erro e tentar outra rede social. **Essa customização substituirá a página padrão.** |
+| `/contato/sucesso/` | Agradecer a mensagem, dizer que se não respondermos em algum tempo nos lembrar ou tentar outra rede social. **Essa customização substituirá a página padrão.** |
+| `/representantes-discentes/` | Explicar como funciona a representação discente na Unicamp e o que o centro acadêmico faz sobre isso. |
 
 A intenção de cada página estática que complementa os programas é justamente
 explicar e incentivar participação. A minha visão em "intenção da página" pode

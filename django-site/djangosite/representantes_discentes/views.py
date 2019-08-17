@@ -11,7 +11,7 @@ from paginas_estaticas.models import PaginaEstatica
 def RepresentantesDiscentesPagina(request, pagina=1):
     try:
         # Tentamos conseguir a página estática
-        pagina_estatica = PaginaEstatica.objects.get(endereco='representantes-discentes/')
+        pagina_estatica = PaginaEstatica.objects.get(endereco='/representantes-discentes/')
     except ObjectDoesNotExist:
         pagina_estatica = None
 

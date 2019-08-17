@@ -84,7 +84,7 @@ def ContatoView(request):
 
         # Tentamos conseguir a página estática de contato
         try:
-            pagina = PaginaEstatica.objects.get(endereco='contato/')
+            pagina = PaginaEstatica.objects.get(endereco='/contato/')
         except ObjectDoesNotExist:
             pagina = None
 
@@ -103,7 +103,7 @@ def ContatoView(request):
 def redirect_falha(request):
     # Tentamos conseguir a página estática de contato
     try:
-        pagina = PaginaEstatica.objects.get(endereco='contato/falha/')
+        pagina = PaginaEstatica.objects.get(endereco='/contato/falha/')
     except ObjectDoesNotExist:
         pagina = None
 
@@ -117,7 +117,7 @@ def redirect_falha(request):
 def redirect_sucesso(request):
     # Tentamos conseguir a página estática de contato
     try:
-        pagina = PaginaEstatica.objects.get(endereco='contato/sucesso/')
+        pagina = PaginaEstatica.objects.get(endereco='/contato/sucesso/')
     except ObjectDoesNotExist:
         pagina = None
 

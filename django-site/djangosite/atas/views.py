@@ -22,7 +22,7 @@ def AtasView(request):
 
     # Pegamos a página atas/participe/
     try:
-        participe = PaginaEstatica.objects.get(endereco='atas/')
+        participe = PaginaEstatica.objects.get(endereco='/atas/')
     except ObjectDoesNotExist:
         participe = None
 
