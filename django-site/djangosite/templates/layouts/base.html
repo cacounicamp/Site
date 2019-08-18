@@ -10,11 +10,11 @@
   </title>
 
   {% load static %}
-  <script src="{% static 'main.js' %}"></script>
   <link rel="stylesheet" href="{% static 'main.css' %}">
   <link rel="shortcut icon" type="image/ico" href="{% static "favicon.ico" %}">
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i" rel="stylesheet">
   {% block extrahead %}{% endblock %}
+  <script src="{% static 'main.js' %}" async></script>
 </head>
 
 <body class="body-bg">
