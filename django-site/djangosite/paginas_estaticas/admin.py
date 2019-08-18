@@ -78,9 +78,15 @@ class AdminPaginaEstatica(admin.ModelAdmin):
     fields = ('endereco', 'titulo', 'url_ativa', 'conteudo')
 
 
+# Administrador para item comum do menu (ordering)
+class AdminItemMenu(admin.ModelAdmin):
+    list_display = ('nome', 'dropdown', 'indice')
+    ordering = ('dropdown', 'indice')
+
+
 # Registramos nossos modelos
 admin.site.register(MenuDropdown)
-admin.site.register(ItemMenu)
+admin.site.register(ItemMenu, AdminItemMenu)
 
 # Registramos o administrador para PaginaEstatica
 admin.site.register(PaginaEstatica, AdminPaginaEstatica)

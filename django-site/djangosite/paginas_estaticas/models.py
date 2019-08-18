@@ -69,7 +69,7 @@ class ItemMenuAbstrato(models.Model):
     desativado = models.BooleanField(default=False)
 
     def __str__(self):
-        return '"{}" (id={})'.format(self.nome, self.id)
+        return '"{}" (indice={})'.format(self.nome, self.indice)
 
     class Meta:
         abstract = True
@@ -100,7 +100,14 @@ class ItemMenu(ItemMenuAbstrato):
             raise ValidationError('O item ou deve possuir um endereço ou deve '
                                   'possuir uma página associada.')
 
+    def __str__(self):
+        return '"{}" (dropdown={}, indice={})'.format(
+            self.nome,
+            'null' if self.dropdown is None else '"{}"'.format(self.dropdown.nome),
+            self.indice
+        )
+
     class Meta:
         verbose_name = "item comum do menu"
         verbose_name_plural = "itens comuns do menu"
-        ordering = ['indice']
+        ordering = ['dropdown', 'indice']
