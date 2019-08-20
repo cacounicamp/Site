@@ -19,10 +19,8 @@
     <div class="row">
       <div class="col">
         <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
-          <p>
-            <h5><a href="{{ata.get_url}}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5>
-          </p>
-          <p><i>{{ata.highlights}}</i></p>
+          <h5><a href="{{ata.get_url}}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5>
+          <i>{{ata.highlights}}</i>
         </div>
       </div>
     </div>

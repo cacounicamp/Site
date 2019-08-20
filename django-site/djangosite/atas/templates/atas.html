@@ -38,18 +38,16 @@ Atas | CACo
     <div class="row">
       <div class="col">
 
-      {% for ata in atas_reunioes %}
-      <div class="row">
-        <div class="col">
-          <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
-            <p>
+        {% for ata in atas_reunioes %}
+        <div class="row">
+          <div class="col">
+            <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
               <h5><a href="{{ata.get_url}}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5>
-            </p>
-            <p><i>{{ata.highlights}}</i></p>
+              <i>{{ata.highlights}}</i>
+            </div>
           </div>
         </div>
-      </div>
-      {% endfor %}
+        {% endfor %}
 
       </div>
     </div>
@@ -80,10 +78,8 @@ Atas | CACo
         <div class="row">
           <div class="col">
             <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
-              <p>
-                <h5><a href="{{ata.get_url}}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5>
-              </p>
-              <p><i>{{ata.highlights}}</i></p>
+              <h5><a href="{{ata.get_url}}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5>
+              <i>{{ata.highlights}}</i>
             </div>
           </div>
         </div>
