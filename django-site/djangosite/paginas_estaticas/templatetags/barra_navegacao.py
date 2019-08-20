@@ -26,12 +26,15 @@ def imprime_barra_navegacao(url):
                           <div class="dropdown-menu" aria-labelledby="navbarDropdown">""".format(menu.nome)
 
                 for dropdown in lista_dropdowns:
+                    # Não mostramos itens desativados neste caso (não fica bonito)
                     if not dropdown.desativado:
+                        # Determinamos o endereço do item dropdown
                         if dropdown.endereco is not None:
-                            resultado += """<a class="dropdown-item" href="{1}">{0}</a>""".format(dropdown.nome, dropdown.endereco)
+                            endereco = dropdown.endereco
                         else:
                             endereco = dropdown.pagina.endereco
-                            resultado += """<a class="dropdown-item {2}" href="{1}">{0}</a>""".format(dropdown.nome, endereco, '' if endereco != url else 'active')
+                        # Imprimimos o item
+                        resultado += """<a class="dropdown-item {2}" href="{1}">{0}</a>""".format(dropdown.nome, endereco, '' if endereco != url else 'active')
 
                 # Terminamos o dropdown
                 resultado += \
@@ -40,18 +43,19 @@ def imprime_barra_navegacao(url):
 
         # Menus que não são dropdown
         else:
+            # Se está desativado, desativamos mas ainda mostramos
             if menu.desativado:
                 resultado += \
                     """<li class="nav-item">
                       <a class="nav-link disabled">{0}</a>
                     </li>""".format(menu.nome)
-            elif menu.endereco is not None:
-                resultado += \
-                    """<li class="nav-item">
-                      <a class="nav-link {2}" href="{1}">{0}</a>
-                    </li>""".format(menu.nome, menu.endereco, '' if menu.endereco != url else 'active')
             else:
-                endereco = menu.pagina.endereco
+                # Como item de dropdown, determinamos o endereço
+                if menu.endereco is not None:
+                    endereco = menu.endereco
+                else:
+                    endereco = menu.pagina.endereco
+                # Adicionamos o item conferindo endereço
                 resultado += \
                     """<li class="nav-item">
                       <a class="nav-link {2}" href="{1}">{0}</a>
