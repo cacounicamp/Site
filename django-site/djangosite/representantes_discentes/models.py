@@ -54,7 +54,7 @@ class RepresentanteDiscente(models.Model):
     )
 
     def __str__(self):
-        return '{rd.nome} ({rd.curso}{ano_ingresso}): {titularidade} em {rd.ano_atuacao} de {rd.comissao}'.format(rd=self, titularidade='titular' if self.titular else 'suplente', ano_ingresso=str(self.ano_ingresso) + ' ' if self.ano_ingresso else '')
+        return '{rd.nome} ({rd.curso}{ano_ingresso}): {titularidade} em {rd.ano_atuacao} de {rd.comissao}'.format(rd=self, titularidade='titular' if self.titular else 'suplente', ano_ingresso=str(self.ano_ingresso) if self.ano_ingresso else '')
 
     class Meta:
         verbose_name = "representante discente"
