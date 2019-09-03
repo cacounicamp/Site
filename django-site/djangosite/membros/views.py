@@ -400,6 +400,10 @@ def MembroDesvincularView(request):
 
             # Tentamos enviar o e-mail de confirmação
             try:
+                            
+                recipient_list = settings.EMAIL_CONTATO_DESTINATARIO.copy()
+                recipient_list.append(membro.email_institucional)
+                
                 send_mail(
                     subject=settings.EMAIL_ASSUNTO_BASE.format(
                         assunto='DESASSOCIAR-SE do centro acadêmico da computação'
@@ -409,7 +413,7 @@ def MembroDesvincularView(request):
                         url_token=request.build_absolute_uri(reverse('membro/token/', args=[membro.token_uuid]))
                     ),
                     from_email=settings.EMAIL_CONTATO_REMETENTE,
-                    recipient_list=[membro.email_institucional, settings.EMAIL_CONTATO_DESTINATARIO]
+                    recipient_list=recipient_list
                 )
             except SMTPException:
                 # Cancelamos a criação do token
