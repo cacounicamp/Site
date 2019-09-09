@@ -50,7 +50,7 @@ def MembrosView(request):
         pagina = None
 
     # Pegamos os membros
-    membros = Membro.objects.exclude(data_confirmacao__isnull=True).all()
+    membros = Membro.membros_confirmados().all()
 
     # Servimos a página
     context = {
