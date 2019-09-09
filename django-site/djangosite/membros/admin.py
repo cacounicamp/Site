@@ -5,7 +5,6 @@ from django.shortcuts import redirect
 from django.urls import path, reverse
 from django.contrib import admin, messages
 from django.template.response import TemplateResponse
-from django.contrib.auth.decorators import permission_required
 
 from .models import Membro
 from .forms import FormularioAdminResetar
@@ -23,12 +22,11 @@ class MembroAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         # Adicionamos nossa URL
         customizacoes = [
-            path('resetar-lista/', self.ResetView),
-            path('lista-de-membros.csv', self.ListaMembrosCSVView),
+            path('resetar-lista/', self.admin_site.admin_view(self.ResetView)),
+            path('lista-de-membros.csv', self.admin_site.admin_view(self.ListaMembrosCSVView)),
         ]
         return customizacoes + urls
 
-    @permission_required('resetar_lista')
     def ResetView(self, request):
         if request.method == 'POST':
             form = FormularioAdminResetar(request.POST)
@@ -59,7 +57,6 @@ class MembroAdmin(admin.ModelAdmin):
             # Produzimos a página
             return TemplateResponse(request, "membros_admin_resetar.html", context)
 
-    @permission_required('ver_lista')
     def ListaMembrosCSVView(self, request):
         # Pegamos todos os membros confirmados
         membros = Membro.membros_confirmados().all()
@@ -70,7 +67,7 @@ class MembroAdmin(admin.ModelAdmin):
 
         # Fazemos um CSV com todos os valores
         csv_membros = csv.writer(resposta)
-        csv_membros.write_row([
+        csv_membros.writerow([
             'nome',
             'registro_academico',
             'email_institucional',
@@ -81,7 +78,7 @@ class MembroAdmin(admin.ModelAdmin):
         ])
         # Para cada membro...
         for membro in membros:
-            csv_membros.write_row([
+            csv_membros.writerow([
                 membro.nome,
                 membro.registro_academico,
                 membro.email_institucional,
