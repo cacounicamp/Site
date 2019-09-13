@@ -1,3 +1,5 @@
+import re
+
 from django.http import Http404
 from django.urls import reverse
 from django.conf import settings
@@ -55,6 +57,10 @@ Centro acadêmico da computação
 """
 
 
+re_codigo_disc = re.compile('[a-z]{1,2}\d{3}')
+re_ano = re.compile('\d{4}')
+
+
 def BancoDeProvasView(request):
     try:
         # Tentamos conseguir a página estática do banco de provas
@@ -68,23 +74,72 @@ def BancoDeProvasView(request):
     if busca is None:
         avaliacoes = None
     else:
-        # Buscamos todos os códigos de disciplinas
-        disciplinas = []
-        codigos = CodigoDisciplina.objects.filter(codigo__icontains=busca).all()
-        for codigo in codigos:
-            # Colocamos na lista de disciplinas apenas as que foram aprovadas
-            # e não automaticamente criadas
-            if codigo.disciplina.autorizada:
-                disciplinas.append(codigo.disciplina)
+        # Iniciamos a query
+        query_final = Q()
+        busca = busca.lower()
 
-        # Buscamos as avaliações com qualquer combinação desses dados
+        # Iniciamos listas
+        unmatched = []
+        matches_codigos = []
+        anos_matched = []
+
+        # Separamos a busca em palavras
+        for palavra in busca.replace(',', ' ').split():
+            matched = False
+
+            # Verificamos se há um código de disciplina
+            match_codigo = re_codigo_disc.match(palavra)
+            if match_codigo is not None:
+                matches_codigos.append(match_codigo)
+                matched = True
+
+            # Verificamos se há anos
+            match_ano = re_ano.match(palavra)
+            if match_ano is not None:
+                # Transformamos em inteiro
+                anos_matched.append(int(match_ano.group(0)))
+                matched = True
+
+            # Conferimos se não houve matches (professores, tipo de prova)
+            if not matched:
+                unmatched.append(palavra)
+
+        # Criamos lista vazia de disciplinas
+        disciplinas = []
+        # Buscamos todos os códigos de disciplinas
+        for match_codigo in matches_codigos:
+            # Buscamos a match como código
+            codigos = CodigoDisciplina.objects.filter(codigo__iexact=match_codigo.group(0)).all()
+
+            # Para cada código, adicionamos a lista se aprovada
+            for codigo in codigos:
+                # Conferimos se é aprovada e adicionamos à lista
+                if codigo.disciplina.autorizada:
+                    disciplinas.append(codigo.disciplina)
+
+        # Buscamos as avaliações com essas disciplinas
+        if len(disciplinas) > 0:
+            query_final = Q(disciplina__in=disciplinas) & query_final
+
+        # Procuramos pelo ano
+        if len(anos_matched) > 0:
+            query_final = Q(ano__in=anos_matched) & query_final
+
+        # Buscamos professores e tipos de avaliação
+        query_unmatched = Q()
+        for palavra in unmatched:
+            # Pesquisamos em cada categoria com OR
+            query_unmatched = Q(tipo_avaliacao__nome__icontains=palavra) | \
+                Q(docente__icontains=palavra) | \
+                Q(periodo__nome__icontains=palavra) | \
+                query_unmatched
+
+        # Colocamos na query com AND
+        query_final = query_unmatched & query_final
+
+        # Buscamos as avaliações finalmente
         avaliacoes = Avaliacao.objects.filter(
-            Q(disciplina__in=disciplinas) | \
-            Q(docente__icontains=busca) | \
-            Q(tipo_avaliacao__nome__icontains=busca) | \
-            Q(quantificador_avaliacao__icontains=busca) | \
-            Q(periodo__nome__icontains=busca) | \
-            Q(ano__icontains=busca),
+            query_final,
             # Filtramos as avaliações visíveis
             visivel=True,
             disciplina__autorizada=True
