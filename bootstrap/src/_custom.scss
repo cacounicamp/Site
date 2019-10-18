@@ -3,6 +3,12 @@
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/mixins";
 
+// Sobreescrevemos fonte
+
+* {
+    font-family: 'Ubuntu', sans-serif;
+}
+
 // Adicionamos cores específicas
 
 .bg-light-2 {
@@ -54,3 +60,4 @@
         padding: 0px;
     }
 }
+
