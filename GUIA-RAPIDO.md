@@ -14,7 +14,7 @@ repositório, em Ubuntu:
 $ apt update
 $ apt upgrade
 $ apt install git python3-pip postgresql postgresql-contrib npm nginx certbot python3-certbot-nginx libmysqlclient-dev
-$ pip3 install pipenv
+$ pip3 install virtualenv
 $ git clone https://github.com/rafaelsartori96/CACo-site.git
 ```
 
@@ -120,50 +120,40 @@ Configuramos agora o site utilizando um [_virtual
 environment_](https://docs.python.org/3/tutorial/venv.html) (instala pacotes de
 Python sem que interfira com o resto do sistema, permitindo estabilidade pois
 escolhemos quando queremos atualizar um sistema em produção independente dos
-pacotes do sistema operacional). Faremos isso através de pipenv, uma
+pacotes do sistema operacional). Faremos isso através de `virtualenv`, uma
 ferramenta que torna mais agradável trabalhar com _virtual environments_.
 
 Para utilizarmos depois o _virtual environment_ em produção, temos que instalar
-o pipenv no local do projeto. Então precisamos definir a
-_environment variable_ de configuração do pipenv, basta colocar em
-`~/.bashrc` a linha:
-```
-export PIPENV_VENV_IN_PROJECT=1
-```
-e depois recarregar a configuração do bash:
-```
-$ source ~/.bashrc
-```
+o virtualenv num local bem definido do projeto (para configurarmos uwsgi
+futuramente).
 
 Entramos na pasta raiz do projeto Django (a partir da pasta raiz do projeto):
 ```
 $ cd django-site/
 ```
 
-Criamos um _virtual environment_ instalando todos os pacotes do projeto
-(descritos nos arquivos `Pipfile`, que contém os pacotes do projeto, e
-`Pipfile.lock`, que contém o estado atual dos pacotes do projeto):
+Criamos um _virtual environment_ e instalamos todos os pacotes do projeto
+(descritos no arquivo `requirements.txt`, que contém os pacotes do projeto e
+suas versões):
 ```
-# Para produção, é importante continuar as versões testadas
-$ pipenv install --keep-outdated
-```
-
-Ativamos o _virtual environment_ através do pipenv:
-```
-$ pipenv shell
-# Note que à esquerda aparece o nome do virtual environment
-(django-site) $
+# criamos o virtual environment com nome '.venv' (pode ser qualquer nome)
+$ virtualenv .venv
+# ativamos ele
+$ source .venv/bin/activate
+# Para produção, é importante continuar as versões testadas (sem atualizá-las)
+# Note que o nome do virtual environment aparece à esquerda
+(.venv) $ pip install --requirement requirements.txt
 ```
 
 Entramos no projeto Django (a partir da pasta raiz do projeto Django):
 ```
-(django-site) $ cd djangosite/
+(.venv) $ cd djangosite/
 ```
 
 Editamos o arquivo `config.json` como diz
-[README.MD](README.MD#arquivo-de-configuração):
+[README.md](README.md#arquivo-de-configuração):
 ```
-(django-site) $ EDITOR_PREFERIDO config.json
+(.venv) $ EDITOR_PREFERIDO config.json
 # Configuramos o necessário
 ```
 
@@ -181,27 +171,27 @@ o trecho de configuração.
 
 Voltando à pasta Django, preparamos a estrutura do banco de dados:
 ```
-(django-site) $ python manage.py makemigrations
+(.venv) $ python manage.py makemigrations
 ```
 
 Colocamos a estrutura no banco de dados:
 ```
-(django-site) $ python manage.py migrate
+(.venv) $ python manage.py migrate
 ```
 
 Criamos um super usuário (administrador do site):
 ```
-(django-site) $ python manage.py createsuperuser
+(.venv) $ python manage.py createsuperuser
 ```
 
 Copiamos arquivos estáticos para serem servidos:
 ```
-(django-site) $ python manage.py collectstatic
+(.venv) $ python manage.py collectstatic
 ```
 
 Executamos o servidor para desenvolvimento e testes no IP e porta que quisermos:
 ```
-(django-site) $ python manage.py runserver ip:porta
+(.venv) $ python manage.py runserver ip:porta
 ```
 
 No nosso navegador, acessamos o site com o final do endereço `/admin` para
@@ -211,8 +201,8 @@ página estática com endereço `/` (chamada de _root_ ou raiz).
 
 Após concluído, fechamos o servidor e o banco de dados utilizando `Ctrl + C`.
 Para sair do _virtual environment_, utilize o comando `exit` ou utilize o atalho
-`Ctrl + D` (isso não fechará o terminal, pois o pipenv abre uma sessão ao ser
-ativado).
+`Ctrl + D` (isso não fechará o terminal, pois o _virtual environment_ abre uma
+sessão ao ser ativado).
 
 
 ## Para produção
@@ -227,7 +217,7 @@ Para iniciar o servidor utilizando uwsgi (para ser passado pelo nginx),
 utilizamos no _virtual environment_:
 
 ```
-(django-site) $ uwsgi --ini uwsgi.ini
+(.venv) $ uwsgi --ini uwsgi.ini
 (uwsgi criará o socket ou servirá TCP para o nginx que ainda será configurado)
 ```
 
@@ -304,13 +294,16 @@ $ openssl dhparam -out /etc/nginx/dhparam.pem 2048
 ### Django e _virtual environment_
 
 Para verificar o que está desatualizado no _virtual environment_ e atualizar, é
-necessário estar na pasta que contém o `Pipfile` e executar:
+necessário estar na pasta que contém o `requirements.txt` e executar, com o
+_environment_ ativado:
 
 ```
-# Verificar desatualizado:
-$ pipenv update --outdated
-# Atualizar:
-$ pipenv update
+# Reinstalamos com upgrade
+(.venv) $ pip install -U -r requirements.txt
+# Checamos dependências
+(.venv) $ pip check
+# Se tudo foi testado e funciona, atualizamos requirements.txt
+(.venv) $ pip freeze > requirements.txt
 ```
 
 ### Bootstrap

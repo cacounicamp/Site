@@ -17,7 +17,7 @@ site é reescrito.
 
 ## Guia rápido de instalação
 
-O guia rápido pode ser encontrado [aqui](GUIA-RAPIDO.MD), utilizando
+O guia rápido pode ser encontrado [aqui](GUIA-RAPIDO.md), utilizando
 [Ubuntu](https://ubuntu.com) para configuração.
 
 No entanto, para **desenvolvimento** e **configuração**, é necessário entender
