@@ -1,3 +1,16 @@
+# Repositório inativo
+
+Não manterei mais o servidor e o site. Deixo a responsabilidade que tomei à
+atual gestão do CACo. Fiz o que acho que é justo de tentar guiar e muito
+bem documentar todo o projeto para fácil manutenção e adição de recursos.
+Sintam-se livres para clonar o repositório na organização do GitHub
+cacounicamp ou, se quiserem, fazer um novo site.
+
+Espero que as próximas gestões cuidem melhor do patrimônio do CACo, de seus
+próprios membros e ex-membros e da documentação dos atos do CACo. Não destruindo
+a vontade de participação através da manipulação e pressa. Afinal, havia espaço
+para todas e todos, mas a vontade do poder falou mais alto.
+
 # CACo-site
 
 Este é um repositório da segunda versão para o site do CACo. O motivo de existir
