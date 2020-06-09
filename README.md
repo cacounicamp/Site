@@ -1,17 +1,9 @@
-# Repositório inativo
-
-Não manterei mais o servidor e o site. Deixo a responsabilidade que tomei à
-atual gestão do CACo. Fiz o que acho que é justo de tentar guiar e muito
-bem documentar todo o projeto para fácil manutenção e adição de recursos.
-Sintam-se livres para clonar o repositório na organização do GitHub
-cacounicamp ou, se quiserem, fazer um novo site.
-
-Espero que as próximas gestões cuidem melhor do patrimônio do CACo, de seus
-próprios membros e ex-membros e da documentação dos atos do CACo. Não destruindo
-a vontade de participação através da manipulação e pressa. Afinal, havia espaço
-para todas e todos, mas a vontade do poder falou mais alto.
-
 # CACo-site
+A manutenção é responsabilidade das gestões vigentes (a qualquer tempo), mas todas/os podem contribuir! O CACo é o Centro Acadêmico da Computação da Unicamp, entidade representativa que defende o interesse coletivo das/os estudantes dos cursos de Ciência e Engenharia da Computação.
+
+Organizado, codificado e comentado até o commit 250 pelo [rafaelsartori96](https://github.com/rafaelsartori96), a quem agradecemos pela enorme dedicação e sempre tivemos muito apreço.
+
+# Motivação
 
 Este é um repositório da segunda versão para o site do CACo. O motivo de existir
 uma segunda versão é, além de querer aprender a utilizar servidores web e a
