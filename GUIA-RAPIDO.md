@@ -13,7 +13,10 @@ repositório, em Ubuntu:
 ```
 $ apt update
 $ apt upgrade
-$ apt install git python3-pip postgresql postgresql-contrib npm nginx certbot python3-certbot-nginx libmysqlclient-dev
+$ apt install git python3-pip postgresql postgresql-contrib nginx certbot python3-certbot-nginx libmysqlclient-dev
+$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+$ nvm install 14.17.6
+$ nvm use 14.17.6
 $ pip3 install virtualenv
 $ git clone https://github.com/rafaelsartori96/CACo-site.git
 ```
@@ -264,7 +267,7 @@ $ EDITOR_PREFERIDO /etc/nginx/nginx.conf
 É necessário configurar `nginx.conf` para o caminho do _socket_ configurado em
 uwsgi e para o caminho das pastas `static/` e `media/`. Então podemos utilizar
 o editor para substituir o texto `/caminho/para/projeto/django` pelo caminho
-real do projeto em todo o arquivo.
+real até o arquivo `django_caco-uwsgi.socket` (incluindo o nome do arquivo) que foi criado ao executar o uwsgi anteriormente.
 
 Conferimos se está tudo certo e recarregamos a configuração:
 ```
