@@ -55,7 +55,7 @@ def ultimas_atas():
     saida += """<div class="col">\n"""
 
     # Fazemos uma caixa em volta de tudo
-    saida += """<div class="alert alert-secondary rounded shadow-sm">\n"""
+    saida += """<div class="alert">\n"""
     # Fazemos um header
     saida += """<h5 class="text-center">Últimas atas</h5>\n"""
     saida += """<hr>\n"""
@@ -71,7 +71,7 @@ def ultimas_atas():
         # Abrimos a coluna
         saida += """<div class="col">\n"""
         # Abrimos o alerta
-        saida += """<div class="alert alert-{0} shadow-sm" role="alert">\n""".format(cor_alert_ata(ata))
+        saida += """<div class="alert alert-{0} shadow-sm border-0" role="alert">\n""".format(cor_alert_ata(ata))
         # Iniciamos o link
         saida += """<a href="{0}" class="alert-link">\n""".format(ata.get_url())
 

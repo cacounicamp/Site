@@ -3,6 +3,9 @@
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/mixins";
 
+// Opcional para utilizar spacing api
+@import "node_modules/bootstrap/scss/utilities/api";
+
 // Sobreescrevemos fonte
 
 * {
@@ -43,6 +46,7 @@
 .navbar-footer-color {
     background-color: #dddedc;
 }
+
 
 // Fazemos um padding condicional a telas grandes
 .p-sm {

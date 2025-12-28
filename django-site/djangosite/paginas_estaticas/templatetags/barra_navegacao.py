@@ -22,7 +22,7 @@ def imprime_barra_navegacao(url):
             else:
                 resultado += \
                     """<li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{0}</a>
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{0}</a>
                           <div class="dropdown-menu" aria-labelledby="navbarDropdown">""".format(menu.nome)
 
                 for dropdown in lista_dropdowns:

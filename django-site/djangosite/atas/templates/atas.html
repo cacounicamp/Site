@@ -41,7 +41,7 @@ Atas | CACo
         {% for ata in atas_reunioes %}
         <div class="row">
           <div class="col">
-            <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
+            <div class="alert alert-{% cor_alert_ata ata %} shadow-sm border-0" role="alert">
               <h5><a href="{{ata.get_url}}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5>
               <i>{{ata.highlights}}</i>
             </div>
@@ -52,7 +52,7 @@ Atas | CACo
       </div>
     </div>
 
-    <div class="row rounded border shadow-sm ml-1 mr-1">
+    <div class="row rounded border shadow-sm ms-1 me-1">
       <div class="col">
         <div class="float-right">
           <a class="btn btn-sm btn-link" href="{% url 'atas/reunioes/' %}" role="button">Ver mais atas de reuniões...</a>
@@ -77,7 +77,7 @@ Atas | CACo
         {% for ata in atas_assembleias %}
         <div class="row">
           <div class="col">
-            <div class="alert alert-{% cor_alert_ata ata %} shadow-sm" role="alert">
+            <div class="alert alert-{% cor_alert_ata ata %} shadow-sm border-0" role="alert">
               <h5><a href="{{ata.get_url}}" class="alert-link">{% imprime_tipo_ata ata %} <small>{{ata.data_criacao}}</small></a></h5>
               <i>{{ata.highlights}}</i>
             </div>
@@ -88,7 +88,7 @@ Atas | CACo
       </div>
     </div>
 
-    <div class="row rounded border shadow-sm ml-1 mr-1">
+    <div class="row rounded border shadow-sm ms-1 me-1">
       <div class="col">
         <div class="float-right">
           <a class="btn btn-sm btn-link" href="{% url 'atas/assembleias/' %}" role="button">Ver mais atas de assembleias...</a>

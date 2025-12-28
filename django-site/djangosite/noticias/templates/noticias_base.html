@@ -9,8 +9,9 @@
 {% for noticia in objetos %}
 <div class="row">
   <div class="col">
-    <div class="alert alert-secondary shadow-sm" role="alert">
-      <h4><a href="{% url 'noticia/' noticia.pk noticia.titulo|slugify %}">{{noticia.titulo}}</a></h4>
+      <div class="p-3 mb-3 bg-white rounded shadow-sm border-0">
+      <!--<div class="p-3 alert alert-secondary shadow-sm border-0">-->
+      <h4><a class="link-underline link-underline-opacity-0 link-underline-opacity-100-hover"href="{% url 'noticia/' noticia.pk noticia.titulo|slugify %}">{{noticia.titulo}}</a></h4>
       <hr>
       <p><small>Em <b>{{noticia.data_criacao}}</b></small></p>
       {{noticia.resumo}}

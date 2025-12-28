@@ -1,4 +1,4 @@
-<!doctype html>
+<!doctype html
 <html lang="pt-br">
 
 <head>
@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, user-scalable=no">
   <meta name="description" content="Centro Academico da Computação - Unicamp">
   <title>
-    {% block titulopagina %}CACo - Centro acadêmico da computação{% endblock %}
+    {% block titulopagina %}CACo - Centro Acadêmico da Computação{% endblock %}
   </title>
 
   {% load static %}
@@ -20,24 +20,23 @@
 <body class="body-bg">
 
   <header>
-    <nav class="shadow-lg navbar navbar-color navbar-expand-lg navbar-dark d-print-none">
-      <div class="media">
-
+    <nav class="shadow-sm navbar navbar-color navbar-expand-lg navbar-dark d-print-none">
+      <div class="ps-3 media">
         <div class="media-body">
           <a class="navbar-brand font-weight-bold d-flex align-items-center" href="/">
-            <img src="{% static "favicon.svg" %}" width="30" class="align-self-center mr-2" alt="Logotipo do centro acadêmico">
-            Centro acadêmico da computação
+            <img src="{% static "favicon.svg" %}" width="30" class="align-self-center me-2" alt="Logotipo do centro acadêmico">
+            Centro Acadêmico da Computação
           </a>
         </div>
 
       </div>
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav me-auto">
           {% with url_pagina=request.path %}
           {% load barra_navegacao %}
           {% autoescape off %}{% imprime_barra_navegacao url_pagina %}{% endautoescape %}
@@ -52,25 +51,25 @@
     <div class="row p-sm">
 
       <div class="col-md-8 p-2 mt-1 mb-1">
-        <div class="p-3 shadow rounded bg-light-2">
+        <div class="p-3 shadow-sm rounded bg-light-2">
           {% block body %}{% endblock %}
         </div>
       </div>
 
       <div class="col-md-4 p-2 mt-1 mb-1 d-print-none">
-        <div class="p-3 shadow rounded bg-light-2 d-print-none">
+        <div class="p-3 shadow-sm rounded bg-light-2 d-print-none">
 
           {% load atas %}
           {% autoescape off %}{% ultimas_atas %}{% endautoescape %}
 
           <div class="row">
             <div class="col">
-              <div class="alert alert-secondary shadow-sm">
+              <div class="alert">
                 <h5 class="text-center">Agenda do CACo</h5>
                 <hr>
                 <div class="embed-responsive rounded" style="height: 400px;">
-                  <iframe src="https://calendar.google.com/calendar/b/1/embed?height=600&amp;wkst=1&amp;bgcolor=%23e2e3e5&amp;ctz=America%2FSao_Paulo&amp;src=bHZlaGhkdGhldWd0bXEwcnBmcnJpOTZmczBAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&amp;src=cHQtYnIuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%23e2e3e5&amp;color=%23e2e3e5&amp;showTitle=0&amp;showNav=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;mode=AGENDA&amp;showTz=0&amp;showCalendars=0"></iframe>
-                </div>
+		<iframe src="https://calendar.google.com/calendar/embed?height=NaN&wkst=1&ctz=America%2FSao_Paulo&showPrint=0&showTitle=0&showNav=0&showDate=0&showTabs=0&showCalendars=0&showTz=0&mode=AGENDA&src=Y2Fjby5nZXN0YW9AZ21haWwuY29t&src=NTdiOGRlNjEwMjI1ZmQ3ODI1YjU0YjAyZjI4ZDgyODA3NWFiOWRlMjFhNzdkOWY1M2I2Yzk2MGE0NmZkNWJiYkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=cHQtYnIuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&color=%23cc00cc&color=%23009688&color=%230B8043" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+		</div>
               </div>
             </div>
           </div>
@@ -81,17 +80,17 @@
     </div>
   </div>
 
-  <footer>
+  <footer class="bottom-0 w-100">
 
     <div class="shadow-lg rounded-top d-print-none mt-1 pt-3 navbar-footer-color">
       <div class="row justify-content-center">
         <div class="col-auto">
 
           <h6 class="text-center">
-            {% now "Y" as ano %}{% if ano == "2018" %}2018{% else %}2018-{{ano}}{% endif %} &mdash; <strong>Centro acadêmico da computação</strong> - CACo,<br>
+            {% now "Y" as ano %}{% if ano == "2018" %}2018{% else %}2018-{{ano}}{% endif %} &mdash; <strong>Centro Acadêmico da Computação</strong> - CACo,<br>
             cac<span style="display:none"></span>o@ic.unicamp.br<br>
             <small>
-              <a href="http://github.com/rafaelsartori96/CACo-site">Código fonte no GitHub</a>
+              <a href="https://github.com/cacounicamp/Site">Código fonte no GitHub</a>
             </small>
           </h6>
 

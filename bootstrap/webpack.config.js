@@ -4,7 +4,7 @@ const path = require("path");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // Para minimizar output
 const TerserJSPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = {
     entry: "./src/main.js",
@@ -17,7 +17,7 @@ module.exports = {
     },
 
     optimization: {
-        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+        minimizer: [new TerserJSPlugin({}), new CssMinimizerPlugin()],
     },
 
     module: {
@@ -28,23 +28,11 @@ module.exports = {
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
-                            hmr: process.env.NODE_ENV === 'development',
-                            reloadAll: process.env.NODE_ENV === 'development',
                         },
                     },
                     'css-loader',
                     'sass-loader',
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            // pode ser exportado para postcss.config.js
-                            plugins: function () {
-                                return [
-                                    require('autoprefixer')
-                                ];
-                            }
-                        }
-                    },
+                    'postcss-loader',
                 ],
             },
         ],
